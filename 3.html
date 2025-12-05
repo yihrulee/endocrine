@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>總指揮：腦垂腺</title>
+    <style>
+        /* --- 基礎樣式 --- */
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .container {
+            max-width: 960px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* --- 標題與文本 --- */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #007bff;
+        }
+        .header h1 {
+            color: #007bff;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        .text-section {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-left: 5px solid #007bff;
+            background-color: #e9f5ff;
+            border-radius: 5px;
+        }
+        .keyword {
+            color: #d9534f;
+            font-weight: bold;
+        }
+
+        /* --- 圖片區塊 --- */
+        .image-container {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .main-image {
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        .side-images {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            gap: 20px;
+        }
+        .side-image-item {
+            flex: 1;
+            padding: 0 10px;
+            text-align: center;
+        }
+        .side-image-item img {
+            width: 100%;
+            height: auto;
+            max-height: 250px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        .image-caption {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+            text-align: left;
+            padding: 0 5px;
+        }
+
+        /* --- 隨堂評量標題 --- */
+        .quiz-section-title {
+            margin-top: 50px;
+            margin-bottom: 20px;
+            color: #333;
+            border-left: 8px solid #ffc107;
+            padding-left: 15px;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        /* --- 題目區塊通用樣式 --- */
+        .question-block {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #fff;
+            /* 讓題目區塊有輕微陰影 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        /* 重點整理區塊樣式 (表格題) */
+        .review-block {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 2px solid #17a2b8; /* 使用不同顏色區分重點整理 */
+            border-radius: 8px;
+            background-color: #f0fbff;
+        }
+        .review-block h3 {
+            color: #117a8b;
+            margin-top: 0;
+        }
+
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        /* --- 表格樣式 --- */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #999;
+            padding: 12px;
+            text-align: center;
+        }
+        .comparison-table th {
+            background-color: #343a40;
+            color: #fff;
+            font-weight: normal;
+        }
+        .comparison-table td {
+            color: #333;
+        }
+        .table-select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            width: 90%;
+            max-width: 150px;
+        }
+
+        /* --- 選項樣式 --- */
+        .option-label {
+            display: block;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: #fff;
+        }
+        .option-label:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+        }
+        .option-label input {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        /* --- 回饋與按鈕 --- */
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+        .correct {
+            border: 2px solid #28a745;
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrect {
+            border: 2px solid #dc3545;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            margin-right: 10px;
+            color: white;
+        }
+        .btn-check { background-color: #007bff; }
+        .btn-check:hover:not(:disabled) { background-color: #0056b3; }
+        .btn-retry { background-color: #ffc107; color: #333; display: none; }
+        .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        /* --- 底部導覽 --- */
+        .navigation {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
+        .nav-btn {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #6c757d;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .nav-btn.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .nav-btn-prev { background-color: #17a2b8; }
+        .nav-btn-prev:hover { background-color: #138496; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <h1>總指揮：腦垂腺</h1>
+    </header>
+
+    <div class="text-section">
+        <p>腦垂腺位於腦的底部，雖然體積很小，卻扮演著<span class="keyword">關鍵角色</span>。腦垂腺分泌的<span class="keyword">生長激素</span>是控制生長發育的主要激素，若在成長階段分泌過少或過多，會影響個體的發育，例如<span class="keyword">侏儒症</span>和<span class="keyword">巨人症</span>。此外，腦垂腺還可以分泌多種<span class="keyword">促進激素</span>，影響其他內分泌腺體（如甲狀腺、性腺等）。因此，腦垂腺常被稱為人體內分泌系統的<span class="keyword">總指揮</span>。</p>
+    </div>
+
+    <div class="image-container">
+        <img src="3_1.png" alt="腦垂腺示意圖" class="main-image">
+        <div class="side-images">
+            <div class="side-image-item">
+                <img src="3_2.png" alt="罹患侏儒症的演員">
+                <p class="image-caption">參與《綠野仙蹤》電影演出的侏儒症演員們（圖中拿獎牌者）。</p>
+            </div>
+            <div class="side-image-item">
+                <img src="3_3.png" alt="罹患巨人症的人">
+                <p class="image-caption">罹患巨人症的科森，有251公分高。</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="zone-table" class="review-block">
+        <h3>📊 重點整理：生長異常比較表</h3>
+        <p>請根據剛才的課文與圖片，選擇正確的選項填入表格中，完成「巨人症」與「侏儒症」的比較。</p>
+        
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">病症名稱</th>
+                    <th style="width: 35%;">原因 (成長階段)</th>
+                    <th>特徵</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <select id="t1-1" class="table-select" data-ans="巨人症">
+                            <option value="">--請選擇--</option>
+                            <option value="巨人症">巨人症</option>
+                            <option value="侏儒症">侏儒症</option>
+                            <option value="大脖子病">大脖子病</option>
+                        </select>
+                    </td>
+                    <td>
+                        生長激素分泌
+                        <select id="t1-2" class="table-select" data-ans="過多">
+                            <option value="">--請選擇--</option>
+                            <option value="過多">過多</option>
+                            <option value="過少">過少</option>
+                            <option value="不穩定">不穩定</option>
+                        </select>
+                    </td>
+                    <td style="text-align: left;">骨骼過度生長，體型異常高大</td>
+                </tr>
+                <tr>
+                    <td>
+                        <select id="t1-3" class="table-select" data-ans="侏儒症">
+                            <option value="">--請選擇--</option>
+                            <option value="巨人症">巨人症</option>
+                            <option value="侏儒症">侏儒症</option>
+                            <option value="糖尿病">糖尿病</option>
+                        </select>
+                    </td>
+                    <td>
+                        生長激素分泌
+                        <select id="t1-4" class="table-select" data-ans="過少">
+                            <option value="">--請選擇--</option>
+                            <option value="過多">過多</option>
+                            <option value="過少">過少</option>
+                            <option value="停止">停止</option>
+                        </select>
+                    </td>
+                    <td style="text-align: left;">骨骼生長遲緩，身材明顯矮小，智力通常正常</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="btn btn-check" onclick="checkTableAnswer()">檢查答案</button>
+        <button class="btn btn-retry" onclick="retryTableAnswer()">重做本題</button>
+        <div id="feedback-table" class="feedback"></div>
+    </div>
+    
+    <h2 class="quiz-section-title">📝 隨堂評量</h2>
+
+    <div id="zone-q1" class="question-block">
+        <h3>(練習一) 觀念推論：總指揮的職責</h3>
+        <p class="question-title">腦垂腺被稱為內分泌系統的「總指揮」，這意味著如果將腦垂腺摘除，下列哪種生理現象最可能發生？</p>
+        <label class="option-label"><input type="radio" name="q1-option" value="A"> 只有生長會停止，其他內分泌功能不受影響。</label>
+        <label class="option-label"><input type="radio" name="q1-option" value="B"> 甲狀腺與性腺等腺體的功能也會隨之衰退。</label>
+        <label class="option-label"><input type="radio" name="q1-option" value="C"> 身體會立即大量分泌生長激素來補償。</label>
+        <label class="option-label"><input type="radio" name="q1-option" value="D"> 血糖會立刻失控，因為胰島素由腦垂腺直接分泌。</label>
+        
+        <button class="btn btn-check" onclick="checkSingleChoice('zone-q1', 'B', 'q1-option')">檢查答案</button>
+        <button class="btn btn-retry" onclick="retryQuestion('zone-q1')">重做本題</button>
+        <div id="feedback-q1" class="feedback"></div>
+    </div>
+    
+    <div id="zone-q2" class="question-block">
+        <h3>(練習二) 圖表分析：生長激素的秘密</h3>
+        <p class="question-title">科學家分析血液中生長激素的濃度變化，發現它呈現「脈衝式分泌」，且在<strong>夜間深度睡眠期間</strong>濃度最高。根據這項數據，對於一位想長高的國中生，下列哪項建議最符合科學依據？</p>
+        <label class="option-label"><input type="radio" name="q2-option" value="A"> 每天必須睡滿 12 小時，不管幾點睡都可以。</label>
+        <label class="option-label"><input type="radio" name="q2-option" value="B"> 只要補充高鈣食物，熬夜唸書並不會影響長高。</label>
+        <label class="option-label"><input type="radio" name="q2-option" value="C"> 應盡量在晚上 10~11 點前入睡，以把握生長激素分泌的高峰期。</label>
+        <label class="option-label"><input type="radio" name="q2-option" value="D"> 早上起床後立即劇烈運動，可以刺激生長激素在白天達到最高峰。</label>
+
+        <button class="btn btn-check" onclick="checkSingleChoice('zone-q2', 'C', 'q2-option')">檢查答案</button>
+        <button class="btn btn-retry" onclick="retryQuestion('zone-q2')">重做本題</button>
+        <div id="feedback-q2" class="feedback"></div>
+    </div>
+
+    <div id="zone-q3" class="question-block">
+        <h3>(練習三) 多重選擇：控制範圍</h3>
+        <p class="question-title">腦垂腺分泌的「促進激素」可以直接調控下列哪些內分泌腺體的功能？（請選出所有正確答案，全對才給分）</p>
+        <label class="option-label"><input type="checkbox" name="q3-option" value="甲狀腺"> 甲狀腺</label>
+        <label class="option-label"><input type="checkbox" name="q3-option" value="胰島"> 胰島（分泌胰島素）</label>
+        <label class="option-label"><input type="checkbox" name="q3-option" value="性腺"> 性腺（卵巢/睪丸）</label>
+        <label class="option-label"><input type="checkbox" name="q3-option" value="腎上腺"> 腎上腺</label>
+        <p style="font-size: 0.9em; color: #666;">（提示：胰島主要受血糖濃度直接控制）</p>
+
+        <button class="btn btn-check" onclick="checkMultiSelect('zone-q3', ['甲狀腺', '性腺', '腎上腺'], 'q3-option')">檢查答案</button>
+        <button class="btn btn-retry" onclick="retryQuestion('zone-q3')">重做本題</button>
+        <div id="feedback-q3" class="feedback"></div>
+    </div>
+    
+    <div class="navigation">
+        <a href="2.html" class="nav-btn nav-btn-prev">← 上一頁</a>
+        <a href="./4.html" id="next-page" class="nav-btn disabled">下一頁 →</a>
+    </div>
+
+</div>
+
+<script>
+    // 狀態追蹤：4 個部分 (Table + 練習1 + 練習2 + 練習3)
+    const qStatus = {
+        'table': false,
+        'q1': false,
+        'q2': false,
+        'q3': false
+    };
+
+    /* --- 1. 表格檢查邏輯 --- */
+    function checkTableAnswer() {
+        const containerId = 'zone-table';
+        const container = document.getElementById(containerId);
+        const feedback = document.getElementById('feedback-table');
+        const checkBtn = container.querySelector('.btn-check');
+        const retryBtn = container.querySelector('.btn-retry');
+
+        // 取得四個下拉選單
+        const inputs = [
+            document.getElementById('t1-1'),
+            document.getElementById('t1-2'),
+            document.getElementById('t1-3'),
+            document.getElementById('t1-4')
+        ];
+
+        // 檢查是否皆已選擇
+        if (inputs.some(el => el.value === "")) {
+            alert("請完成表格中所有的選項！");
+            return;
+        }
+
+        // 核對答案
+        let allCorrect = true;
+        inputs.forEach(el => {
+            el.disabled = true; // 鎖定
+            if (el.value !== el.getAttribute('data-ans')) {
+                allCorrect = false;
+                el.style.backgroundColor = '#f8d7da'; // 錯誤標紅
+            } else {
+                el.style.backgroundColor = '#d4edda'; // 正確標綠
+            }
+        });
+
+        checkBtn.disabled = true;
+        feedback.style.display = 'block';
+
+        if (allCorrect) {
+            qStatus['table'] = true;
+            feedback.className = 'feedback correct';
+            feedback.innerHTML = '✅ **完全正確！** 您已清楚掌握生長異常的特徵與原因。';
+            retryBtn.style.display = 'none';
+        } else {
+            qStatus['table'] = false;
+            feedback.className = 'feedback incorrect';
+            feedback.innerHTML = '❌ **部分有誤**。請重新檢查病名與分泌量（過多/過少）的對應關係。';
+            retryBtn.style.display = 'inline-block';
+        }
+        updateNextButton();
+    }
+
+    function retryTableAnswer() {
+        const containerId = 'zone-table';
+        const container = document.getElementById(containerId);
+        const inputs = container.querySelectorAll('select');
+        
+        inputs.forEach(el => {
+            el.disabled = false;
+            el.value = "";
+            el.style.backgroundColor = '';
+        });
+
+        resetUI(containerId, 'feedback-table');
+        qStatus['table'] = false;
+        updateNextButton();
+    }
+
+    /* --- 2. 單選題檢查邏輯 (練習一, 練習二) --- */
+    function checkSingleChoice(containerId, correctVal, inputName) {
+        const container = document.getElementById(containerId);
+        // feedback id 規則: feedback-q1, feedback-q2
+        const feedbackId = containerId.replace('zone-', 'feedback-'); 
+        const feedback = document.getElementById(feedbackId);
+        const checkBtn = container.querySelector('.btn-check');
+        const retryBtn = container.querySelector('.btn-retry');
+        const inputs = container.querySelectorAll(`input[name="${inputName}"]`);
+        
+        const selected = container.querySelector(`input[name="${inputName}"]:checked`);
+        const statusKey = containerId.replace('zone-', ''); // q1, q2
+
+        if (!selected) {
+            alert("請選擇一個答案！");
+            return;
+        }
+
+        // 鎖定
+        inputs.forEach(el => el.disabled = true);
+        checkBtn.disabled = true;
+        feedback.style.display = 'block';
+
+        if (selected.value === correctVal) {
+            qStatus[statusKey] = true;
+            feedback.className = 'feedback correct';
+            
+            let msg = "✅ **答對了！**";
+            if (statusKey === 'q1') msg += " 腦垂腺控制甲狀腺、性腺與腎上腺皮質，若被摘除，這些腺體也會隨之衰退。";
+            if (statusKey === 'q2') msg += " 沒錯！把握夜間深度睡眠期（約 11 點至 2 點）是長高的關鍵。";
+            
+            feedback.innerHTML = msg;
+            retryBtn.style.display = 'none';
+        } else {
+            qStatus[statusKey] = false;
+            feedback.className = 'feedback incorrect';
+            feedback.innerHTML = "❌ **答案不正確**。請再仔細思考題目敘述與選項。";
+            retryBtn.style.display = 'inline-block';
+        }
+        updateNextButton();
+    }
+
+    /* --- 3. 多選題檢查邏輯 (練習三) --- */
+    function checkMultiSelect(containerId, correctArray, inputName) {
+        const container = document.getElementById(containerId);
+        const feedbackId = containerId.replace('zone-', 'feedback-');
+        const feedback = document.getElementById(feedbackId);
+        const inputs = container.querySelectorAll(`input[name="${inputName}"]`);
+        const checkBtn = container.querySelector('.btn-check');
+        const retryBtn = container.querySelector('.btn-retry');
+        const statusKey = containerId.replace('zone-', ''); // q3
+
+        const checked = Array.from(inputs).filter(el => el.checked).map(el => el.value);
+
+        if (checked.length === 0) {
+            alert("請至少選擇一個選項！");
+            return;
+        }
+
+        // 鎖定
+        inputs.forEach(el => el.disabled = true);
+        checkBtn.disabled = true;
+        feedback.style.display = 'block';
+
+        // 判斷陣列內容是否完全一致（忽略順序）
+        const isCorrect = checked.length === correctArray.length && 
+                          checked.every(val => correctArray.includes(val));
+
+        if (isCorrect) {
+            qStatus[statusKey] = true;
+            feedback.className = 'feedback correct';
+            feedback.innerHTML = "✅ **全對！** 腦垂腺分泌激素控制甲狀腺、性腺和腎上腺（皮質）。";
+            retryBtn.style.display = 'none';
+        } else {
+            qStatus[statusKey] = false;
+            feedback.className = 'feedback incorrect';
+            feedback.innerHTML = "❌ **有誤**。提示：胰島主要受血糖調控，不由腦垂腺直接命令。";
+            retryBtn.style.display = 'inline-block';
+        }
+        updateNextButton();
+    }
+
+    /* --- 通用：重做與解鎖 --- */
+    function retryQuestion(containerId) {
+        const container = document.getElementById(containerId);
+        const inputs = container.querySelectorAll('input');
+        const feedbackId = containerId.replace('zone-', 'feedback-');
+        const statusKey = containerId.replace('zone-', '');
+
+        inputs.forEach(el => {
+            el.disabled = false;
+            el.checked = false;
+        });
+
+        resetUI(containerId, feedbackId);
+        qStatus[statusKey] = false;
+        updateNextButton();
+    }
+
+    function resetUI(containerId, feedbackId) {
+        const container = document.getElementById(containerId);
+        const feedback = document.getElementById(feedbackId);
+        const checkBtn = container.querySelector('.btn-check');
+        const retryBtn = container.querySelector('.btn-retry');
+
+        feedback.style.display = 'none';
+        feedback.className = 'feedback';
+        checkBtn.disabled = false;
+        retryBtn.style.display = 'none';
+    }
+
+    function updateNextButton() {
+        const nextBtn = document.getElementById('next-page');
+        const allDone = Object.values(qStatus).every(val => val === true);
+
+        if (allDone) {
+            nextBtn.classList.remove('disabled');
+            nextBtn.style.backgroundColor = '#28a745';
+            nextBtn.setAttribute('href', './4.html');
+        } else {
+            nextBtn.classList.add('disabled');
+            nextBtn.style.backgroundColor = '';
+            nextBtn.removeAttribute('href');
+        }
+    }
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', updateNextButton);
+
+</script>
+
+</body>
+</html>

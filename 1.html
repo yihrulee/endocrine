@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考試前的緊張時刻</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --success-bg: #d4edda;
+            --error-color: #c0392b;
+            --error-bg: #f8d7da;
+            --bg-color: #f9f9f9;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'Heiti TC', sans-serif;
+            line-height: 1.8;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+            font-size: 2.2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-top: 30px;
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+        }
+
+        p {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        /* 關鍵字樣式 */
+        .kw-red {
+            color: #e74c3c;
+            font-weight: bold;
+            background-color: rgba(231, 76, 60, 0.1);
+            padding: 0 5px;
+            border-radius: 4px;
+        }
+
+        .kw-blue {
+            color: #2980b9;
+            font-weight: bold;
+            background-color: rgba(41, 128, 185, 0.1);
+            padding: 0 5px;
+            border-radius: 4px;
+        }
+
+        /* 多媒體容器 */
+        .media-block {
+            width: 100%;
+            margin: 20px 0 40px 0;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+            box-sizing: border-box; /* 確保 padding 不會撐開寬度 */
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* 影片樣式 */
+        video {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background-color: #000;
+        }
+
+        /* 錯誤訊息樣式 */
+        .error-msg {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            width: 90%;
+            text-align: center;
+            display: none; /* 預設隱藏 */
+            font-weight: bold;
+        }
+
+        /* 互動題目區塊 */
+        .quiz-section {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 3px dashed #e0e0e0;
+        }
+
+        .question-card {
+            background-color: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .q-text { font-weight: bold; font-size: 1.1rem; display: block; margin-bottom: 15px; }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .options label:hover { background: #e9ecef; }
+        .options input { margin-right: 10px; transform: scale(1.2); }
+
+        select { padding: 8px; font-size: 1rem; margin: 0 5px; }
+
+        /* 正確錯誤回饋 */
+        .question-card.correct { border-color: var(--success-color); background-color: var(--success-bg); }
+        .question-card.incorrect { border-color: var(--error-color); background-color: var(--error-bg); }
+
+        .feedback { margin-top: 15px; padding: 10px; border-radius: 5px; font-weight: bold; display: none; }
+        .feedback.show-correct { display: block; color: #155724; }
+        .feedback.show-incorrect { display: block; color: #721c24; }
+
+        /* 按鈕 */
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+        .btn-retry { background-color: #e67e22; margin-left: 10px; display: none; }
+
+        /* 導覽列 */
+        .footer-nav { display: flex; justify-content: space-between; margin-top: 50px; }
+        .nav-link {
+            text-decoration: none; color: white; background-color: #7f8c8d;
+            padding: 12px 30px; border-radius: 50px; font-weight: bold;
+        }
+        .nav-link.next { background-color: var(--success-color); }
+        .nav-link.disabled { background-color: #bdc3c7; pointer-events: none; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>考試前的緊張時刻</h1>
+
+    <div class="content-block">
+        <h2>為什麼心跳加快了?</h2>
+        <p>
+            明天就是段考了！坐在教室裡，發現自己的<span class="kw-red">心跳加速</span>、<span class="kw-red">呼吸</span>變得又快又急，手心還冒出<span class="kw-red">汗</span>。明明只是坐著不動，身體卻像準備衝刺一樣。怎麼會這樣呢?
+        </p>
+    </div>
+
+    <div class="media-block">
+        <img src="1.png" alt="學生緊張示意圖">
+        
+        <video id="myVideo" width="100%" autoplay muted loop playsinline>
+            <source src="1.mp4" type="video/mp4">
+            您的瀏覽器不支援影片標籤。
+        </video>
+        
+        <div id="videoErrorMsg" class="error-msg">
+            ⚠️ 影片無法播放，可能原因：<br>
+            1. 檔名錯誤 (請確認是 1.mp4 不是 1.mp4.mp4)<br>
+            2. 檔案不在同一個資料夾
+        </div>
+    </div>
+
+    <div class="content-block">
+        <h2>這是身體的協調作用</h2>
+        <p>
+            這些變化，當然和<span class="kw-blue">神經系統</span>有關；但是，真的只有神經在工作嗎？事實上，還有另一個系統會悄悄釋放<span class="kw-blue">激素</span>，透過<span class="kw-blue">血液</span>傳遍全身，讓心臟跳得更快、呼吸變深、<span class="kw-blue">血糖上升</span>，幫你迎戰考試壓力。
+        </p>
+        <p>
+            蝌蚪變青蛙、毛毛蟲變蝴蝶等成長變化過程，便是由內分泌腺所分泌的物質控制身體各部位生長變化的結果。
+        </p>
+        <div style="text-align: center; margin-top: 20px;">
+            <img src="1_1.png" alt="內分泌影響生長變化示意圖" style="width: 66.66%;">
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h3 style="text-align: center;">小試身手</h3>
+
+        <div class="question-card" id="q1-card">
+            <span class="q-text">1. 當面對考試壓力時，身體出現「心跳加速、手心冒汗」是為了？（單選）</span>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A"> A. 讓身體睡眠</label>
+                <label><input type="radio" name="q1" value="B"> B. 準備應對挑戰（戰鬥或逃跑）</label>
+                <label><input type="radio" name="q1" value="C"> C. 表示生病了</label>
+            </div>
+            <button class="btn" id="btn-check-q1" onclick="checkQ1()">檢查答案</button>
+            <button class="btn btn-retry" id="btn-retry-q1" onclick="retryQ1()">重做本題</button>
+            <div class="feedback" id="feedback-q1"></div>
+        </div>
+
+        <div class="question-card" id="q2-card">
+            <span class="q-text">2. 除了神經系統，還有哪個物質透過「血液」傳送來調節身體？（選單）</span>
+            <p>
+                另一個系統會釋放
+                <select id="q2-select">
+                    <option value="" disabled selected>-- 請選擇 --</option>
+                    <option value="digestive">消化液</option>
+                    <option value="hormone">激素</option>
+                    <option value="urine">尿液</option>
+                </select>
+                ，提供能量。
+            </p>
+            <button class="btn" id="btn-check-q2" onclick="checkQ2()">檢查答案</button>
+            <button class="btn btn-retry" id="btn-retry-q2" onclick="retryQ2()">重做本題</button>
+            <div class="feedback" id="feedback-q2"></div>
+        </div>
+
+        <div class="question-card" id="q3-card">
+            <span class="q-text">3. 人體主要依靠哪兩個系統來進行協調作用？（複選，全對才得分）</span>
+            <div class="options">
+                <label><input type="checkbox" name="q3" value="A"> A. 消化系統</label>
+                <label><input type="checkbox" name="q3" value="B"> B. 神經系統</label>
+                <label><input type="checkbox" name="q3" value="C"> C. 呼吸系統</label>
+                <label><input type="checkbox" name="q3" value="D"> D. 內分泌系統</label>
+            </div>
+            <button class="btn" id="btn-check-q3" onclick="checkQ3()">檢查答案</button>
+            <button class="btn btn-retry" id="btn-retry-q3" onclick="retryQ3()">重做本題</button>
+            <div class="feedback" id="feedback-q3"></div>
+        </div>
+    </div>
+
+    <div class="footer-nav">
+        <a href="index.html" class="nav-link">← 上一頁</a>
+        <a href="./2.html" class="nav-link next disabled" id="next-link">下一頁 →</a>
+    </div>
+</div>
+
+<script>
+    // --- 影片錯誤偵測腳本 ---
+    const video = document.getElementById('myVideo');
+    const errorMsg = document.getElementById('videoErrorMsg');
+
+    // 監聽 source 的錯誤 (較準確)
+    const source = video.querySelector('source');
+    source.addEventListener('error', function() {
+        console.log("影片載入失敗");
+        errorMsg.style.display = 'block';
+    });
+
+    // 監聽 video 本身的錯誤
+    video.addEventListener('error', function() {
+        console.log("影片播放發生錯誤");
+        errorMsg.style.display = 'block';
+    });
+
+    // --- 測驗邏輯 ---
+    let q1Solved = false, q2Solved = false, q3Solved = false;
+
+    function checkAllSolved() {
+        const nextLink = document.getElementById('next-link');
+        if (q1Solved && q2Solved && q3Solved) nextLink.classList.remove('disabled');
+        else nextLink.classList.add('disabled');
+    }
+
+    // Q1
+    function checkQ1() {
+        const val = document.querySelector('input[name="q1"]:checked')?.value;
+        if (!val) return alert("請作答！");
+        
+        document.querySelectorAll('input[name="q1"]').forEach(el => el.disabled = true);
+        document.getElementById('btn-check-q1').disabled = true;
+
+        const card = document.getElementById('q1-card');
+        const fb = document.getElementById('feedback-q1');
+        
+        if (val === 'B') {
+            card.classList.add('correct');
+            fb.textContent = "正確！身體在應急狀態下會提升能量與心跳。";
+            fb.className = "feedback show-correct";
+            q1Solved = true;
+        } else {
+            card.classList.add('incorrect');
+            fb.textContent = "不正確。請回想第一段文本。";
+            fb.className = "feedback show-incorrect";
+            document.getElementById('btn-retry-q1').style.display = 'inline-block';
+            q1Solved = false;
+        }
+        checkAllSolved();
+    }
+
+    function retryQ1() {
+        resetCard('q1-card', 'feedback-q1', 'btn-check-q1', 'btn-retry-q1');
+        document.querySelectorAll('input[name="q1"]').forEach(el => { el.disabled = false; el.checked = false; });
+        q1Solved = false; checkAllSolved();
+    }
+
+    // Q2
+    function checkQ2() {
+        const val = document.getElementById('q2-select').value;
+        if (!val) return alert("請作答！");
+
+        document.getElementById('q2-select').disabled = true;
+        document.getElementById('btn-check-q2').disabled = true;
+
+        const card = document.getElementById('q2-card');
+        const fb = document.getElementById('feedback-q2');
+
+        if (val === 'hormone') {
+            card.classList.add('correct');
+            fb.textContent = "正確！激素透過血液運輸。";
+            fb.className = "feedback show-correct";
+            q2Solved = true;
+        } else {
+            card.classList.add('incorrect');
+            fb.textContent = "錯誤。提示：第二段藍色字體。";
+            fb.className = "feedback show-incorrect";
+            document.getElementById('btn-retry-q2').style.display = 'inline-block';
+            q2Solved = false;
+        }
+        checkAllSolved();
+    }
+
+    function retryQ2() {
+        resetCard('q2-card', 'feedback-q2', 'btn-check-q2', 'btn-retry-q2');
+        const sel = document.getElementById('q2-select');
+        sel.disabled = false; sel.value = "";
+        q2Solved = false; checkAllSolved();
+    }
+
+    // Q3 (複選)
+    function checkQ3() {
+        const checked = Array.from(document.querySelectorAll('input[name="q3"]:checked')).map(cb => cb.value);
+        if (checked.length === 0) return alert("請作答！");
+
+        document.querySelectorAll('input[name="q3"]').forEach(el => el.disabled = true);
+        document.getElementById('btn-check-q3').disabled = true;
+
+        const card = document.getElementById('q3-card');
+        const fb = document.getElementById('feedback-q3');
+
+        // 正確答案：B 和 D
+        const isCorrect = checked.length === 2 && checked.includes('B') && checked.includes('D');
+
+        if (isCorrect) {
+            card.classList.add('correct');
+            fb.textContent = "完全正確！神經系統與內分泌系統是兩大協調系統。";
+            fb.className = "feedback show-correct";
+            q3Solved = true;
+        } else {
+            card.classList.add('incorrect');
+            fb.textContent = "不正確。你需要選出兩個系統（神經與內分泌）。";
+            fb.className = "feedback show-incorrect";
+            document.getElementById('btn-retry-q3').style.display = 'inline-block';
+            q3Solved = false;
+        }
+        checkAllSolved();
+    }
+
+    function retryQ3() {
+        resetCard('q3-card', 'feedback-q3', 'btn-check-q3', 'btn-retry-q3');
+        document.querySelectorAll('input[name="q3"]').forEach(el => { el.disabled = false; el.checked = false; });
+        q3Solved = false; checkAllSolved();
+    }
+
+    // 通用重置函式
+    function resetCard(cardId, fbId, checkBtnId, retryBtnId) {
+        document.getElementById(cardId).classList.remove('incorrect');
+        document.getElementById(fbId).className = "feedback";
+        document.getElementById(checkBtnId).disabled = false;
+        document.getElementById(retryBtnId).style.display = 'none';
+    }
+</script>
+
+</body>
+</html>

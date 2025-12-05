@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>代謝高手：甲狀腺</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --border: #d0d7e2;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --correct-bg: #e6ffed;
+      --correct-border: #16a34a;
+      --incorrect-bg: #ffe4e6;
+      --incorrect-border: #e11d48;
+      --radius-lg: 18px;
+      --radius-md: 10px;
+      --shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #e0f2fe 0, #f5f7fb 45%, #eef2ff 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px 16px 40px; /* 底部留白 */
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 8px;
+      letter-spacing: 0.06em;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin: 24px 0 8px;
+    }
+    
+    h3 {
+      font-size: 1.1rem;
+      margin: 10px 0 8px;
+      color: var(--accent);
+      border-left: 4px solid var(--accent);
+      padding-left: 10px;
+    }
+
+    .section-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(209, 213, 219, 0.7);
+    }
+
+    .instruction {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .question-card {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 12px 14px 12px;
+      margin-top: 8px;
+      background: #f9fafb;
+      position: relative;
+    }
+
+    .question-card.correct {
+      border-color: var(--correct-border);
+      background: var(--correct-bg);
+    }
+
+    .question-card.incorrect {
+      border-color: var(--incorrect-border);
+      background: var(--incorrect-bg);
+    }
+
+    .question-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.98rem;
+    }
+
+    .question-body {
+      font-size: 0.95rem;
+    }
+
+    select,
+    input[type="radio"],
+    input[type="checkbox"] {
+      font-size: 0.95rem;
+    }
+
+    /* 課文填充美化 */
+    .fill-card {
+      background: #fff7df;
+      border-radius: 24px;
+      padding: 18px 20px 16px;
+      border: 2px solid #facc6b;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(148, 81, 3, 0.09);
+    }
+
+    /* 
+       特別針對填空題內容調整行距 
+       line-height: 2.6 讓下拉選單不會跟文字擠在一起 
+    */
+    .fill-card .question-body {
+      line-height: 2.6;
+      font-size: 1.05rem; /* 字體稍微加大提升易讀性 */
+    }
+
+    .fill-badge {
+      position: absolute;
+      left: 16px;
+      top: -16px;
+      background: #ffffff;
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.85rem;
+      color: #6b7280;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 10px rgba(148, 81, 3, 0.12);
+    }
+
+    .fill-select {
+      padding: 4px 10px;
+      margin: 0 4px; /* 增加左右間距 */
+      border-radius: 999px;
+      border: 2px solid #fb7185;
+      background: #fff1f2;
+      color: #b91c1c;
+      min-width: 90px;
+      cursor: pointer;
+    }
+
+    .fill-select.filled {
+      border-color: #3b82f6;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .btn-row {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: #ffffff;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
+    }
+
+    .btn:hover:enabled {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.18);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #6b7280, #4b5563);
+    }
+
+    .feedback {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px dashed transparent;
+      display: none;
+    }
+
+    .question-card.correct .feedback {
+      display: block;
+      border-color: var(--correct-border);
+      background: rgba(22, 163, 74, 0.1);
+      color: #14532d;
+    }
+
+    .question-card.incorrect .feedback {
+      display: block;
+      border-color: var(--incorrect-border);
+      background: rgba(225, 29, 72, 0.06);
+      color: #881337;
+    }
+
+    .main-image-wrapper {
+      text-align: center;
+      margin: 10px 0 20px;
+    }
+
+    .main-image {
+      width: 66%;
+      max-width: 760px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      display: inline-block;
+    }
+    
+    /* 滿版圖片設定 */
+    #bonus-image-area .main-image {
+        width: 100%;
+        max-width: none;
+    }
+
+    /* 影片並排容器 */
+    .video-grid {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .video-item {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-top: 8px;
+      margin-bottom: 20px;
+      background: #000;
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .options-list {
+      margin-top: 4px;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .options-list li {
+      margin: 4px 0;
+    }
+
+    /* 拖曳配對題 */
+    .match-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1.1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .match-column {
+      background: #f9fafb;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      padding: 8px 10px;
+    }
+
+    .match-column-header {
+      font-weight: 600;
+      font-size: 0.92rem;
+      margin-bottom: 4px;
+    }
+
+    .drop-zone {
+      min-height: 110px;
+      border-radius: 10px;
+      border: 2px dashed #cbd5e1;
+      padding: 6px;
+      background: #fefefe;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-content: flex-start;
+    }
+
+    .drop-zone.over {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+
+    .trait-pool {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: #eef2ff;
+      border: 1px solid #c4b5fd;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .trait-chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      font-size: 0.86rem;
+      cursor: grab;
+      user-select: none;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+      white-space: nowrap;
+    }
+
+    .trait-chip:active {
+      cursor: grabbing;
+    }
+
+    /* 底部導覽區塊 (靜態顯示) */
+    .bottom-nav {
+      margin-top: 40px;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #4b5563, #111827);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+      text-decoration: none; /* 確保連結無下劃線 */
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+    
+    .nav-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: #9ca3af;
+      box-shadow: none;
+    }
+
+    .nav-btn.disabled:hover {
+      transform: none;
+    }
+
+    #progress-info {
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 1rem;
+      background: #f3f4f6;
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .page {
+        padding-bottom: 40px;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+      .main-image {
+        width: 100%;
+      }
+      .match-grid {
+        grid-template-columns: 1fr;
+      }
+      .bottom-nav {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>代謝高手：甲狀腺</h1>
+      <div class="subtitle">從位置、功能到疾病，一起認識這位默默工作的「代謝指揮官」</div>
+    </header>
+
+    <section class="section-card" id="section-text-fill">
+      <h2>一、課文學習與填充</h2>
+      <p class="instruction">請從下拉式選單選出正確字詞，完成課文內容，再按下方「檢查答案」。</p>
+
+      <div class="fill-card question-card" id="q1-card">
+        <div class="fill-badge">課文填空</div>
+        <div class="question-body" style="margin-top:8px;">
+          甲狀腺呈蝴蝶狀，分布於
+          <select id="q1-blank1" class="fill-select">
+            <option value="">（請選擇）</option>
+            <option>喉部氣管</option>
+            <option>胸腔心臟</option>
+            <option>腹部腸道</option>
+          </select>
+          兩側，可分泌
+          <select id="q1-blank2" class="fill-select">
+            <option value="">（請選擇）</option>
+            <option>甲狀腺素</option>
+            <option>生長激素</option>
+            <option>腎上腺素</option>
+          </select>
+          ，控制細胞的
+          <select id="q1-blank3" class="fill-select">
+            <option value="">（請選擇）</option>
+            <option>代謝作用</option>
+            <option>免疫反應</option>
+            <option>訊息傳遞</option>
+          </select>
+          ，以調節生長。如果甲狀腺素分泌過多，細胞代謝比較快，能量消耗也比較快，因此個體常顯得消瘦，且容易神經緊張、煩躁，此稱為
+          <select id="q1-blank4" class="fill-select">
+            <option value="">（請選擇）</option>
+            <option>甲狀腺亢進</option>
+            <option>甲狀腺低下</option>
+            <option>糖尿病</option>
+          </select>
+          。如果幼年時期甲狀腺素分泌不足，會使個體
+          <select id="q1-blank5" class="fill-select">
+            <option value="">（請選擇）</option>
+            <option>生長遲緩</option>
+            <option>快速長高</option>
+            <option>體重暴增</option>
+          </select>
+          ，影響
+          <select id="q1-blank-intellect" class="fill-select">
+            <option value="">（請選擇）</option>
+            <option>智力發展</option>
+            <option>視力發展</option>
+            <option>聽力發展</option>
+          </select>
+          。甲狀腺素由
+          <select id="q1-blank6" class="fill-select">
+            <option value="">（請選擇）</option>
+            <option>胺基酸和碘</option>
+            <option>葡萄糖和水</option>
+            <option>脂肪和鈣</option>
+          </select>
+          所組成，若攝入的
+          <select id="q1-blank-iodine" class="fill-select">
+            <option value="">（請選擇）</option>
+            <option>碘</option>
+            <option>鐵</option>
+            <option>鈣</option>
+          </select>
+          不足時，無法合成足量的甲狀腺素，則會使甲狀腺腫脹，俗稱
+          <select id="q1-blank7" class="fill-select">
+            <option value="">（請選擇）</option>
+            <option>大脖子症</option>
+            <option>孔雀症</option>
+            <option>侏儒症</option>
+          </select>
+          。
+        </div>
+
+        <div class="btn-row">
+          <button class="btn" id="q1-check">檢查答案</button>
+          <button class="btn btn-secondary" id="q1-reset" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback" id="q1-feedback"></div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>二、位置觀察：甲狀腺在哪裡？</h2>
+      <p class="instruction">請觀察下圖中甲狀腺的位置，想想看：它為什麼會被比喻成「蝴蝶」？</p>
+      <div class="main-image-wrapper">
+        <img src="5_1.png" alt="甲狀腺的位置示意圖" class="main-image">
+      </div>
+    </section>
+
+    <section class="section-card" id="video-section">
+      <h2>三、影片學習：跟著專家認識甲狀腺</h2>
+      <p class="instruction">請觀看下列兩段 YouTube 影片，觀察甲狀腺素「過多」與「不足」對人體的影響，再回答下方的測驗。</p>
+
+      <div class="video-grid">
+        <div class="video-item">
+          <h3>影片一：吃不胖有病？</h3>
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/3OfkVKJ0HuY"
+              title="甲狀腺亢進相關影片"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+        <div class="video-item">
+          <h3>影片二：巴西不老女嬰</h3>
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/I72_eHjjdE4"
+              title="甲狀腺不足相關影片"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="question-card" id="vq1-card">
+        <div class="question-title">影片題 1：成人甲狀腺亢進（單選）</div>
+        <div class="question-body">
+          觀看影片一後，我們知道當成年人甲狀腺素分泌「過多」（亢進）時，雖然食慾很好，但身體通常會出現什麼變化？
+          <ul class="options-list">
+            <li>
+              <label>
+                <input type="radio" name="vq1-option" value="A">
+                體重快速增加，變得肥胖
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="vq1-option" value="B">
+                體重減輕，且容易手抖、心跳過快
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="vq1-option" value="C">
+                一直想睡覺，完全不想動
+              </label>
+            </li>
+          </ul>
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="vq1-check">檢查答案</button>
+          <button class="btn btn-secondary" id="vq1-reset" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback" id="vq1-feedback"></div>
+      </div>
+
+      <div class="question-card" id="vq2-card">
+        <div class="question-title">影片題 2：幼年甲狀腺不足（單選）</div>
+        <div class="question-body">
+          影片二中的巴西女子瑪利亞，因為「幼年時期」極度缺乏甲狀腺素，導致了什麼嚴重的後果？
+          <ul class="options-list">
+            <li>
+              <label>
+                <input type="radio" name="vq2-option" value="A">
+                身體與智力停止發育，30歲了仍像個嬰兒
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="vq2-option" value="B">
+                身高生長速度過快，變成巨人
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="vq2-option" value="C">
+                頭髮變白，皮膚出現皺紋，快速老化
+              </label>
+            </li>
+          </ul>
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="vq2-check">檢查答案</button>
+          <button class="btn btn-secondary" id="vq2-reset" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback" id="vq2-feedback"></div>
+      </div>
+
+      <div class="question-card" id="vq3-card">
+        <div class="question-title">影片題 3：綜合比較（單選）</div>
+        <div class="question-body">
+          綜合兩段影片的內容，關於甲狀腺分泌異常的敘述，下列何者正確？
+          <ul class="options-list">
+            <li>
+              <label>
+                <input type="radio" name="vq3-option" value="A">
+                無論是分泌過多或過少，都會讓人變得很胖
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="vq3-option" value="B">
+                成年人分泌過多會導致生長停滯；幼年分泌不足則會精神亢奮
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="vq3-option" value="C">
+                幼年分泌不足會影響智力與生長（呆小症）；成年分泌過多則易消瘦、緊張（亢進）
+              </label>
+            </li>
+          </ul>
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="vq3-check">檢查答案</button>
+          <button class="btn btn-secondary" id="vq3-reset" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback" id="vq3-feedback"></div>
+      </div>
+      
+      <div class="main-image-wrapper" id="bonus-image-area" style="margin-top: 30px; display: none;">
+        <h3 style="border:none; color: var(--text);">🎉 恭喜完成影片挑戰！這是補充圖解：</h3>
+        <img src="5_2.png" alt="甲狀腺相關補充圖片" class="main-image">
+      </div>
+
+    </section>
+
+    <section class="section-card" id="practice-section">
+      <h2>四、互動練習：成為代謝小偵探</h2>
+      <p class="instruction">根據上方課文與影片內容，完成下列四題互動練習。全部題目答對後，才會開啟頁尾「下一頁」按鈕。</p>
+
+      <div class="question-card" id="q4-card">
+        <div class="question-title">練習 1：甲狀腺素在做什麼？（單選題）</div>
+        <div class="question-body">
+          下列哪一項最符合甲狀腺素的主要功能？
+          <ul class="options-list">
+            <li>
+              <label>
+                <input type="radio" name="q4-option" value="A">
+                幫助白血球吞噬病原體，直接殺死細菌
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="q4-option" value="B">
+                調節細胞的代謝速度，影響能量消耗與體溫
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="q4-option" value="C">
+                負責把氧氣從肺泡帶到全身組織
+              </label>
+            </li>
+          </ul>
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="q4-check">檢查答案</button>
+          <button class="btn btn-secondary" id="q4-reset" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback" id="q4-feedback"></div>
+      </div>
+
+      <div class="question-card" id="q5-card">
+        <div class="question-title">練習 2：缺碘與大脖子症（是非題）</div>
+        <div class="question-body">
+          判斷下列敘述是否正確，並從下拉式選單中選擇「是」或「否」：
+          <br><br>
+          「長期攝取碘不足的飲食，可能導致甲狀腺腫大，形成『大脖子症』。」
+          <br><br>
+          我的判斷：
+          <select id="q5-select">
+            <option value="">── 請選擇 ──</option>
+            <option value="true">是</option>
+            <option value="false">否</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="q5-check">檢查答案</button>
+          <button class="btn btn-secondary" id="q5-reset" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback" id="q5-feedback"></div>
+      </div>
+
+      <div class="question-card" id="q6-card">
+        <div class="question-title">練習 3：表格配對—判斷甲狀腺素分泌狀態（拖曳題）</div>
+        <div class="question-body">
+          請將下列生理特徵，拖曳到「甲狀腺素分泌過多」或「甲狀腺素分泌過少」的區塊中。
+          <div class="match-grid" style="margin-top:10px;">
+            <div class="match-column">
+              <div class="match-column-header">甲狀腺素分泌過多</div>
+              <div class="drop-zone" id="zone-high" data-type="high"></div>
+            </div>
+            <div class="match-column">
+              <div class="match-column-header">甲狀腺素分泌過少</div>
+              <div class="drop-zone" id="zone-low" data-type="low"></div>
+            </div>
+          </div>
+
+          <div class="trait-pool" id="trait-pool">
+            <div class="trait-chip" id="trait1" draggable="true" data-target="high">神經緊張、煩躁</div>
+            <div class="trait-chip" id="trait5" draggable="true" data-target="low">容易疲倦想睡</div>
+            <div class="trait-chip" id="trait2" draggable="true" data-target="high">心跳變快</div>
+            <div class="trait-chip" id="trait7" draggable="true" data-target="low">體重增加</div>
+            <div class="trait-chip" id="trait3" draggable="true" data-target="high">體重減輕但食慾好</div>
+            <div class="trait-chip" id="trait6" draggable="true" data-target="low">怕冷、手腳冰冷</div>
+            <div class="trait-chip" id="trait4" draggable="true" data-target="high">容易怕熱</div>
+            <div class="trait-chip" id="trait8" draggable="true" data-target="low">代謝變慢</div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="q6-check">檢查答案</button>
+          <button class="btn btn-secondary" id="q6-reset" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback" id="q6-feedback"></div>
+      </div>
+
+      <div class="question-card" id="q7-card">
+        <div class="question-title">練習 4：生活情境小推理</div>
+        <div class="question-body">
+          小安最近改吃沒有加碘的海鹽，又很少吃海帶、紫菜等含碘食物。
+          長期下來，哪一種健康風險最有可能增加？
+          <ul class="options-list">
+            <li>
+              <label>
+                <input type="radio" name="q7-option" value="A">
+                甲狀腺腫大，出現「大脖子症」
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="q7-option" value="B">
+                視力變得超級好，看得比望遠鏡還清楚
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="q7-option" value="C">
+                馬上長高 10 公分，完全不受其他因素影響
+              </label>
+            </li>
+          </ul>
+        </div>
+        <div class="btn-row">
+          <button class="btn" id="q7-check">檢查答案</button>
+          <button class="btn btn-secondary" id="q7-reset" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback" id="q7-feedback"></div>
+      </div>
+    </section>
+
+    <div class="bottom-nav">
+      <button id="prevBtn" class="nav-btn">&larr; 上一頁</button>
+      <span id="progress-info">目前進度：0/8</span>
+      <button id="nextBtn" class="nav-btn disabled">下一頁 &rarr;</button>
+    </div>
+
+  </div>
+
+  <script>
+    // 紀錄每一題是否全部答對
+    // 共8題：Q1, VQ1, VQ2, VQ3, Q4, Q5, Q6, Q7
+    const questionStates = {
+      q1: false,
+      vq1: false,
+      vq2: false,
+      vq3: false,
+      q4: false,
+      q5: false,
+      q6: false,
+      q7: false
+    };
+
+    // 檢查是否所有影片題 (VQ1~VQ3) 都完成，若完成則顯示隱藏圖片
+    function checkVideoBonus() {
+      const bonusArea = document.getElementById('bonus-image-area');
+      if (questionStates.vq1 && questionStates.vq2 && questionStates.vq3) {
+        bonusArea.style.display = 'block';
+      } else {
+        bonusArea.style.display = 'none';
+      }
+    }
+
+    // 更新導覽按鈕狀態
+    function updateNextButtonState() {
+      // 計算目前答對題數
+      const values = Object.values(questionStates);
+      const correctCount = values.filter(v => v).length;
+      const totalCount = values.length;
+      
+      // 更新頁尾進度文字
+      const progressInfo = document.getElementById('progress-info');
+      if(progressInfo) {
+        progressInfo.textContent = `目前進度：${correctCount}/${totalCount}`;
+      }
+
+      const nextBtn = document.getElementById('nextBtn');
+      if (!nextBtn) return;
+
+      // 只有當所有狀態皆為 true 時，才解鎖按鈕
+      if (correctCount === totalCount) {
+        // 移除 disabled 樣式類別
+        nextBtn.classList.remove('disabled');
+        // 更新文字提示 (可選)
+        nextBtn.innerHTML = '下一頁 &rarr;';
+      } else {
+        // 加上 disabled 樣式類別
+        nextBtn.classList.add('disabled');
+      }
+    }
+
+    function setQuestionResult(id, isCorrect, message) {
+      const card = document.getElementById(id + '-card');
+      const feedback = document.getElementById(id + '-feedback');
+      card.classList.remove('correct', 'incorrect');
+      if (isCorrect) {
+        card.classList.add('correct');
+      } else {
+        card.classList.add('incorrect');
+      }
+      if (feedback) {
+        feedback.textContent = message;
+      }
+    }
+
+    // ---- 課文填充 select 樣式 ----
+    function updateFillSelectStyle(selectEl) {
+      if (selectEl.value === '') {
+        selectEl.classList.remove('filled');
+      } else {
+        selectEl.classList.add('filled');
+      }
+    }
+
+    function initFillSelects() {
+      const fills = document.querySelectorAll('.fill-select');
+      fills.forEach(sel => {
+        updateFillSelectStyle(sel);
+        sel.addEventListener('change', () => updateFillSelectStyle(sel));
+      });
+    }
+
+    // Q1：課文填充
+    function checkQ1() {
+      const answerKey = {
+        'q1-blank1': '喉部氣管',
+        'q1-blank2': '甲狀腺素',
+        'q1-blank3': '代謝作用',
+        'q1-blank4': '甲狀腺亢進',
+        'q1-blank5': '生長遲緩',
+        'q1-blank-intellect': '智力發展',
+        'q1-blank6': '胺基酸和碘',
+        'q1-blank-iodine': '碘',
+        'q1-blank7': '大脖子症'
+      };
+
+      let allSelected = true;
+      for (const id in answerKey) {
+        const sel = document.getElementById(id);
+        if (!sel || !sel.value) {
+          allSelected = false;
+          break;
+        }
+      }
+      if (!allSelected) {
+        alert('請先完成本段所有填空再按「檢查答案」。');
+        return;
+      }
+
+      let allCorrect = true;
+      for (const id in answerKey) {
+        const sel = document.getElementById(id);
+        if (sel.value !== answerKey[id]) {
+          allCorrect = false;
+          break;
+        }
+      }
+
+      const checkBtn = document.getElementById('q1-check');
+      const resetBtn = document.getElementById('q1-reset');
+      checkBtn.disabled = true;
+
+      if (allCorrect) {
+        questionStates.q1 = true;
+        setQuestionResult('q1', true, '太棒了！你已完整掌握甲狀腺的基本位置與功能。');
+        resetBtn.style.display = 'none';
+      } else {
+        questionStates.q1 = false;
+        setQuestionResult('q1', false, '還有部分填空不正確，請依提示重做本題。');
+        resetBtn.style.display = 'inline-flex';
+      }
+      updateNextButtonState();
+    }
+
+    function resetQ1() {
+      const ids = [
+        'q1-blank1','q1-blank2','q1-blank3','q1-blank4',
+        'q1-blank5','q1-blank-intellect','q1-blank6','q1-blank-iodine','q1-blank7'
+      ];
+      ids.forEach(id => {
+        const sel = document.getElementById(id);
+        if(sel) {
+          sel.value = '';
+          updateFillSelectStyle(sel);
+        }
+      });
+      const card = document.getElementById('q1-card');
+      card.classList.remove('correct', 'incorrect');
+      document.getElementById('q1-feedback').textContent = '';
+      document.getElementById('q1-check').disabled = false;
+      document.getElementById('q1-reset').style.display = 'none';
+      questionStates.q1 = false;
+      updateNextButtonState();
+    }
+
+    // --- 影片題邏輯 VQ1, VQ2, VQ3 ---
+
+    // VQ1: 成人亢進
+    function checkVQ1() {
+      const selected = document.querySelector('input[name="vq1-option"]:checked');
+      if (!selected) {
+        alert('請先選擇一個答案再按「檢查答案」。');
+        return;
+      }
+      const checkBtn = document.getElementById('vq1-check');
+      const resetBtn = document.getElementById('vq1-reset');
+      checkBtn.disabled = true;
+
+      if (selected.value === 'B') {
+        questionStates.vq1 = true;
+        setQuestionResult('vq1', true, '正確！甲狀腺亢進會加速代謝，導致體重減輕、手抖與心跳過快。');
+        resetBtn.style.display = 'none';
+      } else {
+        questionStates.vq1 = false;
+        setQuestionResult('vq1', false, '再看一下影片一喔！代謝變快通常會讓人變瘦還是變胖？');
+        resetBtn.style.display = 'inline-flex';
+      }
+      checkVideoBonus();
+      updateNextButtonState();
+    }
+
+    function resetVQ1() {
+      document.querySelectorAll('input[name="vq1-option"]').forEach(el => el.checked = false);
+      const card = document.getElementById('vq1-card');
+      card.classList.remove('correct', 'incorrect');
+      document.getElementById('vq1-feedback').textContent = '';
+      document.getElementById('vq1-check').disabled = false;
+      document.getElementById('vq1-reset').style.display = 'none';
+      questionStates.vq1 = false;
+      checkVideoBonus(); 
+      updateNextButtonState();
+    }
+
+    // VQ2: 幼年不足
+    function checkVQ2() {
+      const selected = document.querySelector('input[name="vq2-option"]:checked');
+      if (!selected) {
+        alert('請先選擇一個答案再按「檢查答案」。');
+        return;
+      }
+      const checkBtn = document.getElementById('vq2-check');
+      const resetBtn = document.getElementById('vq2-reset');
+      checkBtn.disabled = true;
+
+      if (selected.value === 'A') {
+        questionStates.vq2 = true;
+        setQuestionResult('vq2', true, '答對了！幼年缺乏甲狀腺素會嚴重影響生長與智力發展。');
+        resetBtn.style.display = 'none';
+      } else {
+        questionStates.vq2 = false;
+        setQuestionResult('vq2', false, '影片二中的瑪利亞看起來像個嬰兒，請再試一次！');
+        resetBtn.style.display = 'inline-flex';
+      }
+      checkVideoBonus();
+      updateNextButtonState();
+    }
+
+    function resetVQ2() {
+      document.querySelectorAll('input[name="vq2-option"]').forEach(el => el.checked = false);
+      const card = document.getElementById('vq2-card');
+      card.classList.remove('correct', 'incorrect');
+      document.getElementById('vq2-feedback').textContent = '';
+      document.getElementById('vq2-check').disabled = false;
+      document.getElementById('vq2-reset').style.display = 'none';
+      questionStates.vq2 = false;
+      checkVideoBonus();
+      updateNextButtonState();
+    }
+
+    // VQ3: 綜合比較
+    function checkVQ3() {
+      const selected = document.querySelector('input[name="vq3-option"]:checked');
+      if (!selected) {
+        alert('請先選擇一個答案再按「檢查答案」。');
+        return;
+      }
+      const checkBtn = document.getElementById('vq3-check');
+      const resetBtn = document.getElementById('vq3-reset');
+      checkBtn.disabled = true;
+
+      if (selected.value === 'C') {
+        questionStates.vq3 = true;
+        setQuestionResult('vq3', true, '完全正確！你已經能清楚分辨甲狀腺異常在不同時期的症狀了。');
+        resetBtn.style.display = 'none';
+      } else {
+        questionStates.vq3 = false;
+        setQuestionResult('vq3', false, '請回想兩段影片的重點：一個是長不大（呆小症），一個是吃不胖且緊張（亢進）。');
+        resetBtn.style.display = 'inline-flex';
+      }
+      checkVideoBonus();
+      updateNextButtonState();
+    }
+
+    function resetVQ3() {
+      document.querySelectorAll('input[name="vq3-option"]').forEach(el => el.checked = false);
+      const card = document.getElementById('vq3-card');
+      card.classList.remove('correct', 'incorrect');
+      document.getElementById('vq3-feedback').textContent = '';
+      document.getElementById('vq3-check').disabled = false;
+      document.getElementById('vq3-reset').style.display = 'none';
+      questionStates.vq3 = false;
+      checkVideoBonus();
+      updateNextButtonState();
+    }
+
+    // --- 互動練習題 (Q4, Q5, Q6, Q7) ---
+
+    // Q4：單選
+    function checkQ4() {
+      const selected = document.querySelector('input[name="q4-option"]:checked');
+      if (!selected) {
+        alert('請先選擇一個答案再按「檢查答案」。');
+        return;
+      }
+      const checkBtn = document.getElementById('q4-check');
+      const resetBtn = document.getElementById('q4-reset');
+      checkBtn.disabled = true;
+
+      if (selected.value === 'B') {
+        questionStates.q4 = true;
+        setQuestionResult('q4', true, '答對！甲狀腺素主要是調節代謝速率與能量消耗。');
+        resetBtn.style.display = 'none';
+      } else {
+        questionStates.q4 = false;
+        setQuestionResult('q4', false, '再想想：甲狀腺素和「代謝」最有關係，而不是免疫或運送氧氣。');
+        resetBtn.style.display = 'inline-flex';
+      }
+      updateNextButtonState();
+    }
+
+    function resetQ4() {
+      document.querySelectorAll('input[name="q4-option"]').forEach(el => el.checked = false);
+      const card = document.getElementById('q4-card');
+      card.classList.remove('correct', 'incorrect');
+      document.getElementById('q4-feedback').textContent = '';
+      document.getElementById('q4-check').disabled = false;
+      document.getElementById('q4-reset').style.display = 'none';
+      questionStates.q4 = false;
+      updateNextButtonState();
+    }
+
+    // Q5：是非題（下拉）
+    function checkQ5() {
+      const sel = document.getElementById('q5-select');
+      if (!sel.value) {
+        alert('請先從下拉選單中選擇「是」或「否」。');
+        return;
+      }
+      const checkBtn = document.getElementById('q5-check');
+      const resetBtn = document.getElementById('q5-reset');
+      checkBtn.disabled = true;
+
+      if (sel.value === 'true') {
+        questionStates.q5 = true;
+        setQuestionResult('q5', true, '正確！缺碘會使甲狀腺為了合成更多甲狀腺素而腫大，形成大脖子症。');
+        resetBtn.style.display = 'none';
+      } else {
+        questionStates.q5 = false;
+        setQuestionResult('q5', false, '再想想課文中對「碘」與「大脖子症」的描述。');
+        resetBtn.style.display = 'inline-flex';
+      }
+      updateNextButtonState();
+    }
+
+    function resetQ5() {
+      const sel = document.getElementById('q5-select');
+      sel.value = '';
+      const card = document.getElementById('q5-card');
+      card.classList.remove('correct', 'incorrect');
+      document.getElementById('q5-feedback').textContent = '';
+      document.getElementById('q5-check').disabled = false;
+      document.getElementById('q5-reset').style.display = 'none';
+      questionStates.q5 = false;
+      updateNextButtonState();
+    }
+
+    // Q6：拖曳配對題
+    function initDragAndDrop() {
+      const chips = document.querySelectorAll('.trait-chip');
+      const zones = document.querySelectorAll('.drop-zone, #trait-pool');
+
+      chips.forEach(chip => {
+        chip.addEventListener('dragstart', e => {
+          e.dataTransfer.setData('text/plain', e.target.id);
+          setTimeout(() => {
+            e.target.style.opacity = '0.4';
+          }, 0);
+        });
+        chip.addEventListener('dragend', e => {
+          e.target.style.opacity = '1';
+        });
+      });
+
+      zones.forEach(zone => {
+        zone.addEventListener('dragover', e => {
+          e.preventDefault();
+          zone.classList.add('over');
+        });
+        zone.addEventListener('dragleave', () => {
+          zone.classList.remove('over');
+        });
+        zone.addEventListener('drop', e => {
+          e.preventDefault();
+          zone.classList.remove('over');
+          const id = e.dataTransfer.getData('text/plain');
+          const chip = document.getElementById(id);
+          if (chip) {
+            zone.appendChild(chip);
+          }
+        });
+      });
+    }
+
+    function checkQ6() {
+      const zoneHigh = document.getElementById('zone-high');
+      const zoneLow = document.getElementById('zone-low');
+
+      const highChips = Array.from(zoneHigh.querySelectorAll('.trait-chip'));
+      const lowChips = Array.from(zoneLow.querySelectorAll('.trait-chip'));
+
+      // 必須全部都移出題庫
+      const pool = document.getElementById('trait-pool');
+      const poolChips = pool.querySelectorAll('.trait-chip');
+      if (poolChips.length > 0) {
+        alert('請先將所有特徵拖曳到「分泌過多」或「分泌過少」區塊，再按檢查答案。');
+        return;
+      }
+
+      // 判斷正確性
+      let allCorrect = true;
+
+      highChips.forEach(chip => {
+        if (chip.dataset.target !== 'high') {
+          allCorrect = false;
+        }
+      });
+
+      lowChips.forEach(chip => {
+        if (chip.dataset.target !== 'low') {
+          allCorrect = false;
+        }
+      });
+
+      const checkBtn = document.getElementById('q6-check');
+      const resetBtn = document.getElementById('q6-reset');
+      checkBtn.disabled = true;
+
+      if (allCorrect) {
+        questionStates.q6 = true;
+        setQuestionResult('q6', true, '太好了！你已能分辨哪些症狀是甲狀腺素分泌過多，哪些是分泌過少。');
+        resetBtn.style.display = 'none';
+      } else {
+        questionStates.q6 = false;
+        setQuestionResult('q6', false, '有些特徵被放錯區了，再回想課文中的症狀描述，重新配對一次吧！');
+        resetBtn.style.display = 'inline-flex';
+      }
+      updateNextButtonState();
+    }
+
+    function resetQ6() {
+      const pool = document.getElementById('trait-pool');
+      const chips = document.querySelectorAll('.trait-chip');
+      chips.forEach(chip => pool.appendChild(chip));
+
+      const card = document.getElementById('q6-card');
+      card.classList.remove('correct', 'incorrect');
+      document.getElementById('q6-feedback').textContent = '';
+      document.getElementById('q6-check').disabled = false;
+      document.getElementById('q6-reset').style.display = 'none';
+      questionStates.q6 = false;
+      updateNextButtonState();
+    }
+
+    // Q7：情境題
+    function checkQ7() {
+      const selected = document.querySelector('input[name="q7-option"]:checked');
+      if (!selected) {
+        alert('請先選擇一個答案再按「檢查答案」。');
+        return;
+      }
+      const checkBtn = document.getElementById('q7-check');
+      const resetBtn = document.getElementById('q7-reset');
+      checkBtn.disabled = true;
+
+      if (selected.value === 'A') {
+        questionStates.q7 = true;
+        setQuestionResult('q7', true, '正確！長期缺碘會增加缺碘性甲狀腺腫（大脖子症）的風險。');
+        resetBtn.style.display = 'none';
+      } else {
+        questionStates.q7 = false;
+        setQuestionResult('q7', false, '想想課文中提到「缺碘」最直接影響的是哪一個器官與疾病。');
+        resetBtn.style.display = 'inline-flex';
+      }
+      updateNextButtonState();
+    }
+
+    function resetQ7() {
+      document.querySelectorAll('input[name="q7-option"]').forEach(el => el.checked = false);
+      const card = document.getElementById('q7-card');
+      card.classList.remove('correct', 'incorrect');
+      document.getElementById('q7-feedback').textContent = '';
+      document.getElementById('q7-check').disabled = false;
+      document.getElementById('q7-reset').style.display = 'none';
+      questionStates.q7 = false;
+      updateNextButtonState();
+    }
+
+    // 導覽按鈕邏輯
+    function setupNavButtons() {
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+
+      if (!prevBtn || !nextBtn) return;
+
+      // 上一頁連至 4.html
+      prevBtn.addEventListener('click', function () {
+        window.location.href = '4.html';
+      });
+
+      // 下一頁連至 ./6.html
+      nextBtn.addEventListener('click', function () {
+        // 如果有 disabled class，則不跳轉，並跳出提示
+        if (nextBtn.classList.contains('disabled')) {
+          const completed = Object.values(questionStates).filter(v => v).length;
+          alert(`加油！還有題目沒完成喔 (目前進度：${completed}/8)`);
+          return;
+        }
+        window.location.href = './6.html';
+      });
+    }
+
+    // 綁定事件
+    document.addEventListener('DOMContentLoaded', function () {
+      // 填充選單樣式
+      initFillSelects();
+
+      // 綁定各題按鈕事件
+      document.getElementById('q1-check').addEventListener('click', checkQ1);
+      document.getElementById('q1-reset').addEventListener('click', resetQ1);
+
+      document.getElementById('vq1-check').addEventListener('click', checkVQ1);
+      document.getElementById('vq1-reset').addEventListener('click', resetVQ1);
+
+      document.getElementById('vq2-check').addEventListener('click', checkVQ2);
+      document.getElementById('vq2-reset').addEventListener('click', resetVQ2);
+
+      document.getElementById('vq3-check').addEventListener('click', checkVQ3);
+      document.getElementById('vq3-reset').addEventListener('click', resetVQ3);
+
+      document.getElementById('q4-check').addEventListener('click', checkQ4);
+      document.getElementById('q4-reset').addEventListener('click', resetQ4);
+
+      document.getElementById('q5-check').addEventListener('click', checkQ5);
+      document.getElementById('q5-reset').addEventListener('click', resetQ5);
+
+      document.getElementById('q6-check').addEventListener('click', checkQ6);
+      document.getElementById('q6-reset').addEventListener('click', resetQ6);
+
+      document.getElementById('q7-check').addEventListener('click', checkQ7);
+      document.getElementById('q7-reset').addEventListener('click', resetQ7);
+
+      setupNavButtons();
+      initDragAndDrop();
+      updateNextButtonState(); // 初始化按鈕狀態
+      checkVideoBonus(); // 初始化隱藏圖片
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鈣質調節：副甲狀腺</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-bg: #d4edda;
+            --success-border: #c3e6cb;
+            --success-text: #155724;
+            --error-bg: #f8d7da;
+            --error-border: #f5c6cb;
+            --error-text: #721c24;
+            /* 關鍵字顏色定義 */
+            --kw-1: #e74c3c; /* 紅 */
+            --kw-2: #e67e22; /* 橘 */
+            --kw-3: #f1c40f; /* 黃(深) */
+            --kw-4: #27ae60; /* 綠 */
+            --kw-5: #2980b9; /* 藍 */
+            --kw-6: #8e44ad; /* 紫 */
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fdfdfd;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h3 {
+            border-left: 5px solid var(--accent-color);
+            padding-left: 10px;
+            color: var(--primary-color);
+        }
+
+        /* --- 課文填空樣式 --- */
+        .cloze-container {
+            font-size: 1.15rem;
+            line-height: 2.2;
+        }
+
+        select {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            margin: 0 3px;
+        }
+
+        select:disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            color: #495057;
+            font-weight: bold;
+        }
+
+        /* 關鍵字樣式 (用於第二段文本) */
+        .highlight-1 { color: var(--kw-1); font-weight: bold; }
+        .highlight-2 { color: var(--kw-2); font-weight: bold; }
+        .highlight-3 { color: var(--kw-5); font-weight: bold; }
+        .highlight-4 { color: var(--kw-4); font-weight: bold; }
+        .highlight-5 { color: var(--kw-6); font-weight: bold; }
+
+        /* --- 圖片樣式 --- */
+        .img-container-1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .img-6-1 {
+            width: 66.66%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .img-container-2 {
+            display: none; /* 初始隱藏 */
+            margin-top: 20px;
+            text-align: center;
+            border-top: 2px dashed #ccc;
+            padding-top: 20px;
+        }
+        .img-6-2 {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .reward-text {
+            color: var(--success-text);
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* --- 影片樣式 --- */
+        .video-row {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .video-wrapper {
+            flex: 1;
+        }
+        iframe {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 5px;
+            border: none;
+        }
+        @media (max-width: 768px) {
+            .video-row { flex-direction: column; }
+            .img-6-1 { width: 100%; }
+        }
+
+        /* --- 題目與按鈕樣式 --- */
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        .btn:hover { background-color: #2980b9; }
+        .btn:disabled { background-color: #bdc3c7; cursor: not-allowed; }
+        
+        .btn-retry {
+            background-color: #e67e22;
+            display: none;
+        }
+        .btn-retry:hover { background-color: #d35400; }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        /* 答題狀態樣式 */
+        .correct {
+            border: 2px solid var(--success-border);
+            background-color: var(--success-bg);
+        }
+        .correct .feedback {
+            color: var(--success-text);
+            display: block;
+        }
+        
+        .incorrect {
+            border: 2px solid var(--error-border);
+            background-color: var(--error-bg);
+        }
+        .incorrect .feedback {
+            color: var(--error-text);
+            display: block;
+        }
+
+        .quiz-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+
+        /* --- 頁尾導覽 --- */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+        .nav-btn {
+            text-decoration: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            color: white;
+            background-color: #95a5a6;
+            transition: 0.3s;
+        }
+        .nav-btn.next {
+            background-color: var(--accent-color);
+        }
+        .nav-btn.disabled {
+            background-color: #bdc3c7;
+            pointer-events: none;
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>鈣質調節：副甲狀腺</h1>
+
+    <section id="section-text">
+        <h3>觀念導讀</h3>
+        
+        <div class="cloze-container" id="cloze-block">
+            <p>
+                <select data-ans="甲狀腺" style="color:var(--kw-1)">
+                    <option value="">(腺體位置)</option>
+                    <option value="腦垂腺">腦垂腺</option>
+                    <option value="甲狀腺">甲狀腺</option>
+                </select>
+                的背面有四顆豆狀的
+                <select data-ans="副甲狀腺" style="color:var(--kw-2)">
+                    <option value="">(腺體名稱)</option>
+                    <option value="甲狀腺">甲狀腺</option>
+                    <option value="副甲狀腺">副甲狀腺</option>
+                </select>
+                ，可以分泌
+                <select data-ans="副甲狀腺素" style="color:var(--kw-2)">
+                    <option value="">(激素名稱)</option>
+                    <option value="甲狀腺素">甲狀腺素</option>
+                    <option value="副甲狀腺素">副甲狀腺素</option>
+                </select>
+                ，負責調節血液中
+                <select data-ans="鈣" style="color:var(--kw-3)">
+                    <option value="">(礦物質)</option>
+                    <option value="鐵">鐵</option>
+                    <option value="碘">碘</option>
+                    <option value="鈣">鈣</option>
+                </select>
+                的濃度，影響
+                <select data-ans="骨骼" style="color:var(--kw-4)">
+                    <option value="">(器官)</option>
+                    <option value="骨骼">骨骼</option>
+                    <option value="皮膚">皮膚</option>
+                </select>
+                生長與肌肉收縮等，分泌不足時肌肉易
+                <select data-ans="痙攣" style="color:var(--kw-1)">
+                    <option value="">(症狀)</option>
+                    <option value="無力">無力</option>
+                    <option value="痙攣">痙攣</option>
+                </select>
+                。
+            </p>
+            <button class="btn" onclick="checkCloze()">檢查答案</button>
+            <button class="btn btn-retry" onclick="retryCloze()">重做本題</button>
+            <div class="feedback"></div>
+        </div>
+
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+        <div style="font-size: 1.1rem; line-height: 1.8;">
+            <p>若 <span class="highlight-2">副甲狀腺素分泌過多</span> ，血鈣持續升高，會使 <span class="highlight-5">骨質流失</span>、 <span class="highlight-1">腎結石風險增加</span>。</p>
+            <p>若 <span class="highlight-4">副甲狀腺素分泌不足</span> ，血鈣下降，可能出現 <span class="highlight-3">手腳麻木</span>、 <span class="highlight-1">肌肉痙攣</span> 等症狀。</p>
+        </div>
+    </section>
+
+    <section>
+        <div class="img-container-1">
+            <img src="6_1.png" alt="副甲狀腺解剖位置圖" class="img-6-1">
+            <p style="color:#666; font-size:0.9em;">圖 6-1：甲狀腺與副甲狀腺的位置關係</p>
+        </div>
+    </section>
+
+    <section id="section-video">
+        <h3>影片學習與挑戰</h3>
+        <div class="video-row">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/fFiMmHVgiuo" title="影片1" allowfullscreen></iframe>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/S9z2T4ej6B0" title="影片2" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div id="video-quiz-block">
+            <h4>影片評量題 (請依序作答)</h4>
+            
+            <div class="quiz-item">
+                <label>1. 影片一提到，48歲婦人因副甲狀腺腫瘤導致激素分泌過多，引發了嚴重的：</label><br>
+                <select id="vq-1">
+                    <option value="">請選擇</option>
+                    <option value="A">甲狀腺腫大</option>
+                    <option value="B">骨質疏鬆與骨折</option>
+                    <option value="C">肥胖</option>
+                </select>
+            </div>
+
+            <div class="quiz-item">
+                <label>2. 影片二中，少女因誤割副甲狀腺導致血液鈣濃度不足，主要症狀為：</label><br>
+                <select id="vq-2">
+                    <option value="">請選擇</option>
+                    <option value="A">肌肉容易抽搐(痙攣)</option>
+                    <option value="B">骨骼過度生長</option>
+                    <option value="C">食慾大增</option>
+                </select>
+            </div>
+
+            <div class="quiz-item">
+                <label>3. 綜合影片內容，副甲狀腺素的主要功能是：</label><br>
+                <select id="vq-3">
+                    <option value="">請選擇</option>
+                    <option value="A">降低血糖</option>
+                    <option value="B">調節體溫</option>
+                    <option value="C">調節血液中的鈣濃度</option>
+                </select>
+            </div>
+
+            <button class="btn" id="btn-vq-check" onclick="checkVideoQuiz()">檢查答案</button>
+            <button class="btn btn-retry" id="btn-vq-retry" onclick="retryVideoQuiz()">重做本題</button>
+            <div class="feedback" id="vq-feedback"></div>
+        </div>
+
+        <div class="img-container-2" id="reward-section">
+            <div class="reward-text">恭喜完成影片挑戰！這是補充圖解：</div>
+            <img src="6_2.png" alt="副甲狀腺補充圖解" class="img-6-2">
+        </div>
+    </section>
+
+    <section id="section-exercises">
+        <h3>綜合互動練習</h3>
+        <p style="color:#666; font-size:0.9em;">完成所有題目後，即可解鎖下一頁。</p>
+
+        <div class="quiz-item" id="ex-1">
+            <strong>1. (是非題) 副甲狀腺位於甲狀腺的背面，通常有四顆。</strong>
+            <div style="margin-top:10px;">
+                <label><input type="radio" name="q1" value="O"> 正確</label>
+                <label style="margin-left:15px;"><input type="radio" name="q1" value="X"> 錯誤</label>
+            </div>
+            <button class="btn" onclick="checkEx1()">檢查答案</button>
+            <button class="btn btn-retry" onclick="retryEx(1)">重做本題</button>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="ex-2">
+            <strong>2. (單選題) 當血液中鈣離子濃度「太低」時，副甲狀腺素會如何運作？</strong>
+            <div style="margin-top:10px;">
+                <select id="q2-select">
+                    <option value="">請選擇答案</option>
+                    <option value="A">減少分泌，讓鈣排出體外</option>
+                    <option value="B">增加分泌，促使骨鈣釋放到血液</option>
+                    <option value="C">停止分泌，等待身體自行恢復</option>
+                </select>
+            </div>
+            <button class="btn" onclick="checkEx2()">檢查答案</button>
+            <button class="btn btn-retry" onclick="retryEx(2)">重做本題</button>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="ex-3">
+            <strong>3. (配合題) 請依照症狀選擇對應的激素分泌情形：</strong>
+            <div style="margin-top:10px; display:grid; gap:10px;">
+                <div>
+                    <label>容易發生腎結石、骨質流失：</label>
+                    <select id="q3-1">
+                        <option value="">請選擇</option>
+                        <option value="high">分泌過多</option>
+                        <option value="low">分泌不足</option>
+                    </select>
+                </div>
+                <div>
+                    <label>手腳麻木、肌肉痙攣：</label>
+                    <select id="q3-2">
+                        <option value="">請選擇</option>
+                        <option value="high">分泌過多</option>
+                        <option value="low">分泌不足</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" onclick="checkEx3()">檢查答案</button>
+            <button class="btn btn-retry" onclick="retryEx(3)">重做本題</button>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="quiz-item" id="ex-4">
+            <strong>4. (多選題) 根據課文，副甲狀腺素調節鈣濃度主要影響哪些生理功能？(請勾選所有正確選項)</strong>
+            <div style="margin-top:10px;">
+                <label><input type="checkbox" name="q4" value="A"> 骨骼生長</label><br>
+                <label><input type="checkbox" name="q4" value="B"> 肌肉收縮</label><br>
+                <label><input type="checkbox" name="q4" value="C"> 視力維持</label>
+            </div>
+            <button class="btn" onclick="checkEx4()">檢查答案</button>
+            <button class="btn btn-retry" onclick="retryEx(4)">重做本題</button>
+            <div class="feedback"></div>
+        </div>
+
+    </section>
+
+    <footer>
+        <a href="5.html" class="nav-btn">← 上一頁</a>
+        <a href="./7.html" class="nav-btn next disabled" id="next-link">下一頁 →</a>
+    </footer>
+
+    <script>
+        // 追蹤練習題完成狀態
+        let exercisesCompleted = {
+            1: false,
+            2: false,
+            3: false,
+            4: false
+        };
+
+        // 更新下一頁按鈕狀態
+        function updateNav() {
+            const allDone = Object.values(exercisesCompleted).every(v => v === true);
+            const nextBtn = document.getElementById('next-link');
+            if (allDone) {
+                nextBtn.classList.remove('disabled');
+            } else {
+                nextBtn.classList.add('disabled');
+            }
+        }
+
+        // --- 課文填空邏輯 ---
+        function checkCloze() {
+            const container = document.getElementById('cloze-block');
+            const selects = container.querySelectorAll('select');
+            const btn = container.querySelector('.btn');
+            const retryBtn = container.querySelector('.btn-retry');
+            const feedback = container.querySelector('.feedback');
+            
+            // 檢查是否全填
+            for(let s of selects) {
+                if(s.value === "") {
+                    alert("請將所有空格填寫完畢再檢查答案！");
+                    return;
+                }
+            }
+
+            // 檢查答案
+            let allCorrect = true;
+            selects.forEach(s => {
+                if(s.value !== s.getAttribute('data-ans')) allCorrect = false;
+            });
+
+            if(allCorrect) {
+                container.classList.add('correct');
+                container.classList.remove('incorrect');
+                feedback.innerText = "完全正確！";
+                btn.style.display = 'none';
+                selects.forEach(s => s.disabled = true);
+            } else {
+                container.classList.add('incorrect');
+                container.classList.remove('correct');
+                feedback.innerText = "部分答案有誤，請重試。";
+                btn.style.display = 'none';
+                retryBtn.style.display = 'inline-block';
+                selects.forEach(s => s.disabled = true);
+            }
+        }
+
+        function retryCloze() {
+            const container = document.getElementById('cloze-block');
+            const selects = container.querySelectorAll('select');
+            const btn = container.querySelector('.btn');
+            const retryBtn = container.querySelector('.btn-retry');
+            const feedback = container.querySelector('.feedback');
+
+            container.classList.remove('correct', 'incorrect');
+            feedback.style.display = 'none';
+            btn.style.display = 'inline-block';
+            retryBtn.style.display = 'none';
+            
+            selects.forEach(s => {
+                s.disabled = false;
+                s.value = "";
+            });
+        }
+
+        // --- 影片評量邏輯 ---
+        function checkVideoQuiz() {
+            const q1 = document.getElementById('vq-1').value;
+            const q2 = document.getElementById('vq-2').value;
+            const q3 = document.getElementById('vq-3').value;
+            const feedback = document.getElementById('vq-feedback');
+            const btn = document.getElementById('btn-vq-check');
+            const retryBtn = document.getElementById('btn-vq-retry');
+            const rewardSection = document.getElementById('reward-section');
+
+            if(q1 === "" || q2 === "" || q3 === "") {
+                alert("請回答所有影片評量題！");
+                return;
+            }
+
+            // 答案: 1.B, 2.A, 3.C
+            if(q1 === "B" && q2 === "A" && q3 === "C") {
+                feedback.innerHTML = "回答正確！";
+                feedback.style.color = "var(--success-text)";
+                feedback.style.display = "block";
+                feedback.parentElement.classList.add('correct');
+                feedback.parentElement.classList.remove('incorrect');
+                
+                btn.style.display = 'none';
+                document.getElementById('vq-1').disabled = true;
+                document.getElementById('vq-2').disabled = true;
+                document.getElementById('vq-3').disabled = true;
+                
+                // 顯示獎勵區
+                rewardSection.style.display = 'block';
+            } else {
+                feedback.innerHTML = "答案有誤，請再看一次影片確認。";
+                feedback.style.color = "var(--error-text)";
+                feedback.style.display = "block";
+                feedback.parentElement.classList.add('incorrect');
+                
+                btn.style.display = 'none';
+                retryBtn.style.display = 'inline-block';
+                document.getElementById('vq-1').disabled = true;
+                document.getElementById('vq-2').disabled = true;
+                document.getElementById('vq-3').disabled = true;
+            }
+        }
+
+        function retryVideoQuiz() {
+            const feedback = document.getElementById('vq-feedback');
+            const btn = document.getElementById('btn-vq-check');
+            const retryBtn = document.getElementById('btn-vq-retry');
+            
+            feedback.parentElement.classList.remove('incorrect');
+            feedback.style.display = 'none';
+            btn.style.display = 'inline-block';
+            retryBtn.style.display = 'none';
+
+            ['vq-1', 'vq-2', 'vq-3'].forEach(id => {
+                const el = document.getElementById(id);
+                el.disabled = false;
+                el.value = "";
+            });
+        }
+
+        // --- 綜合練習邏輯 (通用函數) ---
+        function handleExerciseResult(id, isCorrect, qNum) {
+            const container = document.getElementById(id);
+            const feedback = container.querySelector('.feedback');
+            const btn = container.querySelector('.btn');
+            const retryBtn = container.querySelector('.btn-retry');
+            const inputs = container.querySelectorAll('input, select');
+
+            feedback.style.display = 'block';
+            
+            if (isCorrect) {
+                container.classList.add('correct');
+                container.classList.remove('incorrect');
+                feedback.innerText = "回答正確！";
+                btn.style.display = 'none';
+                inputs.forEach(el => el.disabled = true);
+                exercisesCompleted[qNum] = true;
+                updateNav();
+            } else {
+                container.classList.add('incorrect');
+                container.classList.remove('correct');
+                feedback.innerText = "答案錯誤，請重試。";
+                btn.style.display = 'none';
+                retryBtn.style.display = 'inline-block';
+                inputs.forEach(el => el.disabled = true);
+                exercisesCompleted[qNum] = false;
+                updateNav();
+            }
+        }
+
+        function retryEx(qNum) {
+            const id = 'ex-' + qNum;
+            const container = document.getElementById(id);
+            const feedback = container.querySelector('.feedback');
+            const btn = container.querySelector('.btn');
+            const retryBtn = container.querySelector('.btn-retry');
+            const inputs = container.querySelectorAll('input, select');
+
+            container.classList.remove('correct', 'incorrect');
+            feedback.style.display = 'none';
+            btn.style.display = 'inline-block';
+            retryBtn.style.display = 'none';
+
+            inputs.forEach(el => {
+                el.disabled = false;
+                if(el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+                else el.value = "";
+            });
+            
+            exercisesCompleted[qNum] = false;
+            updateNav();
+        }
+
+        // Q1 是非
+        function checkEx1() {
+            const selected = document.querySelector('input[name="q1"]:checked');
+            if(!selected) { alert("請作答"); return; }
+            handleExerciseResult('ex-1', selected.value === 'O', 1);
+        }
+
+        // Q2 單選
+        function checkEx2() {
+            const val = document.getElementById('q2-select').value;
+            if(val === "") { alert("請作答"); return; }
+            // 缺鈣 -> 副甲狀腺素分泌增加 (B)
+            handleExerciseResult('ex-2', val === 'B', 2);
+        }
+
+        // Q3 配合
+        function checkEx3() {
+            const v1 = document.getElementById('q3-1').value;
+            const v2 = document.getElementById('q3-2').value;
+            if(v1 === "" || v2 === "") { alert("請作答"); return; }
+            // 骨質流失->過多(high), 痙攣->不足(low)
+            handleExerciseResult('ex-3', (v1 === 'high' && v2 === 'low'), 3);
+        }
+
+        // Q4 多選
+        function checkEx4() {
+            const checkboxes = document.querySelectorAll('input[name="q4"]:checked');
+            if(checkboxes.length === 0) { alert("請作答"); return; }
+            
+            // 答案: A, B
+            let vals = Array.from(checkboxes).map(c => c.value);
+            let isCorrect = vals.includes('A') && vals.includes('B') && !vals.includes('C') && vals.length === 2;
+            
+            handleExerciseResult('ex-4', isCorrect, 4);
+        }
+
+    </script>
+</body>
+</html>

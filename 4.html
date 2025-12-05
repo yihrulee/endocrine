@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>腦垂腺的幕後故事：從疾病到生活(補充資料)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f4f5fb;
+      --card: #ffffff;
+      --border: #d4d4dd;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #e0f2fe 0, #f9fafb 45%, #e5e7eb 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.7rem, 2.2vw + 1rem, 2.3rem);
+      letter-spacing: 0.05em;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 20px 20px 24px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #111827;
+    }
+
+    .content-block {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      padding: 10px 10px 12px;
+      border-radius: var(--radius-md);
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+
+    .content-text {
+      flex: 1 1 50%;
+      font-size: 0.95rem;
+    }
+
+    .content-image {
+      flex: 1 1 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .content-image img {
+      max-width: 100%;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.15);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .content-block.reverse {
+      flex-direction: row-reverse;
+    }
+
+    .lead-text {
+      font-size: 1rem;
+      font-weight: 500;
+      background: #eef2ff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      border: 1px solid #c7d2fe;
+      margin-bottom: 16px;
+    }
+
+    .lead-text strong {
+      font-weight: 700;
+    }
+
+    /* 第六段下方滿版圖 */
+    .full-width-img-wrapper {
+      margin: 4px 4px 18px;
+    }
+
+    .full-width-img {
+      width: 100%;
+      display: block;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+    }
+
+    /* 關鍵字顏色 */
+    .kw1 { color: #e11d48; font-weight: 700; }
+    .kw2 { color: #2563eb; font-weight: 700; }
+    .kw3 { color: #16a34a; font-weight: 700; }
+    .kw4 { color: #f97316; font-weight: 700; }
+    .kw5 { color: #8b5cf6; font-weight: 700; }
+    .kw6 { color: #0d9488; font-weight: 700; }
+    .kw7 { color: #facc15; font-weight: 700; }
+
+    /* 題目區 */
+    .quiz-section-title {
+      margin-top: 18px;
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .question {
+      margin-bottom: 14px;
+      padding: 12px 12px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+
+    .question.correct {
+      border-color: #16a34a;
+      background: #dcfce7;
+      box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.3);
+    }
+
+    .question.incorrect {
+      border-color: #dc2626;
+      background: #fee2e2;
+      box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.3);
+    }
+
+    .q-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .q-body {
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+    }
+
+    .options {
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .options label {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 4px;
+      cursor: pointer;
+    }
+
+    .options input {
+      margin-top: 3px;
+    }
+
+    select {
+      font-size: 0.9rem;
+      padding: 4px 6px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+    }
+
+    .inline-select-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .inline-select-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .inline-select-row span {
+      font-size: 0.9rem;
+    }
+
+    .tf-choices {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tf-choices button {
+      flex: 0 0 auto;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    }
+
+    .tf-choices button.selected {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .feedback {
+      display: none;
+      font-size: 0.88rem;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.04);
+    }
+
+    .q-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.15s, box-shadow 0.15s, transform 0.1s, opacity 0.1s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #d1d5db;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.55);
+      transform: translateY(-1px);
+    }
+
+    /* 頁尾導覽 */
+    .nav-footer {
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      flex: 0 0 auto;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: none;
+      text-decoration: none;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      background: #111827;
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, opacity 0.15s, transform 0.1s;
+    }
+
+    .nav-btn span {
+      font-size: 1.1em;
+    }
+
+    .nav-btn:hover {
+      background: #0f172a;
+      transform: translateY(-1px);
+    }
+
+    .nav-btn.disabled {
+      opacity: 0.45;
+      pointer-events: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .nav-status {
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
+    .nav-status strong {
+      color: #16a34a;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 16px 14px 20px;
+      }
+
+      .content-block,
+      .content-block.reverse {
+        flex-direction: column;
+      }
+
+      .content-image {
+        order: -1;
+      }
+
+      .nav-footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+      }
+
+      .nav-btn {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>腦垂腺的幕後故事：從疾病到生活(補充資料)</h1>
+      <div class="subtitle">從身高、飲水、睡眠到情感連結，一次看懂腦垂腺的多重角色</div>
+    </header>
+
+    <main class="card">
+      <!-- 第一段 -->
+      <div class="lead-text">
+        <strong><span class="kw1">腦垂腺</span></strong> 不僅是人體
+        <span class="kw2">內分泌系統</span> 的「<span class="kw3">總指揮</span>」，它還參與了許多
+        <span class="kw4">生理細節</span>，且影響貫穿人生的
+        <span class="kw5">各個階段</span>。
+      </div>
+
+      <!-- 第二段：右圖 -->
+      <div class="section-title">1. 成長與疾病的界線：肢端肥大症</div>
+      <div class="content-block">
+        <div class="content-text">
+          <p>
+            我們知道，<span class="kw6">生長激素</span> 在
+            <span class="kw7">成長期</span> 分泌過多會造成
+            「<span class="kw2">巨人症</span>」。但如果生長激素分泌過多的情況發生在
+            <span class="kw3">成年後</span>，由於骨骼的
+            <span class="kw4">生長板（骨骺）</span> 已經癒合，人雖然不會再長高，但
+            <span class="kw1">骨骼會變粗</span>，進而引發
+            「<span class="kw5">肢端肥大症</span>」（Acromegaly）。
+          </p>
+          <p>
+            患者會出現 <span class="kw1">手腳掌增大</span>（鞋子尺寸改變）、
+            <span class="kw4">下巴突出</span>、<span class="kw6">鼻樑變寬</span> 等特徵。
+            透過區分 <span class="kw7">發育期前</span>（巨人症）與
+            <span class="kw7">發育期後</span>（肢端肥大症）的影響，能更完整地理解
+            生長激素的 <span class="kw3">作用機制</span>。
+          </p>
+        </div>
+        <div class="content-image">
+          <img src="4_1.png" alt="肢端肥大症示意圖">
+        </div>
+      </div>
+
+      <!-- 第三段：左圖 -->
+      <div class="section-title">2. 總指揮的上司：下視丘</div>
+      <div class="content-block reverse">
+        <div class="content-text">
+          <p>
+            雖然 <span class="kw1">腦垂腺</span> 掌握大權，但它其實是聽命於腦部的
+            「<span class="kw2">下視丘</span>」。下視丘就像是內分泌系統的
+            「<span class="kw3">總經理</span>」（決策者），它會
+            <span class="kw4">偵測身體狀況</span>，發布
+            「<span class="kw5">釋放激素</span>」或「<span class="kw6">抑制激素</span>」的命令給
+            腦垂腺（經理）。
+          </p>
+          <p>
+            <span class="kw1">腦垂腺</span> 再進一步指揮
+            <span class="kw2">甲狀腺</span>、<span class="kw7">性腺</span> 等腺體（員工）
+            <span class="kw3">執行任務</span>。因此，
+            <span class="kw2">下視丘</span> 是調節人體
+            <span class="kw4">內分泌穩定</span> 的
+            <span class="kw5">最高中心</span>。
+          </p>
+        </div>
+        <div class="content-image">
+          <img src="4_2.png" alt="下視丘與腦垂腺關係示意圖">
+        </div>
+      </div>
+
+      <!-- 第四段：右圖 -->
+      <div class="section-title">3. 與水的平衡：抗利尿激素</div>
+      <div class="content-block">
+        <div class="content-text">
+          <p>
+            <span class="kw1">腦垂腺後葉</span> 會釋放
+            「<span class="kw2">抗利尿激素</span>」（<span class="kw3">ADH</span>）。當人體因
+            <span class="kw4">流汗</span> 或 <span class="kw4">缺水</span> 而導致
+            <span class="kw5">血液濃度過高</span> 時，ADH 會被分泌，命令
+            <span class="kw6">腎臟</span> 減少 <span class="kw1">尿液的產生</span>，
+            將水分「<span class="kw3">留住</span>」，以維持體內
+            <span class="kw2">水分恆定</span>。
+          </p>
+          <p>
+            然而，<span class="kw4">酒精</span> 會
+            <span class="kw5">抑制</span> 腦垂腺分泌 ADH，這就是為什麼喝
+            <span class="kw7">啤酒</span> 會導致
+            <span class="kw1">頻繁排尿</span> 的原因——水分因無法回收而
+            <span class="kw6">直接排出體外</span>。
+          </p>
+        </div>
+        <div class="content-image">
+          <img src="4_3.png" alt="抗利尿激素與水分平衡示意圖">
+        </div>
+      </div>
+
+      <!-- 第五段：左圖 -->
+      <div class="section-title">4. 把握黃金時刻：睡眠與生長</div>
+      <div class="content-block reverse">
+        <div class="content-text">
+          <p>
+            <span class="kw2">生長激素</span> 的分泌並非全天平均，它呈現
+            「<span class="kw3">脈衝式分泌</span>」，且高峰期與
+            <span class="kw1">深度睡眠</span> 息息相關。科學研究顯示，
+            生長激素分泌量最高峰通常在 <span class="kw4">入睡後 1~2 小時</span>
+            以及 <span class="kw5">深夜 11 點到凌晨 2 點</span> 之間。
+          </p>
+          <p>
+            因此，對於想長高的青少年來說，
+            <span class="kw3">充足且品質良好的睡眠</span>，尤其是在
+            <span class="kw6">晚上 10 點至 11 點前入睡</span>，是比補充再多
+            <span class="kw7">營養品</span> 更重要的
+            「<span class="kw2">長高小撇步</span>」。
+          </p>
+        </div>
+        <div class="content-image">
+          <img src="4_4.png" alt="睡眠與生長激素分泌示意圖">
+        </div>
+      </div>
+
+      <!-- 第六段：右圖 -->
+      <div class="section-title">5. 情感的連結：催產素</div>
+      <div class="content-block">
+        <div class="content-text">
+          <p>
+            <span class="kw1">腦垂腺後葉</span> 除了分泌 ADH，還會釋放
+            「<span class="kw2">催產素</span>」（<span class="kw3">Oxytocin</span>）。
+            它在女性 <span class="kw4">分娩</span> 和
+            <span class="kw5">哺乳</span> 中扮演重要角色，但更廣為人知的是它
+            「<span class="kw6">愛的荷爾蒙</span>」的別稱。
+          </p>
+          <p>
+            當我們 <span class="kw2">擁抱</span>、<span class="kw3">親近</span> 或與人建立
+            <span class="kw4">信任感</span> 時，催產素就會分泌，促進
+            <span class="kw1">情感連結</span> 與 <span class="kw5">歸屬感</span>。
+            這顯示了腦垂腺不只控制 <span class="kw7">生理發育</span>，也影響著人類的
+            <span class="kw6">社會行為</span> 與 <span class="kw2">情緒</span>。
+          </p>
+        </div>
+        <div class="content-image">
+          <img src="4_5.png" alt="催產素與情感連結示意圖">
+        </div>
+      </div>
+
+      <!-- 第六段下方：4_6 滿版圖 -->
+      <div class="full-width-img-wrapper">
+        <img src="4_6.png" alt="催產素相關生活情境示意圖" class="full-width-img">
+      </div>
+
+      <!-- 練習題 -->
+      <div class="quiz-section-title">互動練習題</div>
+
+      <!-- Q1：單選題 -->
+      <section class="question" data-qid="q1" data-qtype="single">
+        <div class="q-title">題目一：巨人症與肢端肥大症的差異</div>
+        <div class="q-body">
+          根據上文，關於 <span class="kw6">生長激素</span> 過多造成的疾病，下列哪一項敘述正確？
+        </div>
+        <div class="options">
+          <label>
+            <input type="radio" name="q1" value="A" data-correct="false">
+            <span>（A）生長板尚未癒合時，生長激素分泌過多會造成 <strong>肢端肥大症</strong>。</span>
+          </label>
+          <label>
+            <input type="radio" name="q1" value="B" data-correct="true">
+            <span>（B）<strong>成年後</strong> 骨骺已癒合，若生長激素仍分泌過多，會造成 <strong>肢端肥大症</strong>。</span>
+          </label>
+          <label>
+            <input type="radio" name="q1" value="C" data-correct="false">
+            <span>（C）生長激素多寡只影響身高，與下巴或鼻樑外觀無關。</span>
+          </label>
+        </div>
+        <div class="q-actions">
+          <button class="btn btn-primary check-btn" type="button" disabled>檢查答案</button>
+          <button class="btn btn-secondary reset-btn" type="button" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback"></div>
+      </section>
+
+      <!-- Q2：下拉填表題 -->
+      <section class="question" data-qid="q2" data-qtype="dropdown">
+        <div class="q-title">題目二：誰是總經理？誰是經理？</div>
+        <div class="q-body">
+          請用下拉選單補上正確的角色名稱，完成內分泌系統「公司」的分工。
+        </div>
+        <div class="inline-select-group">
+          <div class="inline-select-row">
+            <span>（1）偵測身體狀況，發布「釋放激素」或「抑制激素」指令的是：</span>
+            <select data-answer="hypo">
+              <option value="">— 請選擇 —</option>
+              <option value="pit">腦垂腺</option>
+              <option value="hypo">下視丘</option>
+              <option value="gland">其他內分泌腺體（如甲狀腺、性腺）</option>
+            </select>
+          </div>
+          <div class="inline-select-row">
+            <span>（2）接受指令，再分泌激素去指揮其他腺體的是：</span>
+            <select data-answer="pit">
+              <option value="">— 請選擇 —</option>
+              <option value="pit">腦垂腺</option>
+              <option value="hypo">下視丘</option>
+              <option value="gland">其他內分泌腺體（如甲狀腺、性腺）</option>
+            </select>
+          </div>
+          <div class="inline-select-row">
+            <span>（3）依照腦垂腺的指令執行任務的是：</span>
+            <select data-answer="gland">
+              <option value="">— 請選擇 —</option>
+              <option value="pit">腦垂腺</option>
+              <option value="hypo">下視丘</option>
+              <option value="gland">其他內分泌腺體（如甲狀腺、性腺）</option>
+            </select>
+          </div>
+        </div>
+        <div class="q-actions">
+          <button class="btn btn-primary check-btn" type="button" disabled>檢查答案</button>
+          <button class="btn btn-secondary reset-btn" type="button" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback"></div>
+      </section>
+
+      <!-- Q3：多選題 -->
+      <section class="question" data-qid="q3" data-qtype="multi">
+        <div class="q-title">題目三：ADH 與喝啤酒（可複選）</div>
+        <div class="q-body">
+          根據第三段內容，關於 <span class="kw2">抗利尿激素（ADH）</span> 與喝啤酒，下列哪些敘述是正確的？（可複選）
+        </div>
+        <div class="options">
+          <label>
+            <input type="checkbox" value="A" data-correct="true">
+            <span>（A）當流汗或缺水時，ADH 會分泌，命令腎臟減少尿液的產生。</span>
+          </label>
+          <label>
+            <input type="checkbox" value="B" data-correct="false">
+            <span>（B）ADH 分泌增加時，尿量一定會明顯增加。</span>
+          </label>
+          <label>
+            <input type="checkbox" value="C" data-correct="true">
+            <span>（C）酒精會抑制腦垂腺分泌 ADH。</span>
+          </label>
+          <label>
+            <input type="checkbox" value="D" data-correct="false">
+            <span>（D）喝大量啤酒時，水分比較不容易排出體外。</span>
+          </label>
+        </div>
+        <div class="q-actions">
+          <button class="btn btn-primary check-btn" type="button" disabled>檢查答案</button>
+          <button class="btn btn-secondary reset-btn" type="button" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback"></div>
+      </section>
+
+      <!-- Q4：是非按鈕題 -->
+      <section class="question" data-qid="q4" data-qtype="tf" data-answer="false">
+        <div class="q-title">題目四：熬夜也可以長高嗎？</div>
+        <div class="q-body">
+          判斷下列敘述的正確與否：
+          <br>
+          「想長高的青少年，只要有補充足夠營養，熬夜到凌晨兩點再睡，對
+          <span class="kw2">生長激素</span> 的分泌效果與晚上 10 點入睡一樣好。」
+        </div>
+        <div class="tf-choices">
+          <button type="button" data-value="true">我覺得是「正確」</button>
+          <button type="button" data-value="false">我覺得是「錯誤」</button>
+        </div>
+        <div class="q-actions">
+          <button class="btn btn-primary check-btn" type="button" disabled>檢查答案</button>
+          <button class="btn btn-secondary reset-btn" type="button" style="display:none;">重做本題</button>
+        </div>
+        <div class="feedback"></div>
+      </section>
+
+      <!-- 頁尾導覽 -->
+      <footer class="nav-footer">
+        <a href="./3.html" class="nav-btn">
+          <span>←</span> 上一頁
+        </a>
+        <div class="nav-status">
+          完成所有題目且皆正確後，<strong>「下一頁 →」</strong> 才會解鎖。
+        </div>
+        <a href="javascript:void(0)" id="nextBtn" class="nav-btn disabled" aria-disabled="true">
+          下一頁 <span>→</span>
+        </a>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const questions = document.querySelectorAll('.question');
+      const nextBtn = document.getElementById('nextBtn');
+
+      // True/False 按鈕選擇
+      document.querySelectorAll('.question[data-qtype="tf"]').forEach(q => {
+        const buttons = q.querySelectorAll('.tf-choices button');
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            buttons.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            updateCheckButtonState(q);
+          });
+        });
+      });
+
+      questions.forEach(q => {
+        const qtype = q.dataset.qtype;
+        const checkBtn = q.querySelector('.check-btn');
+        const resetBtn = q.querySelector('.reset-btn');
+        const feedback = q.querySelector('.feedback');
+
+        // 監聽輸入變化，用來啟用檢查按鈕
+        if (qtype === 'single' || qtype === 'multi') {
+          q.querySelectorAll('input').forEach(input => {
+            input.addEventListener('change', () => updateCheckButtonState(q));
+          });
+        } else if (qtype === 'dropdown') {
+          q.querySelectorAll('select').forEach(sel => {
+            sel.addEventListener('change', () => updateCheckButtonState(q));
+          });
+        }
+
+        checkBtn.addEventListener('click', () => {
+          if (checkBtn.disabled) return;
+
+          const isCorrect = evaluateQuestion(q);
+          q.classList.remove('correct', 'incorrect');
+          feedback.style.display = 'block';
+
+          if (isCorrect) {
+            q.classList.add('correct');
+            q.dataset.correct = 'true';
+            feedback.textContent = '✅ 太棒了！你的理解是正確的。';
+            checkBtn.disabled = true;
+            resetBtn.style.display = 'none';
+            lockQuestionInputs(q);
+          } else {
+            q.classList.add('incorrect');
+            q.dataset.correct = 'false';
+            feedback.textContent = '❌ 還有一點小地方需要再想想，請按「重做本題」再試一次。';
+            checkBtn.disabled = true;
+            resetBtn.style.display = 'inline-flex';
+          }
+
+          updateNextButtonState();
+        });
+
+        resetBtn.addEventListener('click', () => {
+          resetQuestion(q);
+          q.classList.remove('correct', 'incorrect');
+          q.dataset.correct = 'false';
+          feedback.style.display = 'none';
+          feedback.textContent = '';
+          checkBtn.disabled = true;
+          resetBtn.style.display = 'none';
+        });
+
+        // 初始化
+        q.dataset.correct = 'false';
+        updateCheckButtonState(q);
+      });
+
+      function isAnswered(q) {
+        const qtype = q.dataset.qtype;
+        if (qtype === 'single') {
+          return !!q.querySelector('input[type="radio"]:checked');
+        } else if (qtype === 'dropdown') {
+          const selects = q.querySelectorAll('select');
+          if (!selects.length) return false;
+          return Array.from(selects).every(sel => sel.value !== '');
+        } else if (qtype === 'multi') {
+          const cbs = q.querySelectorAll('input[type="checkbox"]');
+          return Array.from(cbs).some(cb => cb.checked);
+        } else if (qtype === 'tf') {
+          return !!q.querySelector('.tf-choices button.selected');
+        }
+        return false;
+      }
+
+      function updateCheckButtonState(q) {
+        const checkBtn = q.querySelector('.check-btn');
+        checkBtn.disabled = !isAnswered(q);
+      }
+
+      function evaluateQuestion(q) {
+        const qtype = q.dataset.qtype;
+
+        if (qtype === 'single') {
+          const checked = q.querySelector('input[type="radio"]:checked');
+          if (!checked) return false;
+          return checked.dataset.correct === 'true';
+        }
+
+        if (qtype === 'dropdown') {
+          const selects = q.querySelectorAll('select');
+          return Array.from(selects).every(sel => {
+            const ans = sel.dataset.answer;
+            return sel.value === ans;
+          });
+        }
+
+        if (qtype === 'multi') {
+          const checkboxes = q.querySelectorAll('input[type="checkbox"]');
+          let ok = true;
+          checkboxes.forEach(cb => {
+            const shouldBeChecked = cb.dataset.correct === 'true';
+            if (shouldBeChecked && !cb.checked) ok = false;
+            if (!shouldBeChecked && cb.checked) ok = false;
+          });
+          return ok;
+        }
+
+        if (qtype === 'tf') {
+          const selected = q.querySelector('.tf-choices button.selected');
+          if (!selected) return false;
+          const ans = q.dataset.answer; // 'true' 或 'false'
+          return selected.dataset.value === ans;
+        }
+
+        return false;
+      }
+
+      function lockQuestionInputs(q) {
+        const inputs = q.querySelectorAll('input, select');
+        inputs.forEach(el => {
+          el.disabled = true;
+        });
+
+        if (q.dataset.qtype === 'tf') {
+          q.querySelectorAll('.tf-choices button').forEach(btn => {
+            btn.disabled = true;
+          });
+        }
+      }
+
+      function unlockQuestionInputs(q) {
+        const inputs = q.querySelectorAll('input, select');
+        inputs.forEach(el => {
+          el.disabled = false;
+        });
+
+        if (q.dataset.qtype === 'tf') {
+          q.querySelectorAll('.tf-choices button').forEach(btn => {
+            btn.disabled = false;
+          });
+        }
+      }
+
+      function resetQuestion(q) {
+        const qtype = q.dataset.qtype;
+        unlockQuestionInputs(q);
+
+        if (qtype === 'single') {
+          q.querySelectorAll('input[type="radio"]').forEach(r => {
+            r.checked = false;
+          });
+        } else if (qtype === 'dropdown') {
+          q.querySelectorAll('select').forEach(sel => {
+            sel.value = '';
+          });
+        } else if (qtype === 'multi') {
+          q.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.checked = false;
+          });
+        } else if (qtype === 'tf') {
+          q.querySelectorAll('.tf-choices button').forEach(btn => {
+            btn.classList.remove('selected');
+          });
+        }
+      }
+
+      function updateNextButtonState() {
+        const allCorrect = Array.from(questions).every(q => q.dataset.correct === 'true');
+        if (allCorrect) {
+          nextBtn.classList.remove('disabled');
+          nextBtn.removeAttribute('aria-disabled');
+          nextBtn.setAttribute('href', './5.html');
+        } else {
+          nextBtn.classList.add('disabled');
+          nextBtn.setAttribute('aria-disabled', 'true');
+          nextBtn.setAttribute('href', 'javascript:void(0)');
+        }
+      }
+    });
+  </script>
+</body>
+</html>

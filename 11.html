@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8" />
+  <title>內分泌系統單元總結性評量（20題）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+        "Microsoft JhengHei", sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f4f6fb;
+      color: #333;
+    }
+    header {
+      background: linear-gradient(135deg, #4b7bec, #34ace0);
+      color: #fff;
+      padding: 18px 10px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    header p {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      opacity: 0.95;
+    }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    section {
+      background: #fff;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      border-left: 4px solid #4b7bec;
+      padding-left: 8px;
+    }
+    .hint {
+      font-size: 0.8rem;
+      color: #666;
+    }
+    .field {
+      margin-bottom: 8px;
+    }
+    .field label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 2px;
+    }
+    .field input[type="text"] {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #d0d3dc;
+      font-size: 0.9rem;
+    }
+    .flex-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .flex-3 {
+      flex: 1 1 calc(33% - 10px);
+    }
+    .question {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #e0e4f0;
+      background: #f8f9ff;
+    }
+    .q-title {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    .options label {
+      display: block;
+      font-size: 0.9rem;
+      margin: 2px 0;
+      cursor: pointer;
+    }
+    .explanation {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      padding: 6px 8px;
+      border-radius: 6px;
+      display: none;
+    }
+    .explanation.correct {
+      background: #eafaf1;
+      color: #1e824c;
+      border: 1px solid #b8e994;
+    }
+    .explanation.wrong {
+      background: #fdecea;
+      color: #c0392b;
+      border: 1px solid #f8a5a5;
+    }
+    .result-box {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #f1f3f8;
+      font-size: 0.95rem;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: #4b7bec;
+      color: white;
+      margin-right: 8px;
+      margin-top: 6px;
+      transition: background 0.2s, transform 0.05s;
+    }
+    button:hover {
+      background: #3867d6;
+    }
+    button:active {
+      transform: scale(0.97);
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    button.secondary {
+      background: #d1d8e0;
+      color: #2c3e50;
+    }
+    button.secondary:hover {
+      background: #a5b1c2;
+    }
+    .keyword {
+      color: #e15f41;
+      font-weight: 600;
+    }
+    /* 警示文字樣式 */
+    .warning-text {
+      display: inline-block;
+      color: #e74c3c;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    /* 上傳狀態樣式 */
+    .upload-status {
+      margin-top: 10px;
+      padding: 10px;
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+      color: #856404;
+      border-radius: 5px;
+      display: none;
+    }
+    .upload-success {
+      background: #d4edda;
+      border-color: #c3e6cb;
+      color: #155724;
+    }
+    .upload-error {
+      background: #f8d7da;
+      border-color: #f5c6cb;
+      color: #721c24;
+    }
+
+    @media (max-width: 720px) {
+      .flex-3 {
+        flex: 1 1 100%;
+      }
+      header h1 {
+        font-size: 1.25rem;
+      }
+      /* 手機版時警示文字換行，避免太擠 */
+      .warning-text {
+        display: block;
+        margin-left: 0;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>4-2 內分泌系統｜單元總結性評量</h1>
+    <p>20 題素養導向選擇題，每題 5 分，總分 100 分</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>一、基本資料</h2>
+      <div class="flex-row">
+        <div class="field flex-3">
+          <label for="classInput">班級</label>
+          <input type="text" id="classInput" placeholder="例如：803" />
+        </div>
+        <div class="field flex-3">
+          <label for="seatInput">座號</label>
+          <input type="text" id="seatInput" placeholder="例如：12" />
+        </div>
+        <div class="field flex-3">
+          <label for="nameInput">姓名</label>
+          <input type="text" id="nameInput" placeholder="請輸入姓名" />
+        </div>
+      </div>
+      <p class="hint">
+        作答完畢後按「送出並看詳解」，系統會顯示總分與每題解析，並自動上傳成績。
+      </p>
+    </section>
+
+    <section>
+      <h2>二、選擇題（共 20 題，每題 5 分）</h2>
+
+      <div class="question" data-index="1">
+        <div class="q-title">1. 小明考試前感到非常緊張，發現自己心跳加快、呼吸變急促。主要是因為哪一種激素分泌增加所造成？</div>
+        <div class="options">
+          <label><input type="radio" name="q1" value="A" /> A. 生長激素</label>
+          <label><input type="radio" name="q1" value="B" /> B. 甲狀腺素</label>
+          <label><input type="radio" name="q1" value="C" /> C. 腎上腺素</label>
+          <label><input type="radio" name="q1" value="D" /> D. 胰島素</label>
+        </div>
+        <div class="explanation" id="exp1"></div>
+      </div>
+
+      <div class="question" data-index="2">
+        <div class="q-title">2. 關於內分泌系統的作用特性，下列何者最符合？</div>
+        <div class="options">
+          <label><input type="radio" name="q2" value="A" /> A. 作用迅速且短暫，僅影響局部</label>
+          <label><input type="radio" name="q2" value="B" /> B. 透過激素，調節多種器官，作用較廣泛且持久</label>
+          <label><input type="radio" name="q2" value="C" /> C. 只能在危急時短暫發揮作用</label>
+          <label><input type="radio" name="q2" value="D" /> D. 僅用於傳遞痛覺與溫度訊息</label>
+        </div>
+        <div class="explanation" id="exp2"></div>
+      </div>
+
+      <div class="question" data-index="3">
+        <div class="q-title">3. 下列哪一個構造屬於內分泌腺？</div>
+        <div class="options">
+          <label><input type="radio" name="q3" value="A" /> A. 唾腺</label>
+          <label><input type="radio" name="q3" value="B" /> B. 汗腺</label>
+          <label><input type="radio" name="q3" value="C" /> C. 腦垂腺</label>
+          <label><input type="radio" name="q3" value="D" /> D. 皮脂腺</label>
+        </div>
+        <div class="explanation" id="exp3"></div>
+      </div>
+
+      <div class="question" data-index="4">
+        <div class="q-title">4. 腦垂腺分泌的生長激素主要功能為何？</div>
+        <div class="options">
+          <label><input type="radio" name="q4" value="A" /> A. 調節血液中鈣的濃度</label>
+          <label><input type="radio" name="q4" value="B" /> B. 控制細胞代謝速率與生長</label>
+          <label><input type="radio" name="q4" value="C" /> C. 促進生長與發育，是控制身高的重要激素</label>
+          <label><input type="radio" name="q4" value="D" /> D. 直接產生神經衝動，讓肌肉收縮</label>
+        </div>
+        <div class="explanation" id="exp4"></div>
+      </div>
+
+      <div class="question" data-index="5">
+        <div class="q-title">5. 某甲在成長階段時，生長激素分泌太少，成年後身材特別矮小，此情形稱為：</div>
+        <div class="options">
+          <label><input type="radio" name="q5" value="A" /> A. 甲狀腺亢進</label>
+          <label><input type="radio" name="q5" value="B" /> B. 侏儒症</label>
+          <label><input type="radio" name="q5" value="C" /> C. 巨人症</label>
+          <label><input type="radio" name="q5" value="D" /> D. 糖尿病</label>
+        </div>
+        <div class="explanation" id="exp5"></div>
+      </div>
+
+      <div class="question" data-index="6">
+        <div class="q-title">6. 甲狀腺素分泌過多的人，最可能出現下列哪一種狀況？</div>
+        <div class="options">
+          <label><input type="radio" name="q6" value="A" /> A. 行動遲緩、容易嗜睡、體重增加</label>
+          <label><input type="radio" name="q6" value="B" /> B. 肌肉易痙攣、抽筋</label>
+          <label><input type="radio" name="q6" value="C" /> C. 消瘦、易緊張煩躁、代謝變快</label>
+          <label><input type="radio" name="q6" value="D" /> D. 皮膚乾裂、掉髮</label>
+        </div>
+        <div class="explanation" id="exp6"></div>
+      </div>
+
+      <div class="question" data-index="7">
+        <div class="q-title">7. 副甲狀腺素主要調節哪一項物質的濃度，進而影響骨骼與肌肉的正常功能？</div>
+        <div class="options">
+          <label><input type="radio" name="q7" value="A" /> A. 鈉</label>
+          <label><input type="radio" name="q7" value="B" /> B. 鈣</label>
+          <label><input type="radio" name="q7" value="C" /> C. 葡萄糖</label>
+          <label><input type="radio" name="q7" value="D" /> D. 脂肪酸</label>
+        </div>
+        <div class="explanation" id="exp7"></div>
+      </div>
+
+      <div class="question" data-index="8">
+        <div class="q-title">8. 關於內分泌腺與外分泌腺的比較，下列何者正確？</div>
+        <div class="options">
+          <label><input type="radio" name="q8" value="A" /> A. 汗腺為內分泌腺，分泌的汗液由血液運輸</label>
+          <label><input type="radio" name="q8" value="B" /> B. 內分泌腺的分泌物通常經由輸送管道排出體外</label>
+          <label><input type="radio" name="q8" value="C" /> C. 外分泌腺多依賴血液運送激素到各部位</label>
+          <label><input type="radio" name="q8" value="D" /> D. 內分泌腺分泌激素由血液運送，汗腺與消化腺則有特定導管</label>
+        </div>
+        <div class="explanation" id="exp8"></div>
+      </div>
+
+      <div class="question" data-index="9">
+        <div class="q-title">9. 胰島中的內分泌細胞會分泌哪一種激素來降低血糖濃度？</div>
+        <div class="options">
+          <label><input type="radio" name="q9" value="A" /> A. 腎上腺素</label>
+          <label><input type="radio" name="q9" value="B" /> B. 升糖素</label>
+          <label><input type="radio" name="q9" value="C" /> C. 胰島素</label>
+          <label><input type="radio" name="q9" value="D" /> D. 副甲狀腺素</label>
+        </div>
+        <div class="explanation" id="exp9"></div>
+      </div>
+
+      <div class="question" data-index="10">
+        <div class="q-title">10. 糖尿病患者常出現「吃多、喝多、尿多及體重減輕」的情形，其主要原因與下列哪一項有關？</div>
+        <div class="options">
+          <label><input type="radio" name="q10" value="A" /> A. 生長激素分泌不足</label>
+          <label><input type="radio" name="q10" value="B" /> B. 胰島素長期分泌不足或作用不佳</label>
+          <label><input type="radio" name="q10" value="C" /> C. 甲狀腺素分泌過多</label>
+          <label><input type="radio" name="q10" value="D" /> D. 副甲狀腺素分泌過多</label>
+        </div>
+        <div class="explanation" id="exp10"></div>
+      </div>
+
+      <div class="question" data-index="11">
+        <div class="q-title">11. 下列何種情境最可能使升糖素分泌量增加？</div>
+        <div class="options">
+          <label><input type="radio" name="q11" value="A" /> A. 剛喝完一大杯含糖手搖飲</label>
+          <label><input type="radio" name="q11" value="B" /> B. 一整個早上沒吃早餐，接近中午時感到頭暈</label>
+          <label><input type="radio" name="q11" value="C" /> C. 剛打完預防針</label>
+          <label><input type="radio" name="q11" value="D" /> D. 剛洗完熱水澡覺得全身放鬆</label>
+        </div>
+        <div class="explanation" id="exp11"></div>
+      </div>
+
+      <div class="question" data-index="12">
+        <div class="q-title">12. 體育課進行 400 公尺衝刺比賽時，為了讓身體在短時間內獲得足夠能量，下列哪些反應是腎上腺素促成的結果？</div>
+        <div class="options">
+          <label><input type="radio" name="q12" value="A" /> A. 心跳變慢、血壓下降</label>
+          <label><input type="radio" name="q12" value="B" /> B. 呼吸加快加深、血糖濃度提高</label>
+          <label><input type="radio" name="q12" value="C" /> C. 鈣從骨骼大量釋出，使肌肉痙攣</label>
+          <label><input type="radio" name="q12" value="D" /> D. 促進精子與卵的形成</label>
+        </div>
+        <div class="explanation" id="exp12"></div>
+      </div>
+
+      <div class="question" data-index="13">
+        <div class="q-title">13. 小芳進入青春期後，乳房開始發育、臀部與大腿皮下脂肪增加。這些變化主要與哪一個腺體及其激素有關？</div>
+        <div class="options">
+          <label><input type="radio" name="q13" value="A" /> A. 腎上腺分泌腎上腺素</label>
+          <label><input type="radio" name="q13" value="B" /> B. 卵巢分泌雌性激素</label>
+          <label><input type="radio" name="q13" value="C" /> C. 甲狀腺分泌甲狀腺素</label>
+          <label><input type="radio" name="q13" value="D" /> D. 腦垂腺分泌升糖素</label>
+        </div>
+        <div class="explanation" id="exp13"></div>
+      </div>
+
+      <div class="question" data-index="14">
+        <div class="q-title">14. 阿志已經高一了，但鬍鬚稀少、喉結不明顯、聲音仍偏高。若推測與內分泌有關，較可能是因為：</div>
+        <div class="options">
+          <label><input type="radio" name="q14" value="A" /> A. 睪丸分泌雄性激素不足</label>
+          <label><input type="radio" name="q14" value="B" /> B. 卵巢分泌雌性激素不足</label>
+          <label><input type="radio" name="q14" value="C" /> C. 垂體生長激素過多</label>
+          <label><input type="radio" name="q14" value="D" /> D. 副甲狀腺素分泌不足</label>
+        </div>
+        <div class="explanation" id="exp14"></div>
+      </div>
+
+      <div class="question" data-index="15">
+        <div class="q-title">15. 比較神經系統與內分泌系統的作用特性，下列哪一組配對正確？</div>
+        <div class="options">
+          <label><input type="radio" name="q15" value="A" /> A. 神經系統：持久且廣泛；內分泌系統：迅速且局部</label>
+          <label><input type="radio" name="q15" value="B" /> B. 神經系統：透過激素傳遞訊息；內分泌系統：透過神經衝動</label>
+          <label><input type="radio" name="q15" value="C" /> C. 神經系統：局部、迅速、短暫；內分泌系統：廣泛、較慢且持久</label>
+          <label><input type="radio" name="q15" value="D" /> D. 兩者作用方式完全相同，只是名稱不同</label>
+        </div>
+        <div class="explanation" id="exp15"></div>
+      </div>
+
+      <div class="question" data-index="16">
+        <div class="q-title">16. 下表為甲、乙兩名學生在成長階段的生長激素分泌狀況與身高表現的關係，何者推論最合理？
+          <br />
+          <span class="hint">
+            甲：生長激素分泌明顯高於同齡平均值，成年後身高約 210 公分；<br />
+            乙：生長激素分泌遠低於同齡平均值，成年後身高約 130 公分。
+          </span>
+        </div>
+        <div class="options">
+          <label><input type="radio" name="q16" value="A" /> A. 甲可能罹患侏儒症，乙則為巨人症</label>
+          <label><input type="radio" name="q16" value="B" /> B. 甲可能為巨人症，乙可能為侏儒症</label>
+          <label><input type="radio" name="q16" value="C" /> C. 兩人皆屬正常變異，與生長激素無關</label>
+          <label><input type="radio" name="q16" value="D" /> D. 甲與乙都是因甲狀腺素分泌異常所致</label>
+        </div>
+        <div class="explanation" id="exp16"></div>
+      </div>
+
+      <div class="question" data-index="17">
+        <div class="q-title">17. 蝌蚪變成青蛙、毛毛蟲變成蝴蝶，這些成長與形態的大改變，主要依靠哪一種調節方式？</div>
+        <div class="options">
+          <label><input type="radio" name="q17" value="A" /> A. 外骨骼增生</label>
+          <label><input type="radio" name="q17" value="B" /> B. 內分泌腺分泌的激素調節</label>
+          <label><input type="radio" name="q17" value="C" /> C. 皮膚的汗腺分泌汗液</label>
+          <label><input type="radio" name="q17" value="D" /> D. 肌肉自行收縮變形</label>
+        </div>
+        <div class="explanation" id="exp17"></div>
+      </div>
+
+      <div class="question" data-index="18">
+        <div class="q-title">18. 某地區飲食中長期缺乏碘，小華年幼時又沒有補充足夠碘與甲狀腺素。下列何種情況最可能出現在小華身上？</div>
+        <div class="options">
+          <label><input type="radio" name="q18" value="A" /> A. 甲狀腺腫脹成「大脖子」，且可能生長遲緩、智力受影響</label>
+          <label><input type="radio" name="q18" value="B" /> B. 骨骼鈣質大量流失，立即骨折</label>
+          <label><input type="radio" name="q18" value="C" /> C. 血糖濃度大幅升高，引發糖尿病</label>
+          <label><input type="radio" name="q18" value="D" /> D. 心跳過慢、呼吸停止</label>
+        </div>
+        <div class="explanation" id="exp18"></div>
+      </div>
+
+      <div class="question" data-index="19">
+        <div class="q-title">19. 小傑每天喝多杯含糖飲料，又常久坐不運動，健康檢查發現血糖偏高。從內分泌角度來看，下列哪一個器官長期負擔較重？</div>
+        <div class="options">
+          <label><input type="radio" name="q19" value="A" /> A. 腎上腺</label>
+          <label><input type="radio" name="q19" value="B" /> B. 胰島</label>
+          <label><input type="radio" name="q19" value="C" /> C. 副甲狀腺</label>
+          <label><input type="radio" name="q19" value="D" /> D. 卵巢</label>
+        </div>
+        <div class="explanation" id="exp19"></div>
+      </div>
+
+      <div class="question" data-index="20">
+        <div class="q-title">20. 當人突然聽到巨響而受到驚嚇時，會立刻縮一下身體、轉頭觀察，接著心跳和呼吸加快，以應付可能的危險。關於此現象，下列敘述何者最合理？</div>
+        <div class="options">
+          <label><input type="radio" name="q20" value="A" /> A. 只有神經系統參與，內分泌系統完全不作用</label>
+          <label><input type="radio" name="q20" value="B" /> B. 只有內分泌系統參與，神經系統完全不作用</label>
+          <label><input type="radio" name="q20" value="C" /> C. 神經系統負責快速的反射動作，內分泌系統藉由激素協助維持後續生理反應</label>
+          <label><input type="radio" name="q20" value="D" /> D. 兩者皆不相關，此為消化系統的反應</label>
+        </div>
+        <div class="explanation" id="exp20"></div>
+      </div>
+
+      <button id="submitBtn">送出並看詳解</button>
+      <button id="resetBtn" class="secondary">全部重填</button>
+      <span class="warning-text">按送出後即會上傳你的分數並結束內分泌系統的學習，請務必再仔細檢查你的答案是否正確!!</span>
+
+      <div class="result-box" id="resultBox" style="display: none"></div>
+    </section>
+  </main>
+
+  <script>
+    // === 🔴 Google Web App URL (已設定為您部屬後的網址) ===
+    // 請確認您的後端 Code.gs 已包含 doPost 函式以處理資料寫入
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwSQj_G3f-khUqaWV2wNrRPmBy1UoqJaGAbd6VixeRqi1bFMjNPXMzz_57p-ceSaKj0qQ/exec";
+
+    // 答案與解析設定
+    const answerKey = {
+      1: { ans: "C", exp: "腎上腺分泌的腎上腺素可使心跳加速、呼吸加快加深、血壓與血糖上升，以應付緊急或壓力情況。" },
+      2: { ans: "B", exp: "內分泌腺分泌的激素藉由血液運送到全身，多對多個器官產生影響，作用較廣泛且通常較持久。" },
+      3: { ans: "C", exp: "腦垂腺為內分泌腺，分泌多種激素；汗腺、唾腺與皮脂腺具有導管，屬於外分泌腺。" },
+      4: { ans: "C", exp: "生長激素是控制生長發育的主要激素，在成長階段過少或過多會造成侏儒症或巨人症。" },
+      5: { ans: "B", exp: "成長階段生長激素分泌不足，會造成身材矮小的侏儒症；若過多則為巨人症。" },
+      6: { ans: "C", exp: "甲狀腺素分泌過多會使代謝變快，個體常消瘦、心悸、容易緊張煩躁，為甲狀腺亢進的典型表現。" },
+      7: { ans: "B", exp: "副甲狀腺素可調節血液中鈣的濃度，影響骨骼生長與肌肉收縮；分泌不足時容易肌肉痙攣。" },
+      8: { ans: "D", exp: "內分泌腺的分泌物為激素，由血液運送；汗腺及消化腺等外分泌腺則具有導管，將分泌物排到體外或消化管中。" },
+      9: { ans: "C", exp: "胰島分泌胰島素與升糖素，其中胰島素可降低血糖濃度，升糖素則提升血糖濃度。" },
+      10: { ans: "B", exp: "糖尿病的成因之一為胰島素長期分泌不足或作用不佳，導致血糖過高並出現『三多一少』症狀。" },
+      11: { ans: "B", exp: "長時間未進食時血糖下降，升糖素分泌增加，促使肝糖分解成葡萄糖釋放到血液，使血糖回升。" },
+      12: { ans: "B", exp: "運動或緊急狀況時，腎上腺素使心跳加快、呼吸加快加深，並提高血糖濃度，提供應付狀況所需能量。" },
+      13: { ans: "B", exp: "卵巢分泌的雌性激素會影響女性第二性徵，例如乳房發育與皮下脂肪增加。" },
+      14: { ans: "A", exp: "睪丸分泌的雄性激素會影響男性第二性徵，如長鬍鬚、喉結明顯、聲音變低沉；若分泌不足則表現不明顯。" },
+      15: { ans: "C", exp: "神經系統藉由神經衝動傳導，作用局部、迅速且短暫；內分泌系統透過激素，作用廣泛、較慢且持久。" },
+      16: { ans: "B", exp: "成長期生長激素分泌過多會導致巨人症，過少則可能造成侏儒症，因此甲為巨人症，乙為侏儒症。" },
+      17: { ans: "B", exp: "蝌蚪變青蛙、毛毛蟲變蝴蝶等生命史變化，是由內分泌腺分泌的激素控制身體各部位的生長與變化。" },
+      18: { ans: "A", exp: "甲狀腺素需碘參與合成，缺碘會導致甲狀腺腫大（大脖子症），幼年期不足還會造成生長遲緩、智力發展受影響。" },
+      19: { ans: "B", exp: "長期攝取過多糖分會使胰島必須持續分泌胰島素調節血糖，因此胰島負擔較大，易增加糖尿病風險。" },
+      20: { ans: "C", exp: "突發刺激時，神經系統先產生迅速的反射與行為反應；隨後內分泌系統分泌激素（如腎上腺素），協助維持心跳加快等生理變化。" }
+    };
+
+    const fullScore = 100;
+    const pointsPerQuestion = 5;
+    const totalQuestions = 20;
+
+    const submitBtn = document.getElementById("submitBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resultBox = document.getElementById("resultBox");
+
+    function gradeQuiz() {
+      // 1. 檢查基本資料是否填寫
+      const classVal = document.getElementById("classInput").value.trim();
+      const seatVal = document.getElementById("seatInput").value.trim();
+      const nameVal = document.getElementById("nameInput").value.trim();
+
+      if (!classVal || !seatVal || !nameVal) {
+        alert("⚠️ 請確實填寫「班級、座號、姓名」後再送出喔！");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
+      // 2. 計算成績與顯示解析
+      let correctCount = 0;
+      let unanswered = [];
+
+      for (let i = 1; i <= totalQuestions; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const expDiv = document.getElementById(`exp${i}`);
+        if (!selected) {
+          unanswered.push(i);
+          expDiv.style.display = "none";
+          expDiv.textContent = "";
+          continue;
+        }
+
+        const userAns = selected.value;
+        const { ans, exp } = answerKey[i];
+
+        if (userAns === ans) {
+          correctCount++;
+          expDiv.className = "explanation correct";
+          expDiv.innerHTML = `✅ 作答正確！<br>【解析】${exp}`;
+        } else {
+          expDiv.className = "explanation wrong";
+          expDiv.innerHTML = `❌ 作答錯誤。你選：${userAns}，正確答案：${ans}<br>【解析】${exp}`;
+        }
+        expDiv.style.display = "block";
+      }
+
+      const score = correctCount * pointsPerQuestion;
+
+      let msg = `<strong>評量結果：</strong><br>你總共答對 <strong>${correctCount}</strong> 題，總分為 <strong>${score} / ${fullScore}</strong> 分。<br>`;
+      if (unanswered.length > 0) {
+        msg += `<span style="color:#c0392b;">尚未作答的題號：${unanswered.join(", ")}，已只計算已作答題目的分數，建議補完後再重新評量。</span>`;
+      } else {
+        msg += score === fullScore
+            ? "太棒了！你已非常熟悉內分泌系統的概念與應用。"
+            : "可以根據每題解析，回頭檢視哪些概念尚不熟悉。";
+      }
+
+      // 3. 顯示結果區塊
+      resultBox.style.display = "block";
+      resultBox.innerHTML = msg;
+      resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      // 4. 自動上傳成績邏輯
+      submitBtn.disabled = true;
+      submitBtn.textContent = "資料處理中...";
+
+      const statusDiv = document.createElement("div");
+      statusDiv.className = "upload-status";
+      statusDiv.style.display = "block";
+      statusDiv.innerHTML = "⏳ 正在上傳成績至伺服器，請稍候...";
+      resultBox.appendChild(statusDiv);
+
+      const postData = {
+        sheetName: "總評量", // ★★★ 關鍵修改：指定資料要存入「總評量」工作表
+        className: classVal,
+        seatNumber: seatVal,
+        studentName: nameVal,
+        score: score
+      };
+
+      fetch(GAS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postData)
+      })
+      .then(() => {
+        statusDiv.className = "upload-status upload-success";
+        statusDiv.innerHTML = "✅ <strong>成績上傳成功！</strong> 恭喜完成本單元學習。";
+        submitBtn.textContent = "已送出";
+      })
+      .catch((err) => {
+        console.error("Upload Failed", err);
+        statusDiv.className = "upload-status upload-error";
+        statusDiv.innerHTML = "❌ <strong>上傳失敗。</strong> 請檢查網路連線後，重新整理再試一次。";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "送出並看詳解";
+      });
+    }
+
+    function resetQuiz() {
+      for (let i = 1; i <= totalQuestions; i++) {
+        const radios = document.querySelectorAll(`input[name="q${i}"]`);
+        radios.forEach((r) => (r.checked = false));
+        const expDiv = document.getElementById(`exp${i}`);
+        expDiv.style.display = "none";
+        expDiv.textContent = "";
+      }
+      resultBox.style.display = "none";
+      resultBox.textContent = "";
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = "送出並看詳解";
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    submitBtn.addEventListener("click", gradeQuiz);
+    resetBtn.addEventListener("click", resetQuiz);
+  </script>
+</body>
+</html>

@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>男女大不同：性腺</title>
+  <style>
+    body {
+      font-family: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f9;
+      color: #1f2933;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 16px 80px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #111827;
+    }
+
+    h2 {
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: #111827;
+      border-left: 4px solid #3b82f6;
+      padding-left: 8px;
+      font-size: 1.15rem;
+    }
+
+    p {
+      margin: 8px 0;
+    }
+
+    .question-block {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 12px 0;
+      border: 2px solid transparent;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    }
+
+    .question-block.correct {
+      border-color: #16a34a;
+      background: #bbf7d0;
+    }
+
+    .question-block.incorrect {
+      border-color: #dc2626;
+      background: #fecaca;
+    }
+
+    .question-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    /* 加大課文填充題的行高，避免擁擠 */
+    .question-body {
+      margin-bottom: 8px;
+    }
+    
+    .question-body p {
+      line-height: 2.8; 
+    }
+
+    .feedback {
+      margin-top: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.05);
+      display: none;
+      font-size: 0.9rem;
+    }
+
+    select {
+      min-width: 90px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid #9ca3af;
+      margin: 4px 2px;
+      font-size: 0.95rem;
+      background: #ffffff;
+      vertical-align: middle;
+    }
+
+    .blank-correct {
+      border-color: #16a34a !important;
+      background: #dcfce7 !important;
+    }
+
+    .blank-incorrect {
+      border-color: #dc2626 !important;
+      background: #fee2e2 !important;
+    }
+
+    .keyword-blue {
+      background: #dbeafe;
+    }
+
+    .keyword-green {
+      background: #dcfce7;
+    }
+
+    .keyword-purple {
+      background: #ede9fe;
+    }
+
+    .keyword-yellow {
+      background: #fef9c3;
+    }
+
+    .btn-row {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .check-btn,
+    .redo-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    .check-btn {
+      background: #3b82f6;
+      color: #ffffff;
+    }
+
+    .check-btn:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .redo-btn {
+      background: #f97316;
+      color: #ffffff;
+      display: none;
+    }
+
+    .image-wrapper-center {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .image-wrapper-center img {
+      width: 66%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+    }
+
+    .image-full {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+      display: block;
+      margin-top: 8px;
+    }
+
+    .video-section {
+      margin-top: 28px;
+    }
+
+    .video-section h2 {
+      border-color: #10b981;
+    }
+
+    .video-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 12px 0 4px;
+    }
+
+    .video-card {
+      flex: 1 1 320px;
+      min-width: 280px;
+    }
+
+    .video-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+    }
+
+    .video-card iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+    }
+
+    .bonus-block {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      display: none; /* 預設隱藏 */
+    }
+
+    .options-group {
+      margin-top: 4px;
+    }
+
+    .options-group label {
+      display: block;
+      margin: 6px 0;
+      cursor: pointer;
+    }
+
+    .options-group input[type="radio"],
+    .options-group input[type="checkbox"] {
+      margin-right: 4px;
+    }
+
+    table.match-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 0.95rem;
+    }
+
+    table.match-table th,
+    table.match-table td {
+      border: 1px solid #d1d5db;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    table.match-table th {
+      background: #f3f4f6;
+    }
+
+    .nav-footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid #d1d5db;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .nav-button {
+      padding: 8px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      border: none;
+      background: #111827;
+      color: #ffffff;
+      font-size: 0.95rem;
+      text-align: center;
+      cursor: pointer;
+      min-width: 120px;
+    }
+
+    .nav-button.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .nav-button:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 640px) {
+      .image-wrapper-center img {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>男女大不同：性腺</h1>
+
+  <h2>一、認識性腺</h2>
+  <div class="question-block" id="q-cloze1" data-type="cloze" data-correct="false">
+    <div class="question-body">
+      <p>
+        男性的
+        <select class="keyword-blue" data-answer="睪丸">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="精子">精子</option>
+          <option value="卵">卵</option>
+          <option value="內分泌腺">內分泌腺</option>
+          <option value="性腺">性腺</option>
+          <option value="生殖腺">生殖腺</option>
+          <option value="汗腺">汗腺</option>
+        </select>
+        和女性的
+        <select class="keyword-green" data-answer="卵巢">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="精子">精子</option>
+          <option value="卵">卵</option>
+          <option value="內分泌腺">內分泌腺</option>
+          <option value="性腺">性腺</option>
+          <option value="生殖腺">生殖腺</option>
+          <option value="汗腺">汗腺</option>
+        </select>
+        ，可以產生
+        <select class="keyword-purple" data-answer="精子">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="精子">精子</option>
+          <option value="卵">卵</option>
+          <option value="內分泌腺">內分泌腺</option>
+          <option value="性腺">性腺</option>
+          <option value="生殖腺">生殖腺</option>
+          <option value="汗腺">汗腺</option>
+        </select>
+        或
+        <select class="keyword-yellow" data-answer="卵">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="精子">精子</option>
+          <option value="卵">卵</option>
+          <option value="內分泌腺">內分泌腺</option>
+          <option value="性腺">性腺</option>
+          <option value="生殖腺">生殖腺</option>
+          <option value="汗腺">汗腺</option>
+        </select>
+        等生殖細胞，也是人體重要的
+        <select class="keyword-blue" data-answer="內分泌腺">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="精子">精子</option>
+          <option value="卵">卵</option>
+          <option value="內分泌腺">內分泌腺</option>
+          <option value="性腺">性腺</option>
+          <option value="生殖腺">生殖腺</option>
+          <option value="汗腺">汗腺</option>
+        </select>
+        ，統稱為
+        <select class="keyword-green" data-answer="性腺">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="精子">精子</option>
+          <option value="卵">卵</option>
+          <option value="內分泌腺">內分泌腺</option>
+          <option value="性腺">性腺</option>
+          <option value="生殖腺">生殖腺</option>
+          <option value="汗腺">汗腺</option>
+        </select>
+        （又稱
+        <select class="keyword-purple" data-answer="生殖腺">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="精子">精子</option>
+          <option value="卵">卵</option>
+          <option value="內分泌腺">內分泌腺</option>
+          <option value="性腺">性腺</option>
+          <option value="生殖腺">生殖腺</option>
+          <option value="汗腺">汗腺</option>
+        </select>
+        ）。
+      </p>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="check-btn" onclick="checkQuestion('q-cloze1')" disabled>檢查答案</button>
+      <button type="button" class="redo-btn" onclick="resetQuestion('q-cloze1')">重做本題</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <h2>二、認識第二性徵</h2>
+  <div class="question-block" id="q-cloze2" data-type="cloze" data-correct="false">
+    <div class="question-body">
+      <p>
+        <select class="keyword-blue" data-answer="睪丸">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="雄性激素">雄性激素</option>
+          <option value="雌性激素">雌性激素</option>
+          <option value="第二性徵">第二性徵</option>
+        </select>
+        分泌
+        <select class="keyword-green" data-answer="雄性激素">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="雄性激素">雄性激素</option>
+          <option value="雌性激素">雌性激素</option>
+          <option value="第二性徵">第二性徵</option>
+        </select>
+        ，會影響男性
+        <select class="keyword-purple" data-answer="第二性徵">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="雄性激素">雄性激素</option>
+          <option value="雌性激素">雌性激素</option>
+          <option value="第二性徵">第二性徵</option>
+        </select>
+        的表現，例如長出鬍鬚、喉結凸出、聲音變低沉等。
+        <select class="keyword-yellow" data-answer="卵巢">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="雄性激素">雄性激素</option>
+          <option value="雌性激素">雌性激素</option>
+          <option value="第二性徵">第二性徵</option>
+        </select>
+        分泌
+        <select class="keyword-blue" data-answer="雌性激素">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="雄性激素">雄性激素</option>
+          <option value="雌性激素">雌性激素</option>
+          <option value="第二性徵">第二性徵</option>
+        </select>
+        ，會影響女性
+        <select class="keyword-green" data-answer="第二性徵">
+          <option value="">請選擇</option>
+          <option value="睪丸">睪丸</option>
+          <option value="卵巢">卵巢</option>
+          <option value="雄性激素">雄性激素</option>
+          <option value="雌性激素">雌性激素</option>
+          <option value="第二性徵">第二性徵</option>
+        </select>
+        的表現，例如乳房發育及皮下脂肪增加等。
+      </p>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="check-btn" onclick="checkQuestion('q-cloze2')" disabled>檢查答案</button>
+      <button type="button" class="redo-btn" onclick="resetQuestion('q-cloze2')">重做本題</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="image-wrapper-center">
+    <img src="9_1.png" alt="性腺相關示意圖 9_1" />
+  </div>
+
+  <h2>三、課文重點評量</h2>
+
+  <div class="question-block" id="q-video1" data-type="single-choice" data-correct="false">
+    <div class="question-title">評量 1</div>
+    <div class="question-body">
+      青春期身體快速變化主要與哪一種物質的分泌增加有關？
+      <div class="options-group">
+        <label>
+          <input type="radio" name="video1" value="A"> 血液中的紅血球
+        </label>
+        <label>
+          <input type="radio" name="video1" value="B"> 由內分泌腺分泌的激素
+        </label>
+        <label>
+          <input type="radio" name="video1" value="C"> 食物中的維生素
+        </label>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="check-btn" onclick="checkQuestion('q-video1')" disabled>檢查答案</button>
+      <button type="button" class="redo-btn" onclick="resetQuestion('q-video1')">重做本題</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="question-block" id="q-video2" data-type="single-choice" data-correct="false">
+    <div class="question-title">評量 2</div>
+    <div class="question-body">
+      關於第二性徵，下列何者正確？
+      <div class="options-group">
+        <label>
+          <input type="radio" name="video2" value="A"> 第二性徵只跟遺傳有關，與激素無關。
+        </label>
+        <label>
+          <input type="radio" name="video2" value="B"> 第二性徵是性腺分泌的激素作用在身體各部位的結果。
+        </label>
+        <label>
+          <input type="radio" name="video2" value="C"> 第二性徵只會出現在男生身上。
+        </label>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="check-btn" onclick="checkQuestion('q-video2')" disabled>檢查答案</button>
+      <button type="button" class="redo-btn" onclick="resetQuestion('q-video2')">重做本題</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="question-block" id="q-video3" data-type="single-choice" data-correct="false">
+    <div class="question-title">評量 3</div>
+    <div class="question-body">
+      為了健康面對青春期的身體變化，下列哪一種做法較適當？
+      <div class="options-group">
+        <label>
+          <input type="radio" name="video3" value="A"> 盡量避免運動，減少出汗。
+        </label>
+        <label>
+          <input type="radio" name="video3" value="B"> 保持規律作息、均衡飲食，並適度運動。
+        </label>
+        <label>
+          <input type="radio" name="video3" value="C"> 完全不與大人或老師討論自己的困擾。
+        </label>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="check-btn" onclick="checkQuestion('q-video3')" disabled>檢查答案</button>
+      <button type="button" class="redo-btn" onclick="resetQuestion('q-video3')">重做本題</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  
+  <div class="video-section">
+    <h2>四、影片學習：男女大不同</h2>
+    <p>請觀看下列兩段影片，了解青春期與性腺、第二性徵的關係，並完成下方影片評量。</p>
+    <div class="video-container">
+      <div class="video-card">
+        <div class="video-title">影片 1：青春期的身體變化與激素</div>
+        <iframe src="https://www.youtube.com/embed/YBNnbNvw5Gk" allowfullscreen></iframe>
+      </div>
+      <div class="video-card">
+        <div class="video-title">影片 2：男生女生身體變化比較</div>
+        <iframe src="https://www.youtube.com/embed/xFILp7-B4HA" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="question-block" id="q-video4" data-type="single-choice" data-correct="false">
+      <div class="question-title">影片評量 1</div>
+      <div class="question-body">
+        <p>外源性荷爾蒙（體外補充的男性或女性荷爾蒙）可以持續影響我們已經發育完成的特徵，例如改變脂肪分佈、肌肉量和聲音。但有些改變是「單向」的，一旦發生就非常難以復原。根據影片內容，下列哪一種生理變化，最能展現這種「一旦發生，就很難再變回原狀」的特性？</p>
+        <div class="options-group">
+          <label>
+            <input type="radio" name="video4" value="A"> 肌肉量的改變：男性荷爾蒙會增加肌肉量，但停止補充後肌肉量會慢慢減少。
+          </label>
+          <label>
+            <input type="radio" name="video4" value="B"> 脂肪的改變：補充女性荷爾蒙會讓脂肪集中到胸部和臀部，但補充男性荷爾蒙可以改變這種脂肪分佈。
+          </label>
+          <label>
+            <input type="radio" name="video4" value="C"> 毛髮的改變：男性荷爾蒙會刺激鬍鬚生長，但女性荷爾蒙可以抑制這種毛髮生長。
+          </label>
+          <label>
+            <input type="radio" name="video4" value="D"> 聲音的改變：聲音一旦因為男性荷爾蒙的作用而變低沉，即使補充女性荷爾蒙，也通常無法回復到原來的音高。
+          </label>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="check-btn" onclick="checkQuestion('q-video4')" disabled>檢查答案</button>
+        <button type="button" class="redo-btn" onclick="resetQuestion('q-video4')">重做本題</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question-block" id="q-video5" data-type="single-choice" data-correct="false">
+      <div class="question-title">影片評量 2</div>
+      <div class="question-body">
+        <p>為什麼我們常說青少年（國中時期）絕對不能亂用外源性荷爾蒙？</p>
+        <div class="options-group">
+          <label>
+            <input type="radio" name="video5" value="A"> 因為青少年的皮膚太嫩，打針會很痛，所以不要亂用外源性荷爾蒙。
+          </label>
+          <label>
+            <input type="radio" name="video5" value="B"> 因為可能會長得太高，容易變成巨人症，反而帶來困擾。
+          </label>
+          <label>
+            <input type="radio" name="video5" value="C"> 因為會讓生長板「提早關閉」，導致將來長不高，比原本預期的身高還矮，就跟喉結的形成一樣，這通常是不可逆的。
+          </label>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="check-btn" onclick="checkQuestion('q-video5')" disabled>檢查答案</button>
+        <button type="button" class="redo-btn" onclick="resetQuestion('q-video5')">重做本題</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+    
+    <div id="video-challenge-bonus" class="bonus-block">
+        <p>恭喜完成影片挑戰！這是補充圖解：</p>
+        <img src="9_2.png" alt="補充圖解 9_2" class="image-full">
+    </div>
+  </div>
+
+  <h2>五、素養導向互動練習</h2>
+
+  <div class="question-block" id="q-lit1" data-type="single-choice" data-correct="false">
+    <div class="question-title">素養題 1：情境判斷</div>
+    <div class="question-body">
+      小明進入青春期後，聲音變低沉、喉結變明顯，這主要是因為哪一個構造分泌的激素增加？
+      <div class="options-group">
+        <label>
+          <input type="radio" name="lit1" value="A"> 卵巢分泌的雌性激素
+        </label>
+        <label>
+          <input type="radio" name="lit1" value="B"> 睪丸分泌的雄性激素
+        </label>
+        <label>
+          <input type="radio" name="lit1" value="C"> 甲狀腺分泌的甲狀腺素
+        </label>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="check-btn" onclick="checkQuestion('q-lit1')" disabled>檢查答案</button>
+      <button type="button" class="redo-btn" onclick="resetQuestion('q-lit1')">重做本題</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="question-block" id="q-lit2" data-type="multi-choice" data-correct="false">
+    <div class="question-title">素養題 2：多重選擇</div>
+    <div class="question-body">
+      關於女性的第二性徵，下列哪些變化與卵巢分泌的雌性激素較有關？（可複選）
+      <div class="options-group">
+        <label>
+          <input type="checkbox" name="lit2" value="A"> 乳房發育
+        </label>
+        <label>
+          <input type="checkbox" name="lit2" value="B"> 鬍鬚變得濃密
+        </label>
+        <label>
+          <input type="checkbox" name="lit2" value="C"> 皮下脂肪增加
+        </label>
+        <label>
+          <input type="checkbox" name="lit2" value="D"> 喉結變得明顯
+        </label>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="check-btn" onclick="checkQuestion('q-lit2')" disabled>檢查答案</button>
+      <button type="button" class="redo-btn" onclick="resetQuestion('q-lit2')">重做本題</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="question-block" id="q-lit3" data-type="single-dropdown" data-correct="false">
+    <div class="question-title">素養題 3：健康影響判斷</div>
+    <div class="question-body">
+      如果性腺無法正常分泌足量的激素，下列哪一種情況最有可能發生？
+      <div style="margin-top:4px;">
+        <select data-answer="A">
+          <option value="">請選擇</option>
+          <option value="A">第二性徵發育異常，可能太晚或不明顯</option>
+          <option value="B">立刻全身骨頭斷裂</option>
+          <option value="C">完全不會有任何感覺或變化</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="check-btn" onclick="checkQuestion('q-lit3')" disabled>檢查答案</button>
+      <button type="button" class="redo-btn" onclick="resetQuestion('q-lit3')">重做本題</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="question-block" id="q-lit4" data-type="cloze" data-correct="false">
+    <div class="question-title">素養題 4：配對練習</div>
+    <div class="question-body">
+      請為下列名詞選出最適合的說明：
+      <table class="match-table">
+        <thead>
+        <tr>
+          <th>名詞</th>
+          <th>說明</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>睪丸</td>
+          <td>
+            <select data-answer="male">
+              <option value="">請選擇</option>
+              <option value="male">男性的性腺，會產生精子並分泌雄性激素</option>
+              <option value="female">女性的性腺，會產生卵並分泌雌性激素</option>
+              <option value="both">統稱睪丸和卵巢的內分泌腺</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>卵巢</td>
+          <td>
+            <select data-answer="female">
+              <option value="">請選擇</option>
+              <option value="male">男性的性腺，會產生精子並分泌雄性激素</option>
+              <option value="female">女性的性腺，會產生卵並分泌雌性激素</option>
+              <option value="both">統稱睪丸和卵巢的內分泌腺</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>性腺</td>
+          <td>
+            <select data-answer="both">
+              <option value="">請選擇</option>
+              <option value="male">男性的性腺，會產生精子並分泌雄性激素</option>
+              <option value="female">女性的性腺，會產生卵並分泌雌性激素</option>
+              <option value="both">統稱睪丸和卵巢的內分泌腺</option>
+            </select>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="check-btn" onclick="checkQuestion('q-lit4')" disabled>檢查答案</button>
+      <button type="button" class="redo-btn" onclick="resetQuestion('q-lit4')">重做本題</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="nav-footer">
+    <a href="./8.html" class="nav-button">← 上一頁</a>
+    <button id="next-page" class="nav-button disabled" disabled aria-disabled="true">下一頁 →</button>
+  </div>
+</div>
+
+<script>
+  function isBlockComplete(block) {
+    const type = block.dataset.type;
+    if (type === 'cloze') {
+      const selects = block.querySelectorAll('select');
+      if (!selects.length) return false;
+      return Array.from(selects).every(sel => sel.value !== '');
+    } else if (type === 'single-choice') {
+      const checked = block.querySelector('input[type="radio"]:checked');
+      return !!checked;
+    } else if (type === 'multi-choice') {
+      const checked = block.querySelectorAll('input[type="checkbox"]:checked');
+      return checked.length > 0;
+    } else if (type === 'single-dropdown') {
+      const sel = block.querySelector('select');
+      return sel && sel.value !== '';
+    }
+    return false;
+  }
+
+  function updateCheckButtonState(blockId) {
+    const block = document.getElementById(blockId);
+    if (!block) return;
+    const btn = block.querySelector('.check-btn');
+    if (!btn) return;
+    btn.disabled = !isBlockComplete(block);
+  }
+
+  function setCorrect(block, message) {
+    block.dataset.correct = 'true';
+    block.classList.remove('incorrect');
+    block.classList.add('correct');
+    const fb = block.querySelector('.feedback');
+    if (fb) {
+      fb.textContent = message;
+      fb.style.display = 'block';
+    }
+    const checkBtn = block.querySelector('.check-btn');
+    if (checkBtn) checkBtn.disabled = true;
+    const redoBtn = block.querySelector('.redo-btn');
+    if (redoBtn) redoBtn.style.display = 'none';
+
+    // 檢查各種連動
+    updateVideoChallengeBonus();
+    updateNextButton();
+  }
+
+  function setIncorrect(block, message) {
+    block.dataset.correct = 'false';
+    block.classList.remove('correct');
+    block.classList.add('incorrect');
+    const fb = block.querySelector('.feedback');
+    if (fb) {
+      fb.textContent = message;
+      fb.style.display = 'block';
+    }
+    const checkBtn = block.querySelector('.check-btn');
+    if (checkBtn) checkBtn.disabled = true;
+    const redoBtn = block.querySelector('.redo-btn');
+    if (redoBtn) redoBtn.style.display = 'inline-block';
+
+    updateVideoChallengeBonus();
+    updateNextButton();
+  }
+
+  function resetQuestion(blockId) {
+    const block = document.getElementById(blockId);
+    if (!block) return;
+    block.dataset.correct = 'false';
+    block.classList.remove('correct', 'incorrect');
+
+    const fb = block.querySelector('.feedback');
+    if (fb) {
+      fb.textContent = '';
+      fb.style.display = 'none';
+    }
+
+    const redoBtn = block.querySelector('.redo-btn');
+    if (redoBtn) redoBtn.style.display = 'none';
+
+    const selects = block.querySelectorAll('select');
+    selects.forEach(sel => {
+      sel.value = '';
+      sel.classList.remove('blank-correct', 'blank-incorrect');
+    });
+
+    const radios = block.querySelectorAll('input[type="radio"]');
+    radios.forEach(r => { r.checked = false; });
+
+    const checks = block.querySelectorAll('input[type="checkbox"]');
+    checks.forEach(c => { c.checked = false; });
+
+    const checkBtn = block.querySelector('.check-btn');
+    if (checkBtn) checkBtn.disabled = true;
+
+    updateVideoChallengeBonus();
+    updateNextButton();
+  }
+
+  // 專門處理新的影片挑戰獎勵顯示
+  function updateVideoChallengeBonus() {
+    const bonus = document.getElementById('video-challenge-bonus');
+    if (!bonus) return;
+    const v4 = document.getElementById('q-video4');
+    const v5 = document.getElementById('q-video5');
+    // 當 q-video4 和 q-video5 都正確時才顯示
+    if (v4 && v4.dataset.correct === 'true' && v5 && v5.dataset.correct === 'true') {
+      bonus.style.display = 'block';
+    } else {
+      bonus.style.display = 'none';
+    }
+  }
+
+  function updateNextButton() {
+    const blocks = document.querySelectorAll('.question-block');
+    if (!blocks.length) return;
+    const allCorrect = Array.from(blocks).every(b => b.dataset.correct === 'true');
+    const nextBtn = document.getElementById('next-page');
+    if (!nextBtn) return;
+    if (allCorrect) {
+      nextBtn.classList.remove('disabled');
+      nextBtn.disabled = false;
+      nextBtn.setAttribute('aria-disabled', 'false');
+    } else {
+      nextBtn.classList.add('disabled');
+      nextBtn.disabled = true;
+      nextBtn.setAttribute('aria-disabled', 'true');
+    }
+  }
+
+  function checkQuestion(blockId) {
+    const block = document.getElementById(blockId);
+    if (!block) return;
+    const type = block.dataset.type;
+    let correct = false;
+
+    if (blockId === 'q-cloze1' || blockId === 'q-cloze2' || blockId === 'q-lit4') {
+      const selects = block.querySelectorAll('select');
+      let allTrue = true;
+      selects.forEach(sel => {
+        const expected = sel.dataset.answer;
+        if (!expected) return;
+        if (sel.value === expected) {
+          sel.classList.add('blank-correct');
+          sel.classList.remove('blank-incorrect');
+        } else {
+          sel.classList.add('blank-incorrect');
+          sel.classList.remove('blank-correct');
+          allTrue = false;
+        }
+      });
+      correct = allTrue;
+    } else if (blockId === 'q-video1') {
+      const selected = block.querySelector('input[type="radio"]:checked');
+      correct = selected && selected.value === 'B';
+    } else if (blockId === 'q-video2') {
+      const selected = block.querySelector('input[type="radio"]:checked');
+      correct = selected && selected.value === 'B';
+    } else if (blockId === 'q-video3') {
+      const selected = block.querySelector('input[type="radio"]:checked');
+      correct = selected && selected.value === 'B';
+    } else if (blockId === 'q-video4') {
+      // 影片評量 1：單向改變，答案 D (聲音)
+      const selected = block.querySelector('input[type="radio"]:checked');
+      correct = selected && selected.value === 'D';
+    } else if (blockId === 'q-video5') {
+      // 影片評量 2：青少年禁忌，答案 C (生長板)
+      const selected = block.querySelector('input[type="radio"]:checked');
+      correct = selected && selected.value === 'C';
+    } else if (blockId === 'q-lit1') {
+      const selected = block.querySelector('input[type="radio"]:checked');
+      correct = selected && selected.value === 'B';
+    } else if (blockId === 'q-lit2') {
+      const checks = block.querySelectorAll('input[type="checkbox"]:checked');
+      const values = Array.from(checks).map(c => c.value).sort();
+      const correctSet = ['A', 'C'];
+      if (values.length === correctSet.length) {
+        correct = values[0] === correctSet[0] && values[1] === correctSet[1];
+      } else {
+        correct = false;
+      }
+    } else if (blockId === 'q-lit3') {
+      const sel = block.querySelector('select');
+      correct = sel && sel.value === 'A';
+      if (sel) {
+        if (correct) {
+          sel.classList.add('blank-correct');
+          sel.classList.remove('blank-incorrect');
+        } else {
+          sel.classList.add('blank-incorrect');
+          sel.classList.remove('blank-correct');
+        }
+      }
+    }
+
+    if (correct) {
+      let msg = '答對了，做得很好！';
+      if (blockId === 'q-cloze1') {
+        msg = '答對了！你已掌握性腺與生殖細胞的關係。';
+      } else if (blockId === 'q-cloze2') {
+        msg = '太棒了！你已了解睪丸與卵巢分泌的激素及其影響。';
+      } else if (blockId.startsWith('q-video')) {
+         if (blockId === 'q-video4') msg = '答對了！聲音變低沉通常是不可逆的變化。';
+         else if (blockId === 'q-video5') msg = '答對了！生長板提早關閉會導致身高發展受限。';
+         else msg = '答對了！您已掌握重點。';
+      } else if (blockId === 'q-lit1') {
+        msg = '正確！睪丸分泌的雄性激素會讓男性第二性徵更明顯。';
+      } else if (blockId === 'q-lit2') {
+        msg = '答對了！乳房發育與皮下脂肪增加都是女性第二性徵。';
+      } else if (blockId === 'q-lit3') {
+        msg = '正確！激素不足常表現在第二性徵發育異常。';
+      } else if (blockId === 'q-lit4') {
+        msg = '配對成功！你清楚區分睪丸、卵巢與性腺。';
+      }
+      setCorrect(block, msg);
+    } else {
+      let msg = '有些地方還需要再檢查一下喔，請點「重做本題」重新作答。';
+      if (blockId === 'q-lit2') {
+        msg = '尚未完全正確，記得女性第二性徵與雌性激素的關聯，再想一想！';
+      }
+      setIncorrect(block, msg);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const blocks = document.querySelectorAll('.question-block');
+    blocks.forEach(block => {
+      block.dataset.correct = block.dataset.correct || 'false';
+      block.addEventListener('change', function () {
+        updateCheckButtonState(block.id);
+      });
+      updateCheckButtonState(block.id);
+    });
+
+    const nextBtn = document.getElementById('next-page');
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        if (nextBtn.classList.contains('disabled')) return;
+        window.location.href = './10.html';
+      });
+    }
+
+    // 檢查各種連動 (含新舊)
+    updateVideoChallengeBonus();
+    updateNextButton();
+  });
+</script>
+</body>
+</html>

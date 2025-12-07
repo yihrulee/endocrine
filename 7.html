@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>緊急救星：腎上腺</title>
+  <style>
+    body {
+      font-family: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f7fb;
+      color: #333;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 16px 80px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #174a7e;
+    }
+    h2 {
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: #174a7e;
+    }
+    h3 {
+      margin-top: 20px;
+      margin-bottom: 8px;
+      color: #265d8f;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    /* 課文填充：加大行距，避免行與行太黏 */
+    #section-gap p {
+      line-height: 2.4;
+      margin-bottom: 0.5em;
+    }
+
+    .text-highlight {
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .k1 { color: #d32f2f; font-weight: 600; }
+    .k2 { color: #1976d2; font-weight: 600; }
+    .k3 { color: #388e3c; font-weight: 600; }
+    .k4 { color: #f57c00; font-weight: 600; }
+    .k5 { color: #7b1fa2; font-weight: 600; }
+    .k6 { color: #00897b; font-weight: 600; }
+    .k7 { color: #5d4037; font-weight: 600; }
+    .k8 { color: #c2185b; font-weight: 600; }
+    .k9 { color: #00796b; font-weight: 600; }
+    .k10 { color: #303f9f; font-weight: 600; }
+
+    select, button, input[type="text"] {
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .gap-select {
+      margin: 0 2px;
+      padding: 2px 4px;
+      min-width: 120px; /* 統一寬度，避免從欄位大小猜答案 */
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-top: 10px;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #1976d2, #42a5f5);
+      color: #fff;
+    }
+    .btn-primary:disabled {
+      background: #b0bec5;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: #eeeeee;
+      color: #333;
+    }
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .feedback {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .correct {
+      border: 1px solid #2e7d32;
+      background: #e8f5e9;
+      color: #1b5e20;
+    }
+    .incorrect {
+      border: 1px solid #c62828;
+      background: #ffebee;
+      color: #b71c1c;
+    }
+
+    .image-2-3 {
+      display: block;
+      width: 66%;
+      max-width: 100%;
+      margin: 16px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .full-width-image {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      margin: 16px auto 0;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .video-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .video-wrapper {
+      flex: 1 1 320px;
+      min-width: 0;
+    }
+    .video-wrapper iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    }
+    .video-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #37474f;
+    }
+
+    .question {
+      margin-bottom: 16px;
+    }
+    .options {
+      margin-top: 6px;
+      margin-left: 4px;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 4px;
+      cursor: pointer;
+    }
+    .inline-select {
+      margin: 0 4px;
+      padding: 2px 4px;
+      min-width: 160px;
+    }
+    .small-note {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .nav-footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid #cfd8dc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-button {
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px solid #1976d2;
+      color: #1976d2;
+      background: #ffffff;
+      text-align: center;
+      min-width: 110px;
+      transition: all 0.2s ease;
+    }
+    .nav-button:hover {
+      background: #e3f2fd;
+    }
+    .nav-button.disabled {
+      border-color: #b0bec5;
+      color: #90a4ae;
+      background: #eceff1;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    @media (max-width: 720px) {
+      .image-2-3 {
+        width: 100%;
+      }
+      .container {
+        padding: 16px 12px 64px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>緊急救星：腎上腺</h1>
+
+    <!-- 一、課文填充練習 -->
+    <section class="card" id="section-gap">
+      <h2>一、課文填充：認識腎上腺與腎上腺素</h2>
+      <p>
+        <select class="gap-select" id="gap-1">
+          <option value="">（請選擇）</option>
+          <option value="甲狀腺">甲狀腺</option>
+          <option value="腎上腺">腎上腺</option>
+          <option value="胰臟">胰臟</option>
+        </select>
+        位於
+        <span class="k1">腎臟</span>
+        上方，可分泌多種
+        <select class="gap-select" id="gap-2">
+          <option value="">（請選擇）</option>
+          <option value="酵素">酵素</option>
+          <option value="激素">激素</option>
+          <option value="抗體">抗體</option>
+        </select>
+        來調節生理反應。例如當人在
+        <select class="gap-select" id="gap-3">
+          <option value="">（請選擇）</option>
+          <option value="睡覺與休息">睡覺與休息</option>
+          <option value="運動、承受壓力或應付緊急狀況">運動、承受壓力或應付緊急狀況</option>
+          <option value="安靜閱讀">安靜閱讀</option>
+        </select>
+        時，
+        <span class="k1">腎上腺</span>
+        會分泌
+        <select class="gap-select" id="gap-4">
+          <option value="">（請選擇）</option>
+          <option value="胰島素">胰島素</option>
+          <option value="腎上腺素">腎上腺素</option>
+          <option value="甲狀腺素">甲狀腺素</option>
+        </select>
+        ，使
+        <select class="gap-select" id="gap-5">
+          <option value="">（請選擇）</option>
+          <option value="心跳減慢">心跳減慢</option>
+          <option value="心跳加速">心跳加速</option>
+        </select>
+        、
+        <select class="gap-select" id="gap-6">
+          <option value="">（請選擇）</option>
+          <option value="呼吸變得很淺很慢">呼吸變得很淺很慢</option>
+          <option value="呼吸加快加深">呼吸加快加深</option>
+        </select>
+        、
+        <select class="gap-select" id="gap-7">
+          <option value="">（請選擇）</option>
+          <option value="血壓下降">血壓下降</option>
+          <option value="血壓上升">血壓上升</option>
+        </select>
+        ，以提供細胞較多氧氣與養分；此外，
+        <span class="k4">腎上腺素</span>
+        也能提高
+        <select class="gap-select" id="gap-8">
+          <option value="">（請選擇）</option>
+          <option value="血壓濃度">血壓濃度</option>
+          <option value="血糖濃度">血糖濃度</option>
+        </select>
+        （血糖即為血液中的
+        <select class="gap-select" id="gap-9">
+          <option value="">（請選擇）</option>
+          <option value="脂肪酸">脂肪酸</option>
+          <option value="葡萄糖">葡萄糖</option>
+        </select>
+        ），以提供細胞應付緊急狀況所需的
+        <select class="gap-select" id="gap-10">
+          <option value="">（請選擇）</option>
+          <option value="水分">水分</option>
+          <option value="能量">能量</option>
+        </select>
+        。
+      </p>
+      <button class="btn btn-primary" id="btn-check-gap" disabled>檢查答案</button>
+      <button class="btn btn-secondary hidden" id="btn-reset-gap">重做本題</button>
+      <div class="feedback" id="feedback-gap"></div>
+    </section>
+
+    <!-- 腎上腺圖片 7_1.png -->
+    <section class="card">
+      <h2>圖像輔助理解</h2>
+      <p class="small-note">觀看圖片，協助你在腦中建立「腎上腺」在身體中的位置與功能。</p>
+      <img src="7_1.png" alt="腎上腺示意圖" class="image-2-3">
+    </section>
+
+    <!-- 二、影片學習區 -->
+    <section class="card">
+      <h2>二、影片學習：腎上腺與緊急反應</h2>
+      <p>請先觀看兩段影片，再依序完成下面的影片評量練習。</p>
+      <div class="video-row">
+        <div class="video-wrapper">
+          <div class="video-title">影片一：遇到壓力時，身體發生了什麼事？</div>
+          <iframe src="https://www.youtube.com/embed/UF12P24mIgE" 
+                  title="YouTube video player 1"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
+        </div>
+        <div class="video-wrapper">
+          <div class="video-title">影片二：腎上腺素與戰或逃反應（fight or flight）</div>
+          <iframe src="https://www.youtube.com/embed/GRSdhcTgo7A"
+                  title="YouTube video player 2"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- 三、影片評量題（一次呈現） -->
+    <section class="card" id="section-video-quiz">
+      <h2>三、影片評量練習</h2>
+
+      <!-- 影片題 1：魯夫激素題 -->
+      <div class="question" id="video-q0">
+        <h3>影片題 1</h3>
+        <p>影片中，魯夫被注射的是哪一種激素？</p>
+        <div class="options">
+          <label>
+            <input type="radio" name="video0" value="A">
+            A. 甲狀腺素
+          </label>
+          <label>
+            <input type="radio" name="video0" value="B">
+            B. 副甲狀腺素
+          </label>
+          <label>
+            <input type="radio" name="video0" value="C">
+            C. 腎上腺素
+          </label>
+          <label>
+            <input type="radio" name="video0" value="D">
+            D. 生長激素
+          </label>
+        </div>
+        <button class="btn btn-primary" id="btn-check-video0" disabled>檢查答案</button>
+        <button class="btn btn-secondary hidden" id="btn-reset-video0">重做本題</button>
+        <div class="feedback" id="feedback-video0"></div>
+      </div>
+
+      <!-- 影片題 2 -->
+      <div class="question" id="video-q1">
+        <h3>影片題 2</h3>
+        <p>根據影片內容，當腎上腺素大量分泌時，下列哪一項<strong>不是</strong>常見的生理反應？</p>
+        <div class="options">
+          <label>
+            <input type="radio" name="video1" value="A">
+            A. 心跳變快，血壓升高
+          </label>
+          <label>
+            <input type="radio" name="video1" value="B">
+            B. 呼吸加快加深
+          </label>
+          <label>
+            <input type="radio" name="video1" value="C">
+            C. 全身完全鬆弛、想睡覺
+          </label>
+        </div>
+        <button class="btn btn-primary" id="btn-check-video1" disabled>檢查答案</button>
+        <button class="btn btn-secondary hidden" id="btn-reset-video1">重做本題</button>
+        <div class="feedback" id="feedback-video1"></div>
+      </div>
+
+      <!-- 影片題 3：複選 -->
+      <div class="question" id="video-q2">
+        <h3>影片題 3</h3>
+        <p>在「戰或逃反應」（fight or flight）中，下列哪些變化有助於身體立刻面對危險？（可複選）</p>
+        <div class="options">
+          <label>
+            <input type="checkbox" name="video2" value="A">
+            A. 肌肉血流量增加
+          </label>
+          <label>
+            <input type="checkbox" name="video2" value="B">
+            B. 消化系統活動減弱
+          </label>
+          <label>
+            <input type="checkbox" name="video2" value="C">
+            C. 立即進入深度睡眠
+          </label>
+          <label>
+            <input type="checkbox" name="video2" value="D">
+            D. 瞳孔擴大，讓更多光線進入
+          </label>
+        </div>
+        <p class="small-note">提示：想像你要立刻奔跑或防禦，哪些變化會比較有幫助？</p>
+        <button class="btn btn-primary" id="btn-check-video2" disabled>檢查答案</button>
+        <button class="btn btn-secondary hidden" id="btn-reset-video2">重做本題</button>
+        <div class="feedback" id="feedback-video2"></div>
+      </div>
+
+      <!-- 影片題 4：情境判斷 -->
+      <div class="question" id="video-q3">
+        <h3>影片題 4</h3>
+        <p>小安在荒郊遇到一隻突然衝出的狗，他的身體立刻出現下列哪一組反應，最符合腎上腺素的作用？</p>
+        <div class="options">
+          <label>
+            <input type="radio" name="video3" value="A">
+            A. 臉色潮紅、心跳加速、準備轉身逃跑
+          </label>
+          <label>
+            <input type="radio" name="video3" value="B">
+            B. 心跳變慢、眼皮沈重、想躺下睡覺
+          </label>
+          <label>
+            <input type="radio" name="video3" value="C">
+            C. 食慾大開，立刻很想吃東西
+          </label>
+        </div>
+        <button class="btn btn-primary" id="btn-check-video3" disabled>檢查答案</button>
+        <button class="btn btn-secondary hidden" id="btn-reset-video3">重做本題</button>
+        <div class="feedback" id="feedback-video3"></div>
+      </div>
+    </section>
+
+    <!-- 影片完成後補充圖解 -->
+    <section class="card hidden" id="section-video-bonus">
+      <h2>四、影片延伸圖解</h2>
+      <p><strong>恭喜完成影片挑戰！這是補充圖解：</strong></p>
+      <img src="7_2.png" alt="腎上腺補充圖解" class="full-width-image">
+    </section>
+
+    <!-- 五、素養導向互動練習 -->
+    <section class="card">
+      <h2>五、素養導向互動練習</h2>
+      <p class="small-note">
+        下面四題把腎上腺素的知識，連結到真實生活情境中。請依照題意作答，每題作答完才能按「檢查答案」。
+      </p>
+
+      <!-- 素養題 1：情境單選 -->
+      <div class="question" id="lit-q1">
+        <h3>素養題 1：上台演講的小祐</h3>
+        <p>
+          小祐準備上台演講時，心跳加速、手心冒汗、呼吸變快。這樣的反應最可能與哪一個腺體與激素有關？
+        </p>
+        <div class="options">
+          <label>
+            <input type="radio" name="lit1" value="A">
+            A. 腎上腺與腎上腺素
+          </label>
+          <label>
+            <input type="radio" name="lit1" value="B">
+            B. 甲狀腺與甲狀腺素
+          </label>
+          <label>
+            <input type="radio" name="lit1" value="C">
+            C. 胰島與胰島素
+          </label>
+        </div>
+        <button class="btn btn-primary" id="btn-check-lit1" disabled>檢查答案</button>
+        <button class="btn btn-secondary hidden" id="btn-reset-lit1">重做本題</button>
+        <div class="feedback" id="feedback-lit1"></div>
+      </div>
+
+      <!-- 素養題 2：複選 -->
+      <div class="question" id="lit-q2">
+        <h3>素養題 2：腎上腺素「適量」的好處</h3>
+        <p>下列哪些情況，短時間內腎上腺素分泌增加，<strong>對身體是有幫助</strong>的？（可複選）</p>
+        <div class="options">
+          <label>
+            <input type="checkbox" name="lit2" value="A">
+            A. 遇到火災需要迅速逃生
+          </label>
+          <label>
+            <input type="checkbox" name="lit2" value="B">
+            B. 考試前一晚整夜失眠、一直滑手機
+          </label>
+          <label>
+            <input type="checkbox" name="lit2" value="C">
+            C. 比賽起跑前感到緊張又興奮
+          </label>
+          <label>
+            <input type="checkbox" name="lit2" value="D">
+            D. 長期熬夜打電動到半夜
+          </label>
+        </div>
+        <p class="small-note">想想：腎上腺素是「短時間」幫你動員能量，若變成天天如此，身體會怎樣？</p>
+        <button class="btn btn-primary" id="btn-check-lit2" disabled>檢查答案</button>
+        <button class="btn btn-secondary hidden" id="btn-reset-lit2">重做本題</button>
+        <div class="feedback" id="feedback-lit2"></div>
+      </div>
+
+      <!-- 素養題 3：配對題（改寫選項內容，不再三題完全同文） -->
+      <div class="question" id="lit-q3">
+        <h3>素養題 3：腎上腺素帶來的「好處」是什麼？</h3>
+        <p>請將腎上腺素造成的變化，與它們對身體的主要「目的」配對。</p>
+        <table>
+          <tbody>
+            <tr>
+              <td>① 心跳加速、血壓上升</td>
+              <td>
+                →
+                <select class="inline-select" id="lit3-1">
+                  <option value="">（請選擇）</option>
+                  <option value="A">幫助肺部吸入更多氧氣</option>
+                  <option value="B">讓更多血液把氧氣與養分送到肌肉</option>
+                  <option value="C">提供肌肉立即可用的能量來源</option>
+                  <option value="D">降低身體的警覺與反應</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>② 血糖濃度升高</td>
+              <td>
+                →
+                <select class="inline-select" id="lit3-2">
+                  <option value="">（請選擇）</option>
+                  <option value="A">幫助肺部吸入更多氧氣</option>
+                  <option value="B">讓更多血液把氧氣與養分送到肌肉</option>
+                  <option value="C">提供肌肉立即可用的能量來源</option>
+                  <option value="D">降低身體的警覺與反應</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>③ 呼吸加快加深</td>
+              <td>
+                →
+                <select class="inline-select" id="lit3-3">
+                  <option value="">（請選擇）</option>
+                  <option value="A">幫助肺部吸入更多氧氣</option>
+                  <option value="B">讓更多血液把氧氣與養分送到肌肉</option>
+                  <option value="C">提供肌肉立即可用的能量來源</option>
+                  <option value="D">降低身體的警覺與反應</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-primary" id="btn-check-lit3" disabled>檢查答案</button>
+        <button class="btn btn-secondary hidden" id="btn-reset-lit3">重做本題</button>
+        <div class="feedback" id="feedback-lit3"></div>
+      </div>
+
+      <!-- 素養題 4：情境分類題（改寫選項文字） -->
+      <div class="question" id="lit-q4">
+        <h3>素養題 4：短期幫助？長期風險？</h3>
+        <p>請判斷下列情境與腎上腺素的關係，並選出較適合的分類。</p>
+        <table>
+          <tbody>
+            <tr>
+              <td>① 期末考當天早上有點緊張，但保持專注應考。</td>
+              <td>
+                →
+                <select class="inline-select" id="lit4-1">
+                  <option value="">（請選擇）</option>
+                  <option value="A">短暫壓力，有助於集中與表現</option>
+                  <option value="B">長期壓力，可能造成身心負擔</option>
+                  <option value="C">放鬆狀態，與腎上腺素關聯較低</option>
+                  <option value="D">無法判斷與腎上腺素關係</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>② 幾個月來每天都為成績焦慮到睡不好、心悸。</td>
+              <td>
+                →
+                <select class="inline-select" id="lit4-2">
+                  <option value="">（請選擇）</option>
+                  <option value="A">短暫壓力，有助於集中與表現</option>
+                  <option value="B">長期壓力，可能造成身心負擔</option>
+                  <option value="C">放鬆狀態，與腎上腺素關聯較低</option>
+                  <option value="D">無法判斷與腎上腺素關係</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>③ 放假在公園散步、心情放鬆。</td>
+              <td>
+                →
+                <select class="inline-select" id="lit4-3">
+                  <option value="">（請選擇）</option>
+                  <option value="A">短暫壓力，有助於集中與表現</option>
+                  <option value="B">長期壓力，可能造成身心負擔</option>
+                  <option value="C">放鬆狀態，與腎上腺素關聯較低</option>
+                  <option value="D">無法判斷與腎上腺素關係</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-primary" id="btn-check-lit4" disabled>檢查答案</button>
+        <button class="btn btn-secondary hidden" id="btn-reset-lit4">重做本題</button>
+        <div class="feedback" id="feedback-lit4"></div>
+      </div>
+    </section>
+
+    <!-- 頁尾導覽 -->
+    <div class="nav-footer">
+      <a href="./6.html" class="nav-button">← 上一頁</a>
+      <a href="javascript:void(0)" id="next-page" class="nav-button disabled" aria-disabled="true">下一頁 →</a>
+    </div>
+  </div>
+
+  <script>
+    // 紀錄各題是否已正確完成
+    const questionStatus = {
+      gap: false,
+      video0: false,
+      video1: false,
+      video2: false,
+      video3: false,
+      lit1: false,
+      lit2: false,
+      lit3: false,
+      lit4: false
+    };
+
+    function updateNextButton() {
+      const allCorrect = Object.values(questionStatus).every(v => v === true);
+      const nextBtn = document.getElementById('next-page');
+      if (allCorrect) {
+        nextBtn.classList.remove('disabled');
+        nextBtn.setAttribute('href', './8.html');
+        nextBtn.setAttribute('aria-disabled', 'false');
+      } else {
+        nextBtn.classList.add('disabled');
+        nextBtn.setAttribute('href', 'javascript:void(0)');
+        nextBtn.setAttribute('aria-disabled', 'true');
+      }
+      updateVideoBonus();
+    }
+
+    // 影片補充圖解顯示控制：四題影片都正確才出現
+    function updateVideoBonus() {
+      const allVideoCorrect =
+        questionStatus.video0 &&
+        questionStatus.video1 &&
+        questionStatus.video2 &&
+        questionStatus.video3;
+      const bonusSection = document.getElementById('section-video-bonus');
+      if (allVideoCorrect) {
+        bonusSection.classList.remove('hidden');
+      } else {
+        bonusSection.classList.add('hidden');
+      }
+    }
+
+    // 共用：設定回饋顯示
+    function showFeedback(el, isCorrect, correctMsg, incorrectMsg) {
+      el.style.display = 'block';
+      el.classList.remove('correct', 'incorrect');
+      if (isCorrect) {
+        el.classList.add('correct');
+        el.textContent = correctMsg;
+      } else {
+        el.classList.add('incorrect');
+        el.textContent = incorrectMsg;
+      }
+    }
+
+    // ========== 一、課文填充 ==========
+    const gapIds = ['gap-1','gap-2','gap-3','gap-4','gap-5','gap-6','gap-7','gap-8','gap-9','gap-10'];
+    const gapAnswers = {
+      'gap-1': '腎上腺',
+      'gap-2': '激素',
+      'gap-3': '運動、承受壓力或應付緊急狀況',
+      'gap-4': '腎上腺素',
+      'gap-5': '心跳加速',
+      'gap-6': '呼吸加快加深',
+      'gap-7': '血壓上升',
+      'gap-8': '血糖濃度',
+      'gap-9': '葡萄糖',
+      'gap-10': '能量'
+    };
+
+    function isGapFilled() {
+      return gapIds.every(id => document.getElementById(id).value !== '');
+    }
+
+    function updateGapButtonState() {
+      document.getElementById('btn-check-gap').disabled = !isGapFilled();
+    }
+
+    gapIds.forEach(id => {
+      document.getElementById(id).addEventListener('change', updateGapButtonState);
+    });
+
+    document.getElementById('btn-check-gap').addEventListener('click', function() {
+      const feedback = document.getElementById('feedback-gap');
+      let allCorrect = true;
+      gapIds.forEach(id => {
+        const sel = document.getElementById(id);
+        if (sel.value !== gapAnswers[id]) {
+          allCorrect = false;
+        }
+      });
+
+      if (allCorrect) {
+        showFeedback(feedback, true, '太棒了！你已經掌握腎上腺素在緊急狀況下的作用。', '');
+        this.disabled = true;
+        document.getElementById('btn-reset-gap').classList.add('hidden');
+        questionStatus.gap = true;
+      } else {
+        showFeedback(feedback, false, '', '還有幾個關鍵字需要再確認，請重新調整選項。');
+        document.getElementById('btn-reset-gap').classList.remove('hidden');
+        questionStatus.gap = false;
+      }
+      updateNextButton();
+    });
+
+    document.getElementById('btn-reset-gap').addEventListener('click', function() {
+      gapIds.forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('feedback-gap').style.display = 'none';
+      document.getElementById('feedback-gap').classList.remove('correct','incorrect');
+      document.getElementById('btn-check-gap').disabled = true;
+      this.classList.add('hidden');
+      questionStatus.gap = false;
+      updateNextButton();
+    });
+
+    // ========== 工具：單選是否已選 ==========
+    function isRadioGroupSelected(name) {
+      return !!document.querySelector('input[name="' + name + '"]:checked');
+    }
+
+    // ========== 影片題 1（魯夫激素題） ==========
+    function updateVideo0Btn() {
+      document.getElementById('btn-check-video0').disabled = !isRadioGroupSelected('video0');
+    }
+    document.querySelectorAll('input[name="video0"]').forEach(input => {
+      input.addEventListener('change', updateVideo0Btn);
+    });
+
+    document.getElementById('btn-check-video0').addEventListener('click', function() {
+      const checked = document.querySelector('input[name="video0"]:checked');
+      const feedback = document.getElementById('feedback-video0');
+      const correctValue = 'C'; // 腎上腺素
+
+      if (checked && checked.value === correctValue) {
+        showFeedback(feedback, true, '答對了！魯夫被注射的是能讓身體進入戰鬥狀態的腎上腺素。', '');
+        this.disabled = true;
+        document.getElementById('btn-reset-video0').classList.add('hidden');
+        questionStatus.video0 = true;
+      } else {
+        showFeedback(feedback, false, '', '再想想：哪一種激素會在緊急時幫忙動員能量、加快心跳？');
+        document.getElementById('btn-reset-video0').classList.remove('hidden');
+        questionStatus.video0 = false;
+      }
+      updateNextButton();
+    });
+
+    document.getElementById('btn-reset-video0').addEventListener('click', function() {
+      document.querySelectorAll('input[name="video0"]').forEach(i => i.checked = false);
+      document.getElementById('feedback-video0').style.display = 'none';
+      document.getElementById('feedback-video0').classList.remove('correct','incorrect');
+      document.getElementById('btn-check-video0').disabled = true;
+      this.classList.add('hidden');
+      questionStatus.video0 = false;
+      updateNextButton();
+    });
+
+    // ========== 影片題 2 ==========
+    function updateVideo1Btn() {
+      document.getElementById('btn-check-video1').disabled = !isRadioGroupSelected('video1');
+    }
+
+    document.querySelectorAll('input[name="video1"]').forEach(input => {
+      input.addEventListener('change', updateVideo1Btn);
+    });
+
+    document.getElementById('btn-check-video1').addEventListener('click', function() {
+      const checked = document.querySelector('input[name="video1"]:checked');
+      const feedback = document.getElementById('feedback-video1');
+      const correctValue = 'C'; // 「完全鬆弛、想睡覺」並非腎上腺素反應
+
+      if (checked && checked.value === correctValue) {
+        showFeedback(feedback, true, '答對了！腎上腺素會讓身體「動起來」，而不是想睡覺。', '');
+        this.disabled = true;
+        document.getElementById('btn-reset-video1').classList.add('hidden');
+        questionStatus.video1 = true;
+      } else {
+        showFeedback(feedback, false, '', '再想想：在危急時刻，身體怎樣才能比較有利於逃跑或應戰？');
+        document.getElementById('btn-reset-video1').classList.remove('hidden');
+        questionStatus.video1 = false;
+      }
+      updateNextButton();
+    });
+
+    document.getElementById('btn-reset-video1').addEventListener('click', function() {
+      document.querySelectorAll('input[name="video1"]').forEach(i => i.checked = false);
+      document.getElementById('feedback-video1').style.display = 'none';
+      document.getElementById('feedback-video1').classList.remove('correct','incorrect');
+      document.getElementById('btn-check-video1').disabled = true;
+      this.classList.add('hidden');
+      questionStatus.video1 = false;
+      updateNextButton();
+    });
+
+    // ========== 工具：複選 ==========
+    function getCheckedValues(name) {
+      return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked')).map(i => i.value);
+    }
+
+    // ========== 影片題 3（複選） ==========
+    function updateVideo2Btn() {
+      const checked = getCheckedValues('video2');
+      document.getElementById('btn-check-video2').disabled = checked.length === 0;
+    }
+
+    document.querySelectorAll('input[name="video2"]').forEach(input => {
+      input.addEventListener('change', updateVideo2Btn);
+    });
+
+    document.getElementById('btn-check-video2').addEventListener('click', function() {
+      const checked = getCheckedValues('video2').sort().join(',');
+      const feedback = document.getElementById('feedback-video2');
+      const correct = ['A','B','D'].sort().join(',');
+
+      if (checked === correct) {
+        showFeedback(feedback, true, '做得好！A、B、D 都是在短時間內有助於應付危險的變化。', '');
+        this.disabled = true;
+        document.getElementById('btn-reset-video2').classList.add('hidden');
+        questionStatus.video2 = true;
+      } else {
+        showFeedback(feedback, false, '', '提示：睡覺或完全放鬆並不太像「戰或逃」的狀態喔！');
+        document.getElementById('btn-reset-video2').classList.remove('hidden');
+        questionStatus.video2 = false;
+      }
+      updateNextButton();
+    });
+
+    document.getElementById('btn-reset-video2').addEventListener('click', function() {
+      document.querySelectorAll('input[name="video2"]').forEach(i => i.checked = false);
+      document.getElementById('feedback-video2').style.display = 'none';
+      document.getElementById('feedback-video2').classList.remove('correct','incorrect');
+      document.getElementById('btn-check-video2').disabled = true;
+      this.classList.add('hidden');
+      questionStatus.video2 = false;
+      updateNextButton();
+    });
+
+    // ========== 影片題 4（單選情境） ==========
+    function updateVideo3Btn() {
+      document.getElementById('btn-check-video3').disabled = !isRadioGroupSelected('video3');
+    }
+
+    document.querySelectorAll('input[name="video3"]').forEach(input => {
+      input.addEventListener('change', updateVideo3Btn);
+    });
+
+    document.getElementById('btn-check-video3').addEventListener('click', function() {
+      const checked = document.querySelector('input[name="video3"]:checked');
+      const feedback = document.getElementById('feedback-video3');
+      const correctValue = 'A';
+
+      if (checked && checked.value === correctValue) {
+        showFeedback(feedback, true, '沒錯！遇到危險時，腎上腺素會讓你準備好快速行動。', '');
+        this.disabled = true;
+        document.getElementById('btn-reset-video3').classList.add('hidden');
+        questionStatus.video3 = true;
+      } else {
+        showFeedback(feedback, false, '', '再想想：身體會選擇讓你「準備行動」還是「進入睡眠」呢？');
+        document.getElementById('btn-reset-video3').classList.remove('hidden');
+        questionStatus.video3 = false;
+      }
+      updateNextButton();
+    });
+
+    document.getElementById('btn-reset-video3').addEventListener('click', function() {
+      document.querySelectorAll('input[name="video3"]').forEach(i => i.checked = false);
+      document.getElementById('feedback-video3').style.display = 'none';
+      document.getElementById('feedback-video3').classList.remove('correct','incorrect');
+      document.getElementById('btn-check-video3').disabled = true;
+      this.classList.add('hidden');
+      questionStatus.video3 = false;
+      updateNextButton();
+    });
+
+    // ========== 素養題 1（單選） ==========
+    function updateLit1Btn() {
+      document.getElementById('btn-check-lit1').disabled = !isRadioGroupSelected('lit1');
+    }
+    document.querySelectorAll('input[name="lit1"]').forEach(input => {
+      input.addEventListener('change', updateLit1Btn);
+    });
+
+    document.getElementById('btn-check-lit1').addEventListener('click', function() {
+      const checked = document.querySelector('input[name="lit1"]:checked');
+      const feedback = document.getElementById('feedback-lit1');
+      const correctValue = 'A';
+
+      if (checked && checked.value === correctValue) {
+        showFeedback(feedback, true, '正確！這就是腎上腺與腎上腺素在緊張時的典型表現。', '');
+        this.disabled = true;
+        document.getElementById('btn-reset-lit1').classList.add('hidden');
+        questionStatus.lit1 = true;
+      } else {
+        showFeedback(feedback, false, '', '想想：哪一種激素與「短時間面對壓力」最有關？');
+        document.getElementById('btn-reset-lit1').classList.remove('hidden');
+        questionStatus.lit1 = false;
+      }
+      updateNextButton();
+    });
+
+    document.getElementById('btn-reset-lit1').addEventListener('click', function() {
+      document.querySelectorAll('input[name="lit1"]').forEach(i => i.checked = false);
+      document.getElementById('feedback-lit1').style.display = 'none';
+      document.getElementById('feedback-lit1').classList.remove('correct','incorrect');
+      document.getElementById('btn-check-lit1').disabled = true;
+      this.classList.add('hidden');
+      questionStatus.lit1 = false;
+      updateNextButton();
+    });
+
+    // ========== 素養題 2（複選） ==========
+    function updateLit2Btn() {
+      const checked = getCheckedValues('lit2');
+      document.getElementById('btn-check-lit2').disabled = checked.length === 0;
+    }
+    document.querySelectorAll('input[name="lit2"]').forEach(input => {
+      input.addEventListener('change', updateLit2Btn);
+    });
+
+    document.getElementById('btn-check-lit2').addEventListener('click', function() {
+      const checked = getCheckedValues('lit2').sort().join(',');
+      const feedback = document.getElementById('feedback-lit2');
+      const correct = ['A','C'].sort().join(',');
+
+      if (checked === correct) {
+        showFeedback(feedback, true, '答對了！A、C 是短時間的腎上腺素分泌，能幫助你快速反應或集中精神。', '');
+        this.disabled = true;
+        document.getElementById('btn-reset-lit2').classList.add('hidden');
+        questionStatus.lit2 = true;
+      } else {
+        showFeedback(feedback, false, '', '再想想：哪些情況是「長期壓力與熬夜」，對身體反而是負擔？');
+        document.getElementById('btn-reset-lit2').classList.remove('hidden');
+        questionStatus.lit2 = false;
+      }
+      updateNextButton();
+    });
+
+    document.getElementById('btn-reset-lit2').addEventListener('click', function() {
+      document.querySelectorAll('input[name="lit2"]').forEach(i => i.checked = false);
+      document.getElementById('feedback-lit2').style.display = 'none';
+      document.getElementById('feedback-lit2').classList.remove('correct','incorrect');
+      document.getElementById('btn-check-lit2').disabled = true;
+      this.classList.add('hidden');
+      questionStatus.lit2 = false;
+      updateNextButton();
+    });
+
+    // ========== 素養題 3（配對題） ==========
+    function isLit3Filled() {
+      return ['lit3-1','lit3-2','lit3-3'].every(id => document.getElementById(id).value !== '');
+    }
+    function updateLit3Btn() {
+      document.getElementById('btn-check-lit3').disabled = !isLit3Filled();
+    }
+    ['lit3-1','lit3-2','lit3-3'].forEach(id => {
+      document.getElementById(id).addEventListener('change', updateLit3Btn);
+    });
+
+    document.getElementById('btn-check-lit3').addEventListener('click', function() {
+      const v1 = document.getElementById('lit3-1').value;
+      const v2 = document.getElementById('lit3-2').value;
+      const v3 = document.getElementById('lit3-3').value;
+      const feedback = document.getElementById('feedback-lit3');
+
+      // 正解：① B、② C、③ A（不再是簡單 1:A、2:B、3:C 的順序）
+      const correct = (v1 === 'B' && v2 === 'C' && v3 === 'A');
+      if (correct) {
+        showFeedback(feedback, true, '非常好！你已經能把「身體變化」和「生理目的」連結起來。', '');
+        this.disabled = true;
+        document.getElementById('btn-reset-lit3').classList.add('hidden');
+        questionStatus.lit3 = true;
+      } else {
+        showFeedback(feedback, false, '', '再檢查看看：哪一個變化跟「送養分」、哪一個跟「提供能量」、哪一個跟「吸更多氧氣」最有關？');
+        document.getElementById('btn-reset-lit3').classList.remove('hidden');
+        questionStatus.lit3 = false;
+      }
+      updateNextButton();
+    });
+
+    document.getElementById('btn-reset-lit3').addEventListener('click', function() {
+      ['lit3-1','lit3-2','lit3-3'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('feedback-lit3').style.display = 'none';
+      document.getElementById('feedback-lit3').classList.remove('correct','incorrect');
+      document.getElementById('btn-check-lit3').disabled = true;
+      this.classList.add('hidden');
+      questionStatus.lit3 = false;
+      updateNextButton();
+    });
+
+    // ========== 素養題 4（情境分類題） ==========
+    function isLit4Filled() {
+      return ['lit4-1','lit4-2','lit4-3'].every(id => document.getElementById(id).value !== '');
+    }
+    function updateLit4Btn() {
+      document.getElementById('btn-check-lit4').disabled = !isLit4Filled();
+    }
+    ['lit4-1','lit4-2','lit4-3'].forEach(id => {
+      document.getElementById(id).addEventListener('change', updateLit4Btn);
+    });
+
+    document.getElementById('btn-check-lit4').addEventListener('click', function() {
+      const v1 = document.getElementById('lit4-1').value;
+      const v2 = document.getElementById('lit4-2').value;
+      const v3 = document.getElementById('lit4-3').value;
+      const feedback = document.getElementById('feedback-lit4');
+
+      // 正解：① A、② B、③ C
+      const correct = (v1 === 'A' && v2 === 'B' && v3 === 'C');
+
+      if (correct) {
+        showFeedback(feedback, true, '太棒了！你已經能分辨「適量壓力」與「長期壓力」對身體的不同影響。', '');
+        this.disabled = true;
+        document.getElementById('btn-reset-lit4').classList.add('hidden');
+        questionStatus.lit4 = true;
+      } else {
+        showFeedback(feedback, false, '', '再想一想：哪一種情況是「偶爾、短期」比較有幫助？哪一種是「長期」可能會讓身體過勞？');
+        document.getElementById('btn-reset-lit4').classList.remove('hidden');
+        questionStatus.lit4 = false;
+      }
+      updateNextButton();
+    });
+
+    document.getElementById('btn-reset-lit4').addEventListener('click', function() {
+      ['lit4-1','lit4-2','lit4-3'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('feedback-lit4').style.display = 'none';
+      document.getElementById('feedback-lit4').classList.remove('correct','incorrect');
+      document.getElementById('btn-check-lit4').disabled = true;
+      this.classList.add('hidden');
+      questionStatus.lit4 = false;
+      updateNextButton();
+    });
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>血糖管家：胰島</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .section-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        /* 填空題樣式 */
+        select {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            margin: 0 5px;
+            background-color: #fff;
+        }
+        
+        .cloze-context {
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        /* 關鍵字高亮顏色 */
+        .highlight-1 { color: #e67e22; font-weight: bold; }
+        .highlight-2 { color: #27ae60; font-weight: bold; }
+        .highlight-3 { color: #c0392b; font-weight: bold; }
+        .highlight-4 { color: #2980b9; font-weight: bold; }
+
+        /* 按鈕樣式 */
+        .btn {
+            display: inline-block;
+            padding: 8px 16px; /* 稍微縮小一點適應逐題檢查 */
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: white;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn:hover { background-color: #2980b9; }
+        .btn:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        
+        .btn-retry { background-color: #e74c3c; display: none; }
+        .btn-retry:hover { background-color: #c0392b; }
+
+        /* 圖片樣式 */
+        .img-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .img-8-1 {
+            width: 66.66%;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .img-full {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* 影片容器 */
+        .video-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .video-container {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+            padding-bottom: 28.125%; 
+            height: 0;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        /* 題目區塊樣式 */
+        .quiz-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative; /* For button positioning if needed */
+        }
+        .options label {
+            display: block;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+        
+        /* 回饋樣式 */
+        .correct {
+            border-color: #2ecc71 !important;
+            background-color: #eaffea;
+        }
+        .incorrect {
+            border-color: #e74c3c !important;
+            background-color: #fceceb;
+        }
+        .feedback-msg {
+            margin-top: 10px;
+            font-weight: bold;
+            display: none;
+        }
+        .correct .feedback-msg { display: block; color: #2ecc71; }
+        .incorrect .feedback-msg { display: block; color: #e74c3c; }
+
+        /* 解鎖區域 */
+        #unlock-section {
+            display: none;
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 導覽列 */
+        .nav-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        .nav-link {
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            color: #333;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .nav-link:hover { background-color: #ddd; }
+        .nav-link.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: default;
+        }
+        .nav-link.active-next {
+            background-color: #27ae60;
+            color: white;
+        }
+        .nav-link.active-next:hover {
+            background-color: #219150;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>血糖管家：胰島</h1>
+
+    <div class="section-box">
+        <div class="cloze-context" id="cloze-text">
+            胰臟中除了有分泌胰液的細胞外， 還有一些內分泌細胞。這些細胞集合成一團，像是散布在胰臟中的小島，所以特稱為
+            <select id="q1">
+                <option value="">(請選擇)</option>
+                <option value="wrong">甲狀腺</option>
+                <option value="correct">胰島</option>
+                <option value="wrong">腦垂腺</option>
+            </select>
+            。胰島可分泌
+            <select id="q2">
+                <option value="">(請選擇)</option>
+                <option value="correct">胰島素</option>
+                <option value="wrong">腎上腺素</option>
+                <option value="wrong">生長激素</option>
+            </select>
+            和
+            <select id="q3">
+                <option value="">(請選擇)</option>
+                <option value="wrong">消化液</option>
+                <option value="correct">升糖素</option>
+                <option value="wrong">膽汁</option>
+            </select>
+            ，胰島素可
+            <select id="q4">
+                <option value="">(請選擇)</option>
+                <option value="correct">降低</option>
+                <option value="wrong">提高</option>
+                <option value="wrong">維持</option>
+            </select>
+            血糖濃度，當胰島素長期分泌不足或作用不佳時，會導致血糖濃度過高，此時過多的糖分將隨尿液排出，此即為
+            <select id="q5">
+                <option value="">(請選擇)</option>
+                <option value="wrong">高血壓</option>
+                <option value="wrong">心臟病</option>
+                <option value="correct">糖尿病</option>
+            </select>
+            的成因之一。而升糖素則可
+            <select id="q6">
+                <option value="">(請選擇)</option>
+                <option value="wrong">降低</option>
+                <option value="correct">提高</option>
+                <option value="wrong">分解</option>
+            </select>
+            血糖濃度，與胰島素共同維持血糖濃度的穩定。
+        </div>
+        <button class="btn" id="btn-check-cloze" onclick="checkCloze()">檢查答案</button>
+        <button class="btn btn-retry" id="btn-retry-cloze" onclick="resetCloze()">重做本題</button>
+        <div id="cloze-feedback" class="feedback-msg"></div>
+
+        <div class="img-container">
+            <img src="8_1.png" alt="胰臟與胰島示意圖" class="img-8-1">
+        </div>
+    </div>
+
+    <div class="section-box">
+        <h2>影片學習區</h2>
+        <div class="video-wrapper">
+            <div class="video-container" style="padding-bottom: 28%;"> <iframe src="https://www.youtube.com/embed/zJBcjhdTn1Q" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-container" style="padding-bottom: 28%;">
+                <iframe src="https://www.youtube.com/embed/fsvspYTRlLo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <h3>影片評量挑戰</h3>
+        <p>請根據觀看的影片回答以下問題（請逐題作答並檢查）：</p>
+        
+        <div id="video-quiz-container">
+            <div class="quiz-item" id="vq1-box">
+                <p>1. 根據影片，胰臟除了是內分泌器官（分泌胰島素等），它同時也是哪一種系統的器官，負責分泌消化液？</p>
+                <div class="options">
+                    <label><input type="radio" name="vq1" value="wrong"> 呼吸系統</label>
+                    <label><input type="radio" name="vq1" value="correct"> 消化系統</label>
+                    <label><input type="radio" name="vq1" value="wrong"> 神經系統</label>
+                </div>
+                <button class="btn" id="btn-vq1" onclick="checkVideoItem('vq1')">檢查答案</button>
+                <button class="btn btn-retry" id="retry-vq1" onclick="retryVideoItem('vq1')">重做本題</button>
+                <div class="feedback-msg" id="fb-vq1"></div>
+            </div>
+
+            <div class="quiz-item" id="vq2-box">
+                <p>2. 人體細胞需要哪種物質作為「燃料」來產生能量，而這物質需要胰島素的協助才能進入細胞？</p>
+                <div class="options">
+                    <label><input type="radio" name="vq2" value="wrong"> 蛋白質</label>
+                    <label><input type="radio" name="vq2" value="wrong"> 維生素</label>
+                    <label><input type="radio" name="vq2" value="correct"> 葡萄糖</label>
+                </div>
+                <button class="btn" id="btn-vq2" onclick="checkVideoItem('vq2')">檢查答案</button>
+                <button class="btn btn-retry" id="retry-vq2" onclick="retryVideoItem('vq2')">重做本題</button>
+                <div class="feedback-msg" id="fb-vq2"></div>
+            </div>
+
+            <div class="quiz-item" id="vq3-box">
+                <p>3. (進階題) 影片中將「細胞」比喻為房子，將「胰島素」比喻為門把的鑰匙。若以此比喻來推論糖尿病的成因，下列哪種情況<strong>不屬於</strong>糖尿病的致病原因？</p>
+                <div class="options">
+                    <label><input type="radio" name="vq3" value="wrong"> 胰臟工廠罷工，沒有生產鑰匙（胰島素分泌不足）。</label>
+                    <label><input type="radio" name="vq3" value="wrong"> 門鎖生鏽損壞，鑰匙插進去也轉不動（細胞對胰島素反應不佳）。</label>
+                    <label><input type="radio" name="vq3" value="correct"> 血液中的客人（葡萄糖）太少，導致沒人去敲門。</label>
+                    <label><input type="radio" name="vq3" value="wrong"> 鑰匙數量雖然有，但不足以開啟所有的門（胰島素相對不足）。</label>
+                </div>
+                <button class="btn" id="btn-vq3" onclick="checkVideoItem('vq3')">檢查答案</button>
+                <button class="btn btn-retry" id="retry-vq3" onclick="retryVideoItem('vq3')">重做本題</button>
+                <div class="feedback-msg" id="fb-vq3"></div>
+            </div>
+
+            <div class="quiz-item" id="vq4-box">
+                <p>4. 為什麼糖尿病患者（長期高血糖）容易出現手腳冰冷、傷口不易癒合，甚至影響視力等問題？</p>
+                <div class="options">
+                    <label><input type="radio" name="vq4" value="wrong"> 因為糖分會堵塞毛孔，讓皮膚無法呼吸。</label>
+                    <label><input type="radio" name="vq4" value="correct"> 因為高血糖會損害血管壁使其硬化、變窄，造成血液循環不良。</label>
+                    <label><input type="radio" name="vq4" value="wrong"> 因為胰島素會攻擊紅血球，導致攜氧量下降。</label>
+                </div>
+                <button class="btn" id="btn-vq4" onclick="checkVideoItem('vq4')">檢查答案</button>
+                <button class="btn btn-retry" id="retry-vq4" onclick="retryVideoItem('vq4')">重做本題</button>
+                <div class="feedback-msg" id="fb-vq4"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="unlock-section" class="section-box">
+        <p style="font-size: 1.2rem; text-align: center; color: #d35400; font-weight: bold;">恭喜完成所有影片挑戰！這是補充圖解：</p>
+        <div class="img-container">
+            <img src="8_2.png" alt="血糖調節補充圖解" class="img-full">
+        </div>
+    </div>
+
+    <div class="section-box">
+        <h2>素養導向互動練習</h2>
+        <p>請綜合所學，完成下列挑戰：</p>
+
+        <div class="quiz-item" id="ex1-box">
+            <p><strong>Q1. 生活情境：</strong> 小明剛吃完一頓豐盛的自助餐吃到飽。請問此時他體內的激素變化，下列哪張圖表的描述最合理？</p>
+            <div class="options">
+                <label><input type="radio" name="ex1" value="correct"> 胰島素濃度上升，升糖素濃度下降。</label>
+                <label><input type="radio" name="ex1" value="wrong"> 胰島素濃度下降，升糖素濃度上升。</label>
+                <label><input type="radio" name="ex1" value="wrong"> 兩者濃度皆維持不變。</label>
+            </div>
+            <button class="btn" id="btn-ex1" onclick="checkExercise('ex1')">檢查答案</button>
+            <button class="btn btn-retry" id="retry-ex1" onclick="retryExercise('ex1')">重做本題</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <div class="quiz-item" id="ex2-box">
+            <p><strong>Q2. 功能配對：</strong> 請幫下列生理需求找到正確的「管家」（激素）。</p>
+            <p>
+                (1) 飢餓太久需要分解肝糖到血液中：
+                <select id="ex2-a">
+                    <option value="">請選擇</option>
+                    <option value="wrong">胰島素</option>
+                    <option value="correct">升糖素</option>
+                </select>
+            </p>
+            <p>
+                (2) 讓血液中的葡萄糖進入肌肉細胞儲存：
+                <select id="ex2-b">
+                    <option value="">請選擇</option>
+                    <option value="correct">胰島素</option>
+                    <option value="wrong">升糖素</option>
+                </select>
+            </p>
+            <button class="btn" id="btn-ex2" onclick="checkExercise('ex2')">檢查答案</button>
+            <button class="btn btn-retry" id="retry-ex2" onclick="retryExercise('ex2')">重做本題</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <div class="quiz-item" id="ex3-box">
+            <p><strong>Q3. 病理推論：</strong> 醫生發現一位病患的「胰管」被膽結石堵住了，導致胰液無法排入小腸，出現消化不良的症狀。但抽血檢查後發現，他的「血糖數值」依然能維持正常穩定。請問這個現象最能說明胰臟的哪項特性？</p>
+            <div class="options">
+                <label><input type="radio" name="ex3" value="wrong"> (A) 胰島素也是透過胰管運送，所以應該也會受到阻塞影響，檢驗有誤。</label>
+                <label><input type="radio" name="ex3" value="correct"> (B) 負責調節血糖的「胰島」屬於內分泌組織，激素是直接進入血液運輸，不走胰管，因此不受阻塞影響。</label>
+                <label><input type="radio" name="ex3" value="wrong"> (C) 分泌胰島素的細胞和分泌消化液的細胞是同一群，當消化液受阻時，細胞會轉而全速製造胰島素。</label>
+                <label><input type="radio" name="ex3" value="wrong"> (D) 升糖素具有分解脂肪的功能，可以暫時取代消化液的作用。</label>
+            </div>
+            <button class="btn" id="btn-ex3" onclick="checkExercise('ex3')">檢查答案</button>
+            <button class="btn btn-retry" id="retry-ex3" onclick="retryExercise('ex3')">重做本題</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <div class="quiz-item" id="ex4-box">
+            <p><strong>Q4. 症狀分析：</strong> 如果一個人的胰島素長期「分泌不足」或「細胞對其反應不佳」，身體可能會出現哪些狀況？(請勾選所有正確選項)</p>
+            <div class="options">
+                <label><input type="checkbox" name="ex4" value="correct"> 飯後血糖數值居高不下</label>
+                <label><input type="checkbox" name="ex4" value="correct"> 尿液中可能會檢測出糖分</label>
+                <label><input type="checkbox" name="ex4" value="wrong"> 細胞能獲得過多的能量而變得更有活力</label>
+                <label><input type="checkbox" name="ex4" value="wrong"> 血糖會無限制地一直降低</label>
+            </div>
+            <button class="btn" id="btn-ex4" onclick="checkExercise('ex4')">檢查答案</button>
+            <button class="btn btn-retry" id="retry-ex4" onclick="retryExercise('ex4')">重做本題</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+    </div>
+
+    <div class="nav-footer">
+        <a href="7.html" class="nav-link">← 上一頁</a>
+        <a href="./9.html" id="next-link" class="nav-link disabled">下一頁 →</a>
+    </div>
+
+    <script>
+        // --- 狀態追蹤 (練習題) ---
+        const completionStatus = {
+            ex1: false,
+            ex2: false,
+            ex3: false,
+            ex4: false
+        };
+
+        // --- 狀態追蹤 (影片題) ---
+        const videoStatus = {
+            vq1: false,
+            vq2: false,
+            vq3: false,
+            vq4: false
+        };
+
+        // --- Part 1: Text Cloze Logic ---
+        function checkCloze() {
+            const answers = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6'];
+            let allCorrect = true;
+            let allFilled = true;
+
+            answers.forEach(id => {
+                if(document.getElementById(id).value === "") allFilled = false;
+            });
+
+            if (!allFilled) {
+                alert("請完成所有空格後再提交！");
+                return;
+            }
+
+            answers.forEach(id => {
+                const el = document.getElementById(id);
+                if (el.value !== 'correct') {
+                    allCorrect = false;
+                    el.style.backgroundColor = "#fceceb";
+                    el.style.border = "1px solid red";
+                } else {
+                    el.style.backgroundColor = "#eaffea";
+                    el.style.border = "1px solid green";
+                    // Highlight logic
+                    if(id === 'q1') el.className = "highlight-1"; 
+                    if(id === 'q2') el.className = "highlight-2"; 
+                    if(id === 'q3') el.className = "highlight-3"; 
+                    if(id === 'q4') el.className = "highlight-4"; 
+                    if(id === 'q5') el.className = "highlight-1"; 
+                    if(id === 'q6') el.className = "highlight-4"; 
+                }
+            });
+
+            const btnCheck = document.getElementById('btn-check-cloze');
+            const btnRetry = document.getElementById('btn-retry-cloze');
+            const feedback = document.getElementById('cloze-feedback');
+
+            btnCheck.disabled = true; 
+
+            if (allCorrect) {
+                feedback.innerHTML = "全對了！做得好！";
+                feedback.style.color = "#2ecc71";
+                feedback.style.display = "block";
+            } else {
+                feedback.innerHTML = "有部分錯誤，請修正。";
+                feedback.style.color = "#e74c3c";
+                feedback.style.display = "block";
+                btnRetry.style.display = "inline-block"; 
+            }
+        }
+
+        function resetCloze() {
+            const answers = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6'];
+            answers.forEach(id => {
+                const el = document.getElementById(id);
+                el.style.backgroundColor = "#fff";
+                el.style.border = "1px solid #ccc";
+                el.className = "";
+                el.value = ""; 
+            });
+            
+            document.getElementById('btn-check-cloze').disabled = false;
+            document.getElementById('btn-retry-cloze').style.display = "none";
+            document.getElementById('cloze-feedback').style.display = "none";
+        }
+
+
+        // --- Part 2: Individual Video Quiz Logic ---
+        function checkVideoItem(id) {
+            const ans = document.querySelector(`input[name="${id}"]:checked`);
+            if (!ans) {
+                alert("請先選擇一個答案！");
+                return;
+            }
+
+            const box = document.getElementById(id + '-box');
+            const feedback = document.getElementById('fb-' + id);
+            const btnCheck = document.getElementById('btn-' + id);
+            const btnRetry = document.getElementById('retry-' + id);
+
+            btnCheck.disabled = true;
+
+            if (ans.value === 'correct') {
+                box.classList.add('correct');
+                box.classList.remove('incorrect');
+                feedback.innerHTML = "答對了！";
+                videoStatus[id] = true;
+            } else {
+                box.classList.add('incorrect');
+                box.classList.remove('correct');
+                feedback.innerHTML = "答案不正確，請重試。";
+                btnRetry.style.display = "inline-block";
+                videoStatus[id] = false;
+            }
+
+            checkAllVideoSolved();
+        }
+
+        function retryVideoItem(id) {
+            const box = document.getElementById(id + '-box');
+            const feedback = document.getElementById('fb-' + id);
+            const btnCheck = document.getElementById('btn-' + id);
+            const btnRetry = document.getElementById('retry-' + id);
+
+            // 清除選取
+            const radios = document.querySelectorAll(`input[name="${id}"]`);
+            radios.forEach(r => r.checked = false);
+
+            box.classList.remove('correct', 'incorrect');
+            feedback.innerHTML = "";
+            btnCheck.disabled = false;
+            btnRetry.style.display = "none";
+            
+            videoStatus[id] = false;
+            checkAllVideoSolved(); // 萬一重做導致狀態變更，解鎖區塊要隱藏
+        }
+
+        function checkAllVideoSolved() {
+            const unlockSec = document.getElementById('unlock-section');
+            // 檢查是否所有題目狀態皆為 true
+            if (videoStatus.vq1 && videoStatus.vq2 && videoStatus.vq3 && videoStatus.vq4) {
+                unlockSec.style.display = "block";
+            } else {
+                unlockSec.style.display = "none";
+            }
+        }
+
+
+        // --- Part 3: Exercise Logic ---
+        function checkExercise(exId) {
+            let isCorrect = false;
+            const container = document.getElementById(exId + '-box');
+            const feedback = container.querySelector('.feedback-msg');
+            const btnCheck = document.getElementById('btn-' + exId);
+            const btnRetry = document.getElementById('retry-' + exId);
+
+            // 根據不同題型檢查
+            if (exId === 'ex1') { // 單選
+                const ans = document.querySelector('input[name="ex1"]:checked');
+                if(!ans) { alert("請作答"); return; }
+                if(ans.value === 'correct') isCorrect = true;
+            } 
+            else if (exId === 'ex2') { // 兩個下拉選單
+                const a = document.getElementById('ex2-a').value;
+                const b = document.getElementById('ex2-b').value;
+                if(a === "" || b === "") { alert("請填寫完整"); return; }
+                if(a === 'correct' && b === 'correct') isCorrect = true;
+            }
+            else if (exId === 'ex3') { // 單選 (新題型)
+                const ans = document.querySelector('input[name="ex3"]:checked');
+                if(!ans) { alert("請作答"); return; }
+                if(ans.value === 'correct') isCorrect = true;
+            }
+            else if (exId === 'ex4') { // 複選 (Checkbox)
+                const opts = document.querySelectorAll('input[name="ex4"]');
+                let allRight = true;
+                let checkedCount = 0;
+                opts.forEach(opt => {
+                    if (opt.checked) checkedCount++;
+                    if (opt.checked && opt.value !== 'correct') allRight = false; // 選了錯的
+                    if (!opt.checked && opt.value === 'correct') allRight = false; // 沒選對的
+                });
+                if(checkedCount === 0) { alert("請至少選擇一項"); return; }
+                isCorrect = allRight;
+            }
+
+            // 處理 UI
+            btnCheck.disabled = true;
+            if (isCorrect) {
+                container.classList.add('correct');
+                container.classList.remove('incorrect');
+                feedback.innerHTML = "答對了！觀念很清楚喔！";
+                completionStatus[exId] = true;
+                checkAllComplete(); // 檢查是否全部完成以解鎖下一頁
+            } else {
+                container.classList.add('incorrect');
+                container.classList.remove('correct');
+                feedback.innerHTML = "答案不正確，請再想一想。";
+                btnRetry.style.display = "inline-block";
+                completionStatus[exId] = false;
+                checkAllComplete();
+            }
+        }
+
+        function retryExercise(exId) {
+            const container = document.getElementById(exId + '-box');
+            container.classList.remove('correct', 'incorrect');
+            const feedback = container.querySelector('.feedback-msg');
+            feedback.innerHTML = "";
+            const btnCheck = document.getElementById('btn-' + exId);
+            const btnRetry = document.getElementById('retry-' + exId);
+            
+            btnCheck.disabled = false;
+            btnRetry.style.display = "none";
+
+            // 清空選擇
+            if(exId === 'ex1' || exId === 'ex3') {
+                const radios = document.querySelectorAll(`input[name="${exId}"]`);
+                radios.forEach(r => r.checked = false);
+            }
+            else if (exId === 'ex2') {
+                document.getElementById('ex2-a').value = "";
+                document.getElementById('ex2-b').value = "";
+            }
+            else if (exId === 'ex4') {
+                const boxes = document.querySelectorAll(`input[name="${exId}"]`);
+                boxes.forEach(b => b.checked = false);
+            }
+            
+            completionStatus[exId] = false;
+            checkAllComplete(); // 更新下一頁按鈕狀態
+        }
+
+        function checkAllComplete() {
+            const nextLink = document.getElementById('next-link');
+            if (completionStatus.ex1 && completionStatus.ex2 && completionStatus.ex3 && completionStatus.ex4) {
+                nextLink.classList.remove('disabled');
+                nextLink.classList.add('active-next');
+            } else {
+                nextLink.classList.add('disabled');
+                nextLink.classList.remove('active-next');
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -62,23 +62,17 @@
       margin-bottom: 8px;
     }
 
-    /* --- 修改開始 --- */
-    
     .question-body {
       margin-bottom: 8px;
     }
     
-    /* 1. 一般題目（如影片題、選擇題）使用正常行高，避免文字太鬆散 */
     .question-body p {
       line-height: 1.6; 
     }
 
-    /* 2. 只有填充題（cloze）因為有下拉選單，維持較大行高避免擁擠 */
     .question-block[data-type="cloze"] .question-body p {
       line-height: 2.8;
     }
-
-    /* --- 修改結束 --- */
 
     .feedback {
       margin-top: 8px;
@@ -558,8 +552,34 @@
       </div>
     </div>
 
-    <div class="question-block" id="q-video4" data-type="single-choice" data-correct="false">
+    <div class="question-block" id="q-video-new" data-type="single-choice" data-correct="false">
       <div class="question-title">影片評量 1</div>
+      <div class="question-body">
+        <p>影片1 中，影片中的人物被注射了什麼激素？</p>
+        <div class="options-group">
+          <label>
+            <input type="radio" name="video_new" value="A"> 生長激素
+          </label>
+          <label>
+            <input type="radio" name="video_new" value="B"> 雄性激素
+          </label>
+          <label>
+            <input type="radio" name="video_new" value="C"> 雌性激素
+          </label>
+          <label>
+            <input type="radio" name="video_new" value="D"> 甲狀腺素
+          </label>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="check-btn" onclick="checkQuestion('q-video-new')" disabled>檢查答案</button>
+        <button type="button" class="redo-btn" onclick="resetQuestion('q-video-new')">重做本題</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question-block" id="q-video4" data-type="single-choice" data-correct="false">
+      <div class="question-title">影片評量 2</div>
       <div class="question-body">
         <p>外源性荷爾蒙（體外補充的男性或女性荷爾蒙）可以持續影響我們已經發育完成的特徵，例如改變脂肪分佈、肌肉量。但有些改變是「單向」的，一旦發生就非常難以復原。根據 影片2 內容，影片中的人物可能因為外源性荷爾蒙的影響，展現了很多女性的特質，但也有些地方是無法呈現女性特質的，下列哪一種生理變化，最能展現這種「一旦發生，就很難再改變」的特性？</p>
         <div class="options-group">
@@ -583,7 +603,6 @@
       </div>
       <div class="feedback"></div>
     </div>
-    
     
     <div id="video-challenge-bonus" class="bonus-block">
         <p>恭喜完成影片挑戰！這是補充圖解：</p>
@@ -827,8 +846,10 @@
     const bonus = document.getElementById('video-challenge-bonus');
     if (!bonus) return;
     const v4 = document.getElementById('q-video4');
-    // 注意：q-video5 已移除，現在只檢查 q-video4
-    if (v4 && v4.dataset.correct === 'true') {
+    const vNew = document.getElementById('q-video-new');
+    
+    // 現在必須 q-video-new 和 q-video4 都正確才顯示
+    if ((v4 && v4.dataset.correct === 'true') && (vNew && vNew.dataset.correct === 'true')) {
       bonus.style.display = 'block';
     } else {
       bonus.style.display = 'none';
@@ -876,18 +897,23 @@
       correct = allTrue;
     } else if (blockId === 'q-video1') {
       const selected = block.querySelector('input[type="radio"]:checked');
-      // 答案已移至 C
+      // 答案 C
       correct = selected && selected.value === 'C';
     } else if (blockId === 'q-video2') {
       const selected = block.querySelector('input[type="radio"]:checked');
-      // 答案已移至 A
+      // 答案 A
       correct = selected && selected.value === 'A';
     } else if (blockId === 'q-video3') {
       const selected = block.querySelector('input[type="radio"]:checked');
-      // 答案已移至 A
+      // 答案 A
       correct = selected && selected.value === 'A';
+    } else if (blockId === 'q-video-new') {
+      // --- 新增題目的檢查 ---
+      const selected = block.querySelector('input[type="radio"]:checked');
+      // [設定] 預設為 C (雌性激素)，請依影片實際內容確認
+      correct = selected && selected.value === 'C';
     } else if (blockId === 'q-video4') {
-      // 影片評量 1：單向改變，答案移至 B (聲音)
+      // 影片評量 2 (原影片評量 1)
       const selected = block.querySelector('input[type="radio"]:checked');
       correct = selected && selected.value === 'B';
     } else if (blockId === 'q-lit1') {
@@ -923,7 +949,9 @@
       } else if (blockId === 'q-cloze2') {
         msg = '太棒了！你已了解睪丸與卵巢分泌的激素及其影響。';
       } else if (blockId.startsWith('q-video')) {
+         // 針對影片題的個別回饋
          if (blockId === 'q-video4') msg = '答對了！聲音變低沉通常是不可逆的變化。';
+         else if (blockId === 'q-video-new') msg = '答對了！影片中人物注射的激素確實是這個。';
          else msg = '答對了！您已掌握重點。';
       } else if (blockId === 'q-lit1') {
         msg = '正確！睪丸分泌的雄性激素會讓男性第二性徵更明顯。';
@@ -962,7 +990,6 @@
       });
     }
 
-    // 檢查各種連動 (含新舊)
     updateVideoChallengeBonus();
     updateNextButton();
   });

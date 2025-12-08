@@ -62,14 +62,23 @@
       margin-bottom: 8px;
     }
 
-    /* 加大課文填充題的行高，避免擁擠 */
+    /* --- 修改開始 --- */
+    
     .question-body {
       margin-bottom: 8px;
     }
     
+    /* 1. 一般題目（如影片題、選擇題）使用正常行高，避免文字太鬆散 */
     .question-body p {
-      line-height: 2.8; 
+      line-height: 1.6; 
     }
+
+    /* 2. 只有填充題（cloze）因為有下拉選單，維持較大行高避免擁擠 */
+    .question-block[data-type="cloze"] .question-body p {
+      line-height: 2.8;
+    }
+
+    /* --- 修改結束 --- */
 
     .feedback {
       margin-top: 8px;
@@ -552,7 +561,7 @@
     <div class="question-block" id="q-video4" data-type="single-choice" data-correct="false">
       <div class="question-title">影片評量 1</div>
       <div class="question-body">
-        <p>外源性荷爾蒙（體外補充的男性或女性荷爾蒙）可以持續影響我們已經發育完成的特徵，例如改變脂肪分佈、肌肉量和聲音。但有些改變是「單向」的，一旦發生就非常難以復原。根據影片內容，下列哪一種生理變化，最能展現這種「一旦發生，就很難再變回原狀」的特性？</p>
+        <p>外源性荷爾蒙（體外補充的男性或女性荷爾蒙）可以持續影響我們已經發育完成的特徵，例如改變脂肪分佈、肌肉量。但有些改變是「單向」的，一旦發生就非常難以復原。根據 影片2 內容，影片中的人物可能因為外源性荷爾蒙的影響，展現了很多女性的特質，但也有些地方是無法呈現女性特質的，下列哪一種生理變化，最能展現這種「一旦發生，就很難再改變」的特性？</p>
         <div class="options-group">
           <label>
             <input type="radio" name="video4" value="A"> 脂肪的改變：補充女性荷爾蒙會讓脂肪集中到胸部和臀部，但補充男性荷爾蒙可以改變這種脂肪分佈。
@@ -578,7 +587,7 @@
     <div class="question-block" id="q-video5" data-type="single-choice" data-correct="false">
       <div class="question-title">影片評量 2</div>
       <div class="question-body">
-        <p>為什麼我們常說青少年（國中時期）絕對不能亂用外源性荷爾蒙？</p>
+        <p>使用生長激素可治療兒童的生長遲緩（如生長激素缺乏症、特定遺傳疾病），但需經醫師處方，切不可自行亂用。你認為青少年（國中時期）不應該亂用外源性荷爾蒙(如生長激素)的原因為何？</p>
         <div class="options-group">
           <label>
             <input type="radio" name="video5" value="A"> 因為會讓生長板「提早關閉」，導致將來長不高，比原本預期的身高還矮，就跟喉結的形成一樣，這通常是不可逆的。
@@ -609,16 +618,16 @@
   <div class="question-block" id="q-lit1" data-type="single-choice" data-correct="false">
     <div class="question-title">素養題 1：情境判斷</div>
     <div class="question-body">
-      小明進入青春期後，聲音變低沉、喉結變明顯，這主要是因為哪一個構造分泌的激素增加？
+      小明進入青春期後，聲音變低沉、喉結變明顯，這主要是因為哪一種激素分泌增加？
       <div class="options-group">
         <label>
-          <input type="radio" name="lit1" value="A"> 卵巢分泌的雌性激素
+          <input type="radio" name="lit1" value="A"> 雌性激素
         </label>
         <label>
-          <input type="radio" name="lit1" value="B"> 睪丸分泌的雄性激素
+          <input type="radio" name="lit1" value="B"> 雄性激素
         </label>
         <label>
-          <input type="radio" name="lit1" value="C"> 甲狀腺分泌的甲狀腺素
+          <input type="radio" name="lit1" value="C"> 甲狀腺素
         </label>
       </div>
     </div>

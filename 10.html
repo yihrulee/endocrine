@@ -98,7 +98,6 @@
         .hormone-btn { 
             flex: 1; height: 60px; margin: 0 4px; background: white; color: #333; border: none; border-radius: 8px; 
             cursor: pointer; font-size: 16px; font-weight: bold; box-shadow: 0 4px 0 #999; 
-            /* 調整字體大小以適應更多按鈕文字 */
         }
         .hormone-btn:active { transform: translateY(4px); box-shadow: none; }
         .hormone-btn.blue { background: #40c4ff; color: #000; }
@@ -116,7 +115,7 @@
             z-index: 10000; flex-direction: column; 
             color: white; text-align: center; 
             padding: 20px; box-sizing: border-box; 
-            overflow-y: auto; /* 當內容太長時，允許垂直捲動 */
+            overflow-y: auto; 
         }
         
         .hidden { display: none; }
@@ -139,16 +138,19 @@
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         /* 說明頁步驟樣式 */
-        .step-container { display:flex; justify-content:center; gap:15px; margin: 25px 0; flex-wrap: wrap; }
+        .step-container { display:flex; justify-content:center; gap:15px; margin: 15px 0; flex-wrap: wrap; }
         .step-box { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; width: 120px; border: 1px solid rgba(255,255,255,0.2); }
         .step-icon { font-size: 30px; margin-bottom: 5px; }
         .step-title { font-weight: bold; font-size: 18px; color: #40c4ff; margin-bottom: 5px; }
         .step-desc { font-size: 14px; color: #eceff1; }
         .arrow-icon { font-size: 24px; color: #607d8b; display: flex; align-items: center; }
+        
+        /* 說明文字區塊 */
+        .intro-text { max-width: 700px; margin: 10px auto; color: #cfd8dc; font-size: 18px; line-height: 1.5; text-align: justify; padding: 0 15px; }
 
         /* === 3. 頁尾導覽列 CSS === */
         .footer-nav {
-            flex: 0 0 auto; /* 不會被壓縮 */
+            flex: 0 0 auto; 
             display: flex; justify-content: space-between; width: 95%; max-width: 1200px;
             padding: 5px 0; margin-top: 5px;
             position: relative;
@@ -200,6 +202,7 @@
             .step-title { font-size: 14px; }
             .footer-nav { padding: 5px 10px; box-sizing: border-box; }
             .nav-btn { font-size: 16px; padding: 8px 15px; }
+            .intro-text { font-size: 16px; text-align: left; }
         }
 
         /* 橫式螢幕優化 */
@@ -213,6 +216,7 @@
             .form-row:last-of-type { grid-column: span 2; }
             #btnSubmit { grid-column: span 2; margin-top: 5px; }
             .btn-group { margin-top: 10px; }
+            .intro-text { display: none; } /* 矮螢幕時隱藏說明文字以免按鈕按不到 */
         }
     </style>
 </head>
@@ -220,7 +224,7 @@
 
     <div class="header-bar">
         <div class="score-val">SCORE: <span id="score-display">0</span></div>
-        <div class="time-val">TIME: <span id="timer-display">60</span></div>
+        <div class="time-val">TIME: <span id="timer-display">90</span></div>
     </div>
 
     <div class="game-container">
@@ -252,8 +256,8 @@
         <div class="center-stage">
             <div id="event-section" class="event-section">
                 <h2 id="event-title" class="event-title">準備...</h2>
-                <p id="event-desc" class="event-desc">5秒限時反射挑戰</p>
-                <div class="timer-bar-bg"><div id="timer-bar" class="timer-bar-fill"></div></div>
+                <p id="event-desc" class="event-desc">反射挑戰</p>
+                <div class="timer-bar-bg"><div id="timer-bar" class="timer-bar-fill" style="width: 100%;"></div></div>
             </div>
             
             <div class="body-section">
@@ -288,27 +292,25 @@
         
         let stats = { sugar: 50, heart: 50, calcium: 50, growth: 50 };
         let score = 0;
-        let timeLeft = 60;
+        let timeLeft = 90; // 已修改為 90 秒
         let gameActive = false;
         let gameLoopTimer = null;
-        let eventTimeoutTimer = null; 
         let processingTurn = false; 
         
         let currentEvent = null;
         let lastEventIndex = -1; 
         let eventStartTime = 0;
-        let eventTimeLimit = 5000; 
 
-        // === 2025/12/07 修改：新增骨折事件，調整副甲狀腺邏輯 ===
+        // === 2025/12/07 最終修改：調整心跳事件與顯示邏輯，符合生理學反應 ===
         const eventsDB = [
             { id: 1, title: "🍔 吃大餐！", desc: "血糖飆升 (+40)", type: "sugar_high", target: "insulin", effect: {sugar: 40} },
-            { id: 2, title: "🐕 被狗追！", desc: "能量耗盡 (-40)", type: "danger", target: "adrenaline", effect: {heart: -40, sugar: -20} },
+            // 修改 1: 說明移除了 (+40) 與 (+30)，但 effect 數值保留以維持遊戲機制
+            { id: 2, title: "🐕 被狗追！", desc: "危急！需要更多能量", type: "danger", target: "adrenaline", effect: {heart: 40, sugar: 20} },
             { id: 3, title: "🥴 餓昏了！", desc: "血糖暴跌 (-40)", type: "sugar_low", target: "glucagon", effect: {sugar: -40} },
-            // 修改：大抽筋要選擇「增加」副甲狀腺素
             { id: 4, title: "⚡ 大抽筋！", desc: "血鈣不足 (-40)", type: "cramp", target: "parathormone_increase", effect: {calcium: -40} },
-            { id: 5, title: "📉 壓力大！", desc: "心跳驟降 (-30)", type: "stress", target: "adrenaline", effect: {heart: -30, sugar: -10} },
+            // 修改 1: 說明移除了 (+40) 與 (+30)，但 effect 數值保留以維持遊戲機制
+            { id: 5, title: "📈 壓力大！", desc: "緊繃！需要更多能量", type: "stress", target: "adrenaline", effect: {heart: 30, sugar: 10} },
             { id: 6, title: "🌱 長不高！", desc: "生長停滯 (-30)", type: "growth", target: "growth", effect: {growth: -30} },
-            // 新增：嚴重骨折要選擇「減少」副甲狀腺素
             { id: 7, title: "🦴 嚴重骨折！", desc: "骨質流失 (鈣過高)", type: "fracture", target: "parathormone_decrease", effect: {calcium: 40} }
         ];
 
@@ -320,6 +322,11 @@
             const overlay = document.getElementById("overlay");
             overlay.innerHTML = `
                 <h1 style="font-size: 50px; color: #ffeb3b; margin:0 0 10px 0;">內分泌協調高手</h1>
+                
+                <div class="intro-text">
+                    當生活中面臨不同情境時，身體會透過內分泌腺分泌激素來進行調節。請觀察目前的突發狀況與生理數值，思考身體需要何種激素應對，並點選正確的器官與激素來完成挑戰！
+                </div>
+
                 <div class="step-container">
                     <div class="step-box">
                         <div class="step-icon">👀</div>
@@ -339,13 +346,14 @@
                         <div class="step-desc">選擇正確激素</div>
                     </div>
                 </div>
-                <p style="font-size: 20px; color: #b0bec5;">60 秒極速挑戰・答錯扣 500 分</p>
+                <p style="font-size: 20px; color: #b0bec5; margin: 5px 0;">90 秒極速挑戰・答錯扣 500 分</p>
                 <button class="start-btn" onclick="startGame()">開始挑戰</button>
                 <p style="margin-top: 15px; font-size: 18px; color: #81d4fa; font-weight: bold;">平板、手機遊戲，請「直式」呈現為佳</p>
             `;
             overlay.classList.remove("hidden");
         }
 
+        // 修改 3: 調整心跳條的顏色邏輯
         function updateDisplay() {
             for (let key in stats) {
                 let val = stats[key];
@@ -354,8 +362,19 @@
                 
                 let bar = document.getElementById(`bar-${key}`);
                 bar.style.width = val + "%";
-                if (val < 30 || val > 70) bar.style.background = "#ff1744"; 
-                else bar.style.background = "#00e676";
+                
+                let color = "#00e676"; // 預設綠色
+                
+                if (key === 'heart') {
+                    // 心跳條：只有在過低 (< 30) 時才標記為紅色警告
+                    if (val < 30) color = "#ff1744"; 
+                    // 過高 (例如被狗追時) 維持綠色，代表亢奮但正常
+                } else {
+                    // 其他條 (血糖/血鈣/生長)：過低 (< 30) 或過高 (> 70) 都標記為紅色警告
+                    if (val < 30 || val > 70) color = "#ff1744"; 
+                }
+                
+                bar.style.background = color;
             }
             document.getElementById("score-display").innerText = score;
             document.getElementById("timer-display").innerText = timeLeft;
@@ -364,7 +383,7 @@
         function startGame() {
             stats = { sugar: 50, heart: 50, calcium: 50, growth: 50 };
             score = 0;
-            timeLeft = 60; 
+            timeLeft = 90; // 已修改為 90 秒
             gameActive = true;
             processingTurn = false;
             lastEventIndex = -1; 
@@ -389,12 +408,6 @@
             if (!gameActive) return;
             
             processingTurn = false; 
-            clearTimeout(eventTimeoutTimer);
-            
-            let timerBar = document.getElementById("timer-bar");
-            timerBar.style.transition = "none";
-            timerBar.style.width = "100%";
-            void timerBar.offsetWidth; 
             
             let randIndex;
             do {
@@ -418,14 +431,6 @@
             }
             updateDisplay();
 
-            setTimeout(() => {
-                timerBar.style.transition = "width 5s linear";
-                timerBar.style.width = "0%";
-            }, 50);
-
-            eventTimeoutTimer = setTimeout(() => {
-                handleEventFail("逾時！");
-            }, eventTimeLimit);
         }
 
         function selectGland(gland) {
@@ -442,7 +447,6 @@
             if (gland === 'pituitary') btnArea.innerHTML = makeBtn("生長激素", "growth", "blue");
             else if (gland === 'thyroid') btnArea.innerHTML = makeBtn("甲狀腺素", "thyroxine", "blue");
             else if (gland === 'parathyroid') {
-                // 修改：副甲狀腺現在有兩個選項
                 btnArea.innerHTML = makeBtn("(增加)副甲狀腺素", "parathormone_increase", "orange") + 
                                     makeBtn("(減少)副甲狀腺素", "parathormone_decrease", "green");
             }
@@ -456,11 +460,17 @@
             if (!gameActive || processingTurn) return; 
             processingTurn = true; 
             
-            clearTimeout(eventTimeoutTimer);
+            // 判定是否正確
+            let isCorrect = (currentEvent && type === currentEvent.target);
 
-            if (currentEvent && type === currentEvent.target) {
-                let reactionTime = (Date.now() - eventStartTime) / 1000;
-                let points = Math.max(300, Math.floor(1000 - (reactionTime * 150))); 
+            // 特殊規則：如果事件是 '長不高' (target='growth')，選擇 'thyroxine' (甲狀腺素) 也算正確
+            if (currentEvent && currentEvent.target === 'growth' && type === 'thyroxine') {
+                isCorrect = true;
+            }
+
+            if (isCorrect) {
+                // 給予固定分數
+                let points = 1000; 
                 score += points;
                 showScoreAnim(`+${points}`, true);
                 
@@ -486,13 +496,16 @@
         }
 
         function fixStats(type) {
-            if (type === 'growth') stats.growth = 50; 
-            if (type === 'thyroxine') { stats.heart = 50; stats.sugar = 50; }
-            // 修改：包含兩種副甲狀腺素的操作都要修正血鈣
-            if (type === 'parathormone_increase' || type === 'parathormone_decrease') stats.calcium = 50;
-            if (type === 'adrenaline') { stats.heart = 50; stats.sugar = 50; }
-            if (type === 'insulin') stats.sugar = 50;
-            if (type === 'glucagon') stats.sugar = 50;
+            // 修正數值回歸 50
+            if (currentEvent.target === 'growth' || type === 'growth') stats.growth = 50; 
+            if (currentEvent.target === 'thyroxine' || type === 'thyroxine') { stats.heart = 50; stats.sugar = 50; }
+            if (currentEvent.target === 'parathormone_increase' || currentEvent.target === 'parathormone_decrease' || 
+                type === 'parathormone_increase' || type === 'parathormone_decrease') stats.calcium = 50;
+            if (currentEvent.target === 'adrenaline' || type === 'adrenaline') { 
+                stats.heart = 50; stats.sugar = 50; 
+            }
+            if (currentEvent.target === 'insulin' || type === 'insulin') stats.sugar = 50;
+            if (currentEvent.target === 'glucagon' || type === 'glucagon') stats.sugar = 50;
         }
 
         function showScoreAnim(text, isGood) {
@@ -508,7 +521,6 @@
         function endGame() {
             gameActive = false;
             clearInterval(gameLoopTimer);
-            clearTimeout(eventTimeoutTimer);
             
             const overlay = document.getElementById("overlay");
             overlay.scrollTop = 0;

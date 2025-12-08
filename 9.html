@@ -583,29 +583,7 @@
       </div>
       <div class="feedback"></div>
     </div>
-
-    <div class="question-block" id="q-video5" data-type="single-choice" data-correct="false">
-      <div class="question-title">影片評量 2</div>
-      <div class="question-body">
-        <p>使用生長激素可治療兒童的生長遲緩（如生長激素缺乏症、特定遺傳疾病），但需經醫師處方，切不可自行亂用。你認為青少年（國中時期）不應該亂用外源性荷爾蒙(如生長激素)的原因為何？</p>
-        <div class="options-group">
-          <label>
-            <input type="radio" name="video5" value="A"> 因為會讓生長板「提早關閉」，導致將來長不高，比原本預期的身高還矮，就跟喉結的形成一樣，這通常是不可逆的。
-          </label>
-          <label>
-            <input type="radio" name="video5" value="B"> 因為青少年的皮膚太嫩，打針會很痛，所以不要亂用外源性荷爾蒙。
-          </label>
-          <label>
-            <input type="radio" name="video5" value="C"> 因為可能會長得太高，容易變成巨人症，反而帶來困擾。
-          </label>
-        </div>
-      </div>
-      <div class="btn-row">
-        <button type="button" class="check-btn" onclick="checkQuestion('q-video5')" disabled>檢查答案</button>
-        <button type="button" class="redo-btn" onclick="resetQuestion('q-video5')">重做本題</button>
-      </div>
-      <div class="feedback"></div>
-    </div>
+    
     
     <div id="video-challenge-bonus" class="bonus-block">
         <p>恭喜完成影片挑戰！這是補充圖解：</p>
@@ -849,9 +827,8 @@
     const bonus = document.getElementById('video-challenge-bonus');
     if (!bonus) return;
     const v4 = document.getElementById('q-video4');
-    const v5 = document.getElementById('q-video5');
-    // 當 q-video4 和 q-video5 都正確時才顯示
-    if (v4 && v4.dataset.correct === 'true' && v5 && v5.dataset.correct === 'true') {
+    // 注意：q-video5 已移除，現在只檢查 q-video4
+    if (v4 && v4.dataset.correct === 'true') {
       bonus.style.display = 'block';
     } else {
       bonus.style.display = 'none';
@@ -913,10 +890,6 @@
       // 影片評量 1：單向改變，答案移至 B (聲音)
       const selected = block.querySelector('input[type="radio"]:checked');
       correct = selected && selected.value === 'B';
-    } else if (blockId === 'q-video5') {
-      // 影片評量 2：青少年禁忌，答案移至 A (生長板)
-      const selected = block.querySelector('input[type="radio"]:checked');
-      correct = selected && selected.value === 'A';
     } else if (blockId === 'q-lit1') {
       const selected = block.querySelector('input[type="radio"]:checked');
       correct = selected && selected.value === 'B';
@@ -951,7 +924,6 @@
         msg = '太棒了！你已了解睪丸與卵巢分泌的激素及其影響。';
       } else if (blockId.startsWith('q-video')) {
          if (blockId === 'q-video4') msg = '答對了！聲音變低沉通常是不可逆的變化。';
-         else if (blockId === 'q-video5') msg = '答對了！生長板提早關閉會導致身高發展受限。';
          else msg = '答對了！您已掌握重點。';
       } else if (blockId === 'q-lit1') {
         msg = '正確！睪丸分泌的雄性激素會讓男性第二性徵更明顯。';

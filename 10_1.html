@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>內分泌協調高手</title>
+    <style>
+        /* === 全局設定 === */
+        body { font-family: "Microsoft JhengHei", sans-serif; background-color: #263238; color: white; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; height: 100vh; box-sizing: border-box; overflow: hidden; }
+
+        /* === 1. 頂部資訊列 (Score/Time) === */
+        .header-bar {
+            flex: 0 0 auto; display: flex; justify-content: space-between; width: 95%; max-width: 1200px;
+            background: #37474f; padding: 10px 30px; border-radius: 10px; margin-bottom: 10px; 
+            border: 1px solid #546e7a; box-shadow: 0 4px 6px rgba(0,0,0,0.3); box-sizing: border-box;
+            position: relative;
+        }
+        .score-val { color: #ffeb3b; font-size: 24px; font-family: monospace; font-weight: 900; }
+        .time-val { color: #ff5252; font-size: 24px; font-family: monospace; font-weight: 900; }
+
+        /* === 2. 遊戲主容器 === */
+        .game-container { 
+            flex: 1; display: flex; gap: 15px; width: 100%; max-width: 1200px; overflow: hidden; position: relative;
+        }
+
+        /* 左側：數值監控 */
+        .status-panel { 
+            flex: 0 0 180px; display: flex; flex-direction: column; justify-content: center; gap: 10px; 
+            background: #37474f; padding: 10px; border-radius: 10px; overflow-y: auto;
+        }
+        .status-item { background: #455a64; padding: 5px 8px; border-radius: 8px; border: 1px solid #607d8b; }
+        .label { font-weight: bold; font-size: 13px; margin-bottom: 2px; display: block; color: #cfd8dc; }
+        .progress-bg { background: #263238; height: 10px; border-radius: 10px; overflow: hidden; border: 1px solid #546e7a; }
+        .progress-fill { height: 100%; width: 50%; transition: width 0.2s, background-color 0.2s; }
+        .rule-box { margin-top:10px; color:#cfd8dc; text-align:center; font-size:14px; border:1px solid #555; padding:5px; border-radius:5px; }
+
+        /* 中間舞台 */
+        .center-stage { 
+            flex: 1; background-color: #eceff1; border-radius: 15px; display: flex; flex-direction: column; 
+            overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.5); position: relative;
+        }
+
+        /* [上] 事件區 */
+        .event-section {
+            flex: 0 0 90px; background: #fff; border-bottom: 2px solid #ddd;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 5; position: relative; padding: 5px;
+        }
+        .event-title { font-size: 28px; font-weight: 900; color: #333; margin: 0; }
+        .event-desc { font-size: 18px; color: #d84315; margin-top: 2px; font-weight: bold; }
+        .timer-bar-bg { position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #ddd; }
+        .timer-bar-fill { height: 100%; width: 100%; background: #ff1744; transition: width linear; }
+
+        /* [中] 人體區 */
+        .body-section {
+            flex: 1; 
+            position: relative; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            padding-top: 20px;
+            background: #fafafa; 
+            overflow: hidden;
+        }
+        .body-outline { 
+            position: relative; 
+            width: 220px; 
+            height: 460px; 
+            transform-origin: top center; 
+            transform: scale(0.9);
+        }
+
+        /* 人體繪圖 CSS */
+        .head { width: 65px; height: 75px; background: #ffe0bd; border-radius: 30px; position: absolute; top: 0; left: 78px; border: 3px solid #333; }
+        .torso { width: 90px; height: 190px; background: #ffe0bd; border-radius: 15px; position: absolute; top: 80px; left: 65px; border: 3px solid #333; }
+        .arm-l { width: 25px; height: 160px; background: #ffe0bd; position: absolute; top: 85px; left: 35px; border-radius: 10px; transform: rotate(12deg); border: 3px solid #333; }
+        .arm-r { width: 25px; height: 160px; background: #ffe0bd; position: absolute; top: 85px; left: 160px; border-radius: 10px; transform: rotate(-12deg); border: 3px solid #333; }
+        .leg-l { width: 35px; height: 200px; background: #ffe0bd; position: absolute; top: 275px; left: 65px; border-radius: 10px; border: 3px solid #333; }
+        .leg-r { width: 35px; height: 200px; background: #ffe0bd; position: absolute; top: 275px; left: 120px; border-radius: 10px; border: 3px solid #333; }
+
+        /* 器官按鈕 */
+        .gland-btn { position: absolute; width: 45px; height: 45px; background: #ff1744; border-radius: 50%; border: 3px solid white; cursor: pointer; box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 100; font-size: 20px; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; transition: transform 0.1s; }
+        .gland-btn:hover { transform: scale(1.1); background: #d50000; }
+        .gland-btn:active { transform: scale(0.9); }
+        #btn-pituitary { top: 15px; left: 88px; background: #aa00ff; } 
+        #btn-thyroid { top: 85px; left: 88px; background: #00bcd4; } 
+        #btn-parathyroid { top: 85px; left: 125px; width: 25px; height: 25px; background: #ff6d00; font-size: 12px; } 
+        #btn-adrenal { top: 165px; left: 75px; background: #f44336; } 
+        #btn-pancreas { top: 195px; left: 105px; background: #00c853; } 
+
+        /* [下] 操作面板 */
+        .control-panel {
+            flex: 0 0 90px; background: #263238; border-top: 4px solid #ffeb3b;
+            display: flex; justify-content: center; align-items: center; padding: 5px; z-index: 20;
+        }
+        .placeholder-text { color: #78909c; font-size: 20px; font-weight: bold; }
+        .hormone-btn { 
+            flex: 1; height: 60px; margin: 0 4px; background: white; color: #333; border: none; border-radius: 8px; 
+            cursor: pointer; font-size: 16px; font-weight: bold; box-shadow: 0 4px 0 #999; 
+            /* 調整字體大小以適應更多按鈕文字 */
+        }
+        .hormone-btn:active { transform: translateY(4px); box-shadow: none; }
+        .hormone-btn.blue { background: #40c4ff; color: #000; }
+        .hormone-btn.green { background: #69f0ae; color: #000; }
+        .hormone-btn.orange { background: #ffd740; color: #000; }
+
+        /* 特效與 Overlay */
+        .score-popup { position: absolute; font-size: 80px; font-weight: 900; color: #ffeb3b; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0; pointer-events: none; z-index: 200; text-shadow: 4px 4px 0 #000; white-space: nowrap; }
+        
+        /* Overlay 修改：加入 overflow-y 允許捲動 */
+        .overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            display: flex; justify-content: center; align-items: center; 
+            z-index: 10000; flex-direction: column; 
+            color: white; text-align: center; 
+            padding: 20px; box-sizing: border-box; 
+            overflow-y: auto; /* 當內容太長時，允許垂直捲動 */
+        }
+        
+        .hidden { display: none; }
+        .start-btn { padding: 15px 50px; font-size: 30px; background: #ff1744; color: white; border: none; border-radius: 50px; cursor: pointer; margin-top: 20px; font-weight: bold; animation: pulse 1s infinite; }
+        
+        /* === 表單相關 CSS === */
+        .upload-form-container { background: #37474f; padding: 20px; border-radius: 15px; border: 2px solid #546e7a; margin-top: 20px; max-width: 300px; width: 100%; display: none; }
+        .form-row { margin-bottom: 15px; text-align: left; }
+        .form-row label { display: block; color: #cfd8dc; margin-bottom: 5px; font-weight: bold; }
+        .form-row input { width: 100%; padding: 10px; border-radius: 5px; border: none; box-sizing: border-box; font-size: 16px; }
+        .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .action-btn { padding: 15px 30px; font-size: 20px; border: none; border-radius: 40px; cursor: pointer; font-weight: bold; color: white; transition: 0.2s; }
+        .btn-restart { background: #ff1744; }
+        .btn-upload { background: #00e676; color: #004d40; }
+        .btn-submit { background: #2979ff; width: 100%; margin-top: 10px; }
+        .btn-disabled { background: #78909c; cursor: not-allowed; }
+
+        @keyframes floatUp { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -150%) scale(1.5); } }
+        .score-anim { animation: floatUp 0.8s ease-out forwards; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* 說明頁步驟樣式 */
+        .step-container { display:flex; justify-content:center; gap:15px; margin: 25px 0; flex-wrap: wrap; }
+        .step-box { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; width: 120px; border: 1px solid rgba(255,255,255,0.2); }
+        .step-icon { font-size: 30px; margin-bottom: 5px; }
+        .step-title { font-weight: bold; font-size: 18px; color: #40c4ff; margin-bottom: 5px; }
+        .step-desc { font-size: 14px; color: #eceff1; }
+        .arrow-icon { font-size: 24px; color: #607d8b; display: flex; align-items: center; }
+
+        /* === 3. 頁尾導覽列 CSS === */
+        .footer-nav {
+            flex: 0 0 auto; /* 不會被壓縮 */
+            display: flex; justify-content: space-between; width: 95%; max-width: 1200px;
+            padding: 5px 0; margin-top: 5px;
+            position: relative;
+        }
+        .nav-btn {
+            padding: 10px 20px; font-size: 18px; border-radius: 8px; text-decoration: none;
+            color: white; background: #607d8b; transition: 0.3s; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .nav-btn:hover { background: #78909c; }
+        
+        .nav-btn.disabled {
+            background: #37474f; 
+            color: #546e7a; 
+            pointer-events: none; 
+            cursor: default;
+            border: 1px solid #455a64;
+        }
+
+        .nav-btn.unlocked {
+            background: #00e676; 
+            color: #003300; 
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.6);
+            animation: pulseBtn 1.5s infinite;
+        }
+
+        @keyframes pulseBtn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* === RWD 手機版適配 === */
+        @media (max-width: 768px) {
+            .game-container { flex-direction: column; gap: 5px; }
+            .status-panel { flex: 0 0 auto; width: 100%; flex-direction: row; flex-wrap: wrap; padding: 5px; gap: 5px; box-sizing: border-box; }
+            .status-item { width: 45%; flex: 1 0 auto; padding: 3px; display: flex; align-items: center; justify-content: space-between; }
+            .label { font-size: 12px; margin: 0; margin-right: 5px; }
+            .progress-bg { width: 60px; height: 8px; }
+            .rule-box { display: none; } 
+            .center-stage { border-radius: 5px; }
+            .event-section { flex: 0 0 70px; }
+            .event-title { font-size: 22px; }
+            .event-desc { font-size: 14px; }
+            .body-outline { transform: scale(0.85); transform-origin: top center; margin-top: 10px; }
+            .step-container { gap: 5px; }
+            .arrow-icon { display: none; } 
+            .step-box { width: 90px; padding: 5px; }
+            .step-title { font-size: 14px; }
+            .footer-nav { padding: 5px 10px; box-sizing: border-box; }
+            .nav-btn { font-size: 16px; padding: 8px 15px; }
+        }
+
+        /* 橫式螢幕優化 */
+        @media (max-height: 600px) {
+            .overlay { justify-content: flex-start; padding-top: 20px; }
+            .overlay h1 { font-size: 30px !important; margin: 0 0 5px 0 !important; }
+            .overlay p { font-size: 16px !important; margin: 0 !important; }
+            .overlay div[style*="font-size:100px"] { font-size: 60px !important; margin: 5px 0 !important; }
+            .upload-form-container { margin-top: 5px; padding: 10px; max-width: 400px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+            .form-row { margin-bottom: 0; grid-column: span 1; }
+            .form-row:last-of-type { grid-column: span 2; }
+            #btnSubmit { grid-column: span 2; margin-top: 5px; }
+            .btn-group { margin-top: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <div class="score-val">SCORE: <span id="score-display">0</span></div>
+        <div class="time-val">TIME: <span id="timer-display">60</span></div>
+    </div>
+
+    <div class="game-container">
+        <div class="status-panel">
+            <div class="status-item">
+                <span class="label">血糖 Sugar</span>
+                <div class="progress-bg"><div id="bar-sugar" class="progress-fill"></div></div>
+            </div>
+            <div class="status-item">
+                <span class="label">心跳 Heart</span>
+                <div class="progress-bg"><div id="bar-heart" class="progress-fill"></div></div>
+            </div>
+            <div class="status-item">
+                <span class="label">血鈣 Calcium</span>
+                <div class="progress-bg"><div id="bar-calcium" class="progress-fill"></div></div>
+            </div>
+            <div class="status-item">
+                <span class="label">生長 Growth</span>
+                <div class="progress-bg"><div id="bar-growth" class="progress-fill"></div></div>
+            </div>
+            <div class="rule-box">
+                ⚡ <strong>高手規則：</strong><br>
+                1. 只有一次機會<br>
+                2. 答錯直接下一題<br>
+                3. <span style="color:#ff5252; font-weight:bold;">失敗扣 500 分！</span>
+            </div>
+        </div>
+
+        <div class="center-stage">
+            <div id="event-section" class="event-section">
+                <h2 id="event-title" class="event-title">準備...</h2>
+                <p id="event-desc" class="event-desc">反射挑戰</p>
+                <div class="timer-bar-bg"><div id="timer-bar" class="timer-bar-fill" style="width: 100%;"></div></div>
+            </div>
+            
+            <div class="body-section">
+                <div id="score-popup" class="score-popup">+1000</div>
+                <div class="body-outline">
+                    <div class="head"></div><div class="torso"></div><div class="arm-l"></div><div class="arm-r"></div><div class="leg-l"></div><div class="leg-r"></div>
+                    <div id="btn-pituitary" class="gland-btn" onclick="selectGland('pituitary')">腦</div>
+                    <div id="btn-thyroid" class="gland-btn" onclick="selectGland('thyroid')">甲</div>
+                    <div id="btn-parathyroid" class="gland-btn" onclick="selectGland('parathyroid')">副</div>
+                    <div id="btn-adrenal" class="gland-btn" onclick="selectGland('adrenal')">腎</div>
+                    <div id="btn-pancreas" class="gland-btn" onclick="selectGland('pancreas')">胰</div>
+                </div>
+            </div>
+
+            <div id="control-panel" class="control-panel">
+                <div id="placeholder" class="placeholder-text">🔴 請先點擊部位(圓點)</div>
+                <div id="action-buttons" style="display:none; width:100%; display:flex; gap:10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-nav">
+        <a href="9.html" class="nav-btn">← 上一頁</a>
+        <a href="./11.html" id="btnNextPage" class="nav-btn disabled">下一頁 →</a>
+    </div>
+
+    <div id="overlay" class="overlay"></div>
+
+    <script>
+        // === 🔴 這裡保留舊專案的網址，確保成績傳送到原本的試算表 ===
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbzEHcO9zHYEeyqXjrrY9L9z4v37LSv7M3l_2WXuHiDSD9YVnz91Obn7amIY_rLaXjBqdA/exec"; 
+        
+        let stats = { sugar: 50, heart: 50, calcium: 50, growth: 50 };
+        let score = 0;
+        let timeLeft = 60;
+        let gameActive = false;
+        let gameLoopTimer = null;
+        // ❌ 移除 eventTimeoutTimer
+        let processingTurn = false; 
+        
+        let currentEvent = null;
+        let lastEventIndex = -1; 
+        let eventStartTime = 0;
+        // ❌ 移除 eventTimeLimit
+
+        // === 2025/12/07 修改：新增骨折事件，調整副甲狀腺邏輯 ===
+        const eventsDB = [
+            { id: 1, title: "🍔 吃大餐！", desc: "血糖飆升 (+40)", type: "sugar_high", target: "insulin", effect: {sugar: 40} },
+            { id: 2, title: "🐕 被狗追！", desc: "能量耗盡 (-40)", type: "danger", target: "adrenaline", effect: {heart: -40, sugar: -20} },
+            { id: 3, title: "🥴 餓昏了！", desc: "血糖暴跌 (-40)", type: "sugar_low", target: "glucagon", effect: {sugar: -40} },
+            // 修改：大抽筋要選擇「增加」副甲狀腺素
+            { id: 4, title: "⚡ 大抽筋！", desc: "血鈣不足 (-40)", type: "cramp", target: "parathormone_increase", effect: {calcium: -40} },
+            { id: 5, title: "📉 壓力大！", desc: "心跳驟降 (-30)", type: "stress", target: "adrenaline", effect: {heart: -30, sugar: -10} },
+            { id: 6, title: "🌱 長不高！", desc: "生長停滯 (-30)", type: "growth", target: "growth", effect: {growth: -30} },
+            // 新增：嚴重骨折要選擇「減少」副甲狀腺素
+            { id: 7, title: "🦴 嚴重骨折！", desc: "骨質流失 (鈣過高)", type: "fracture", target: "parathormone_decrease", effect: {calcium: 40} }
+        ];
+
+        window.onload = function() {
+            showStartScreen();
+        };
+
+        function showStartScreen() {
+            const overlay = document.getElementById("overlay");
+            overlay.innerHTML = `
+                <h1 style="font-size: 50px; color: #ffeb3b; margin:0 0 10px 0;">內分泌協調高手</h1>
+                <div class="step-container">
+                    <div class="step-box">
+                        <div class="step-icon">👀</div>
+                        <div class="step-title">1.看題目</div>
+                        <div class="step-desc">發生什麼事？</div>
+                    </div>
+                    <div class="arrow-icon">➡</div>
+                    <div class="step-box">
+                        <div class="step-icon">👆</div>
+                        <div class="step-title">2.點器官</div>
+                        <div class="step-desc">點擊對應圓點</div>
+                    </div>
+                    <div class="arrow-icon">➡</div>
+                    <div class="step-box">
+                        <div class="step-icon">💊</div>
+                        <div class="step-title">3.選激素</div>
+                        <div class="step-desc">選擇正確激素</div>
+                    </div>
+                </div>
+                <p style="font-size: 20px; color: #b0bec5;">60 秒極速挑戰・答錯扣 500 分</p>
+                <button class="start-btn" onclick="startGame()">開始挑戰</button>
+                <p style="margin-top: 15px; font-size: 18px; color: #81d4fa; font-weight: bold;">平板、手機遊戲，請「直式」呈現為佳</p>
+            `;
+            overlay.classList.remove("hidden");
+        }
+
+        function updateDisplay() {
+            for (let key in stats) {
+                let val = stats[key];
+                if (val < 0) val = 0; if (val > 100) val = 100;
+                stats[key] = val;
+                
+                let bar = document.getElementById(`bar-${key}`);
+                bar.style.width = val + "%";
+                if (val < 30 || val > 70) bar.style.background = "#ff1744"; 
+                else bar.style.background = "#00e676";
+            }
+            document.getElementById("score-display").innerText = score;
+            document.getElementById("timer-display").innerText = timeLeft;
+        }
+
+        function startGame() {
+            stats = { sugar: 50, heart: 50, calcium: 50, growth: 50 };
+            score = 0;
+            timeLeft = 60; 
+            gameActive = true;
+            processingTurn = false;
+            lastEventIndex = -1; 
+            // ❌ 移除 clearTimeout(eventTimeoutTimer);
+            
+            document.getElementById("overlay").classList.add("hidden");
+            updateDisplay();
+
+            clearInterval(gameLoopTimer);
+            gameLoopTimer = setInterval(gameLoop, 1000);
+            
+            triggerNewEvent();
+        }
+
+        function gameLoop() {
+            if (!gameActive) return;
+            timeLeft--;
+            if (timeLeft <= 0) { endGame(); return; }
+            updateDisplay();
+        }
+
+        function triggerNewEvent() {
+            if (!gameActive) return;
+            
+            processingTurn = false; 
+            // ❌ 移除 clearTimeout(eventTimeoutTimer);
+            
+            // ❌ 移除計時條相關程式碼
+            // let timerBar = document.getElementById("timer-bar");
+            // timerBar.style.transition = "none";
+            // timerBar.style.width = "100%";
+            // void timerBar.offsetWidth; 
+            
+            let randIndex;
+            do {
+                randIndex = Math.floor(Math.random() * eventsDB.length);
+            } while (randIndex === lastEventIndex && eventsDB.length > 1);
+            
+            lastEventIndex = randIndex; 
+            currentEvent = eventsDB[randIndex];
+            eventStartTime = Date.now();
+
+            document.getElementById("event-title").innerText = currentEvent.title;
+            document.getElementById("event-desc").innerText = currentEvent.desc;
+            
+            document.getElementById("placeholder").style.display = "block";
+            document.getElementById("placeholder").innerText = "🔴 請先點擊部位(圓點)";
+            document.getElementById("action-buttons").style.display = "none";
+            document.getElementById("action-buttons").innerHTML = ""; 
+
+            for(let key in currentEvent.effect) {
+                stats[key] += currentEvent.effect[key];
+            }
+            updateDisplay();
+
+            // ❌ 移除計時條動畫設定
+            // setTimeout(() => {
+            //     timerBar.style.transition = "width 5s linear";
+            //     timerBar.style.width = "0%";
+            // }, 50);
+
+            // ❌ 移除逾時失敗設定
+            // eventTimeoutTimer = setTimeout(() => {
+            //     handleEventFail("逾時！");
+            // }, eventTimeLimit);
+        }
+
+        function selectGland(gland) {
+            if (!gameActive || processingTurn) return; 
+            
+            document.getElementById("placeholder").style.display = "none";
+            let btnArea = document.getElementById("action-buttons");
+            btnArea.style.display = "flex";
+            btnArea.innerHTML = "";
+
+            const makeBtn = (text, type, color) => 
+                `<button class="hormone-btn ${color}" onclick="useHormone('${type}')">${text}</button>`;
+
+            if (gland === 'pituitary') btnArea.innerHTML = makeBtn("生長激素", "growth", "blue");
+            else if (gland === 'thyroid') btnArea.innerHTML = makeBtn("甲狀腺素", "thyroxine", "blue");
+            else if (gland === 'parathyroid') {
+                // 修改：副甲狀腺現在有兩個選項
+                btnArea.innerHTML = makeBtn("(增加)副甲狀腺素", "parathormone_increase", "orange") + 
+                                    makeBtn("(減少)副甲狀腺素", "parathormone_decrease", "green");
+            }
+            else if (gland === 'adrenal') btnArea.innerHTML = makeBtn("腎上腺素", "adrenaline", "orange");
+            else if (gland === 'pancreas') {
+                btnArea.innerHTML = makeBtn("胰島素(降)", "insulin", "green") + makeBtn("升糖素(升)", "glucagon", "orange");
+            }
+        }
+
+        function useHormone(type) {
+            if (!gameActive || processingTurn) return; 
+            processingTurn = true; 
+            
+            // ❌ 移除 clearTimeout(eventTimeoutTimer);
+
+            // ----------------------------------------------------
+            // ✅ 變更點 1: 讓甲狀腺素也能處理生長停滯事件
+            let isCorrect = (currentEvent && type === currentEvent.target);
+
+            // 額外判斷：如果事件是 '長不高' (target='growth')，選擇 'thyroxine' (甲狀腺素) 也算正確
+            if (currentEvent && currentEvent.target === 'growth' && type === 'thyroxine') {
+                isCorrect = true;
+            }
+            // ----------------------------------------------------
+
+
+            if (isCorrect) {
+                let reactionTime = (Date.now() - eventStartTime) / 1000;
+                // 由於取消計時，反應時間的計算已無意義，但保留分數計算結構以避免更動太大
+                // 為了讓分數固定，將 reactionTime 設為 0，或直接給定固定分數
+                let points = 1000; // 固定給分
+                score += points;
+                showScoreAnim(`+${points}`, true);
+                
+                fixStats(currentEvent.target); 
+                setTimeout(triggerNewEvent, 200);
+
+            } else {
+                handleEventFail("答錯！");
+            }
+        }
+
+        function handleEventFail(reason) {
+            if (!gameActive) return;
+            processingTurn = true; 
+            
+            score -= 500; 
+            if(score < 0) score = 0;
+            
+            showScoreAnim(`-500 ${reason}`, false);
+            fixStats(currentEvent.target); 
+            
+            setTimeout(triggerNewEvent, 500); 
+        }
+
+        function fixStats(type) {
+            if (type === 'growth') stats.growth = 50; 
+            // 雖然 thyroxine 被加入作為解法，但 fixStats 應該針對事件的 target 進行修正
+            // 讓 fixStats 保持原樣，因為事件的 target 決定了要修正哪個 bar
+            if (type === 'thyroxine') { stats.heart = 50; stats.sugar = 50; }
+            // 修改：包含兩種副甲狀腺素的操作都要修正血鈣
+            if (type === 'parathormone_increase' || type === 'parathormone_decrease') stats.calcium = 50;
+            if (type === 'adrenaline') { stats.heart = 50; stats.sugar = 50; }
+            if (type === 'insulin') stats.sugar = 50;
+            if (type === 'glucagon') stats.sugar = 50;
+        }
+
+        function showScoreAnim(text, isGood) {
+            let popup = document.getElementById("score-popup");
+            popup.innerText = text;
+            popup.style.color = isGood ? "#ffeb3b" : "#ff1744"; 
+            
+            popup.classList.remove("score-anim");
+            void popup.offsetWidth; 
+            popup.classList.add("score-anim");
+        }
+
+        function endGame() {
+            gameActive = false;
+            clearInterval(gameLoopTimer);
+            // ❌ 移除 clearTimeout(eventTimeoutTimer);
+            
+            const overlay = document.getElementById("overlay");
+            overlay.scrollTop = 0;
+
+            overlay.innerHTML = `
+                <h1 style="font-size:50px">時間到！</h1>
+                <p style="font-size:30px">最終成績</p>
+                <div style="font-size:100px;color:#ffeb3b;font-weight:bold">${score}</div>
+                
+                <div class="btn-group">
+                    <button class="action-btn btn-restart" onclick="startGame()">🔄 再玩一次</button>
+                    <button class="action-btn btn-upload" onclick="showUploadForm()">📤 上傳成績</button>
+                </div>
+
+                <div id="uploadForm" class="upload-form-container">
+                    <div class="form-row">
+                        <label>班級 (Class)</label>
+                        <input type="text" id="inputClass" placeholder="例: 801">
+                    </div>
+                    <div class="form-row">
+                        <label>座號 (No.)</label>
+                        <input type="number" id="inputSeat" placeholder="例: 15">
+                    </div>
+                    <div class="form-row">
+                        <label>姓名 (Name)</label>
+                        <input type="text" id="inputName" placeholder="例: 王小明">
+                    </div>
+                    <button id="btnSubmit" class="action-btn btn-submit" onclick="submitScore()">送出資料</button>
+                    <div id="uploadStatus" style="margin-top:10px; color:#cfd8dc;"></div>
+                </div>
+            `;
+            overlay.classList.remove("hidden");
+        }
+
+        function showUploadForm() {
+            const form = document.getElementById("uploadForm");
+            if (window.innerHeight < 600) {
+                 form.style.display = "grid";
+            } else {
+                 form.style.display = "block";
+            }
+            document.querySelector(".btn-group").style.display = "none";
+        }
+
+        function submitScore() {
+            const cls = document.getElementById("inputClass").value;
+            const seat = document.getElementById("inputSeat").value;
+            const name = document.getElementById("inputName").value;
+            const btn = document.getElementById("btnSubmit");
+            const status = document.getElementById("uploadStatus");
+
+            if(!cls || !seat || !name) {
+                alert("請將資料填寫完整喔！");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.classList.add("btn-disabled");
+            btn.innerText = "上傳中...";
+
+            const data = {
+                className: cls,
+                seatNumber: seat,
+                studentName: name,
+                score: score
+            };
+
+            fetch(GAS_URL, {
+                method: "POST",
+                mode: "no-cors", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            }).then(() => {
+                btn.innerText = "已送出";
+
+                const nextBtn = document.getElementById("btnNextPage");
+                if(nextBtn) {
+                    nextBtn.classList.remove("disabled");
+                    nextBtn.classList.add("unlocked");
+                    nextBtn.innerText = "下一頁 → (GO!)";
+                }
+
+                status.innerHTML = `
+                    <br>
+                    <div id="successMsg" style="color:#69f0ae; font-size:20px; font-weight:bold; margin-bottom:15px;">✅ 上傳成功！</div>
+                    <a href="./11.html" id="finalNextBtn" style="
+                        display:block; width:100%; padding:15px; 
+                        background:#ffeb3b; color:#333; 
+                        text-decoration:none; border-radius:10px; 
+                        font-weight:bold; font-size:22px; 
+                        text-align:center; box-sizing:border-box;
+                        box-shadow: 0 4px 15px rgba(255, 235, 59, 0.4);">
+                        前往下一頁 ➡
+                    </a>
+                `;
+                
+                btn.style.display = 'none';
+                setTimeout(() => {
+                    status.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+
+            }).catch(err => {
+                console.error(err);
+                status.innerText = "❌ 上傳失敗，請稍後再試";
+                btn.disabled = false;
+                btn.classList.remove("btn-disabled");
+                btn.innerText = "送出資料";
+            });
+        }
+    </script>
+</body>
+</html>
